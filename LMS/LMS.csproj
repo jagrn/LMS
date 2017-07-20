@@ -272,6 +272,7 @@
     <Content Include="Views\Activities\Details.cshtml" />
     <Content Include="Views\Activities\Edit.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
+    <Content Include="Views\Courses\Manage.cshtml" />
     <Content Include="Views\Modules\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
