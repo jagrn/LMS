@@ -24,7 +24,7 @@ namespace LMS.Models
             return userIdentity;
         }
     }
-
+    
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Course> Courses { get; set; }

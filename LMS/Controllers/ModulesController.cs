@@ -89,6 +89,56 @@ namespace LMS.Controllers
             return View(module);
         }
 
+        // GET: Modules/Manage/5
+        public ActionResult Manage(int? id)
+        {
+            if (id == null)
+            {
+                return View();
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Module module = db.Modules.Find(id);
+            if (module == null)
+            {
+                return HttpNotFound();
+            }
+            return View(module);
+        }
+
+        // POST: Modules/Manage/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Module module)
+        {
+            if (module.Id == 0)
+            {
+                // Create
+                if (ModelState.IsValid)
+                {
+                    db.Modules.Add(module);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                // Edit
+                if (ModelState.IsValid)
+                {
+                    db.Entry(module).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+            }
+            return View(module);
+        }
+
+
+        
+
         // GET: Modules/Delete/5
         public ActionResult Delete(int? id)
         {
