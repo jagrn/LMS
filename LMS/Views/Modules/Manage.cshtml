@@ -7,9 +7,9 @@
 
 <h2>Manage</h2>
 
-@*@{
-    Model.ProceedPath = "Courses";
-}*@
+@{
+    Model.ProceedPath = "Default";
+}
 
 @using (Html.BeginForm())
         {
@@ -74,26 +74,26 @@
                             <h2>Proceed path : @Model.ProceedPath</h2>
                             <h2>Name : @Model.Name</h2>
                             <h2>CourseID : @Model.CourseId</h2>
+                            <script>
+
+                                console.log("RUNNING - OUTSIDE");
+                            </script>
+
 
                             @*<input type="submit" value="Save" class="btn btn-default" />
 
                             <input type="submit" value="Save/Return" class="btn btn-default" />*@
 
-                            <button type="submit" class="btn btn-default submit-save">SAVE</button>
-
-                            <script>
-                                $(document).ready(function () {
-                                    $('.submit-save').click(function () {
-
-                                        
-                                        $Model.ProceedPath = "SAVE";
-
-                                        //$(this).closest('form')[0].submit();
-                                    });
-                                })
-                            </script>
                             
 
+                            <button type="submit" class="btn btn-default submit-save" onclick="SetProceedPath()">SAVE</button>
+
+                            @*@{ 
+                                var saveString = "SAVE";
+                            }
+                            <button type="submit" class="btn btn-default submit-save" onclick="{@{Model.ProceedPath = saveString;}">SAVE2</button>*@
+                            
+                            
                             <button type="submit" class="btn btn-default">SAVE&RETURN</button>
 
                             <button type="submit" class="btn btn-default">SAVE&Next</button>
@@ -115,6 +115,30 @@
                 </div>
 }
 
+<script>
+                                function SetProceedPath() {
+                                    console.log("RUNNING SET FUNCTION");
+                                    //console.log(arguments[0]);
+                                    //while (true)
+                                    //{
+
+                                    //}
+                                    
+                                    //$Model.ProceedPath = "SAVE";
+                                }
+
+
+                                //$(document).ready(function () {
+                                //    $('.submit-save').click(function () {
+                                //        //window.alert("RUNNING");
+
+                                //        console.log("RUNNING");
+                                //        Model.ProceedPath = "SAVE";
+
+                                //        //$(this).closest('form')[0].submit();
+                                //    });
+                                //})
+</script>
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
