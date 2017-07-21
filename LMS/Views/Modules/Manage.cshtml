@@ -1,4 +1,5 @@
-﻿@model LMS.Models.Module
+﻿@*@model LMS.Models.Module*@
+@model LMS.ViewModels.ManageModuleViewModel
 
 @{
     ViewBag.Title = "Manage";
@@ -6,16 +7,19 @@
 
 <h2>Manage</h2>
 
+@*@{
+    Model.ProceedPath = "Courses";
+}*@
 
 @using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
         <h4>Module</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @*@Html.HiddenFor(model => model.Id)*@
+        @Html.HiddenFor(model => model.ProceedPath)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -57,12 +61,58 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+                <div class="form-group">
+                    
+                   
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+
+                            
+
+                            <h2>Proceed path : @Model.ProceedPath</h2>
+                            <h2>Name : @Model.Name</h2>
+                            <h2>CourseID : @Model.CourseId</h2>
+
+                            @*<input type="submit" value="Save" class="btn btn-default" />
+
+                            <input type="submit" value="Save/Return" class="btn btn-default" />*@
+
+                            <button type="submit" class="btn btn-default submit-save">SAVE</button>
+
+                            <script>
+                                $(document).ready(function () {
+                                    $('.submit-save').click(function () {
+
+                                        
+                                        $Model.ProceedPath = "SAVE";
+
+                                        //$(this).closest('form')[0].submit();
+                                    });
+                                })
+                            </script>
+                            
+
+                            <button type="submit" class="btn btn-default">SAVE&RETURN</button>
+
+                            <button type="submit" class="btn btn-default">SAVE&Next</button>
+
+
+
+                            @*<button type="submit" class="btn btn-default">@Html.ActionLink("SAVE/RETURN", "Manage", "Modules", new { courseId = Model.CourseId }, null)</button>*@
+
+                            @*<input type="submit" value="Save/Next" class="btn btn-default" />*@
+
+                            @*This button directs the user to the manage course view without saving any module data*@
+                            <button class="btn btn-default">@Html.ActionLink("RETURN", "Manage", "Courses", new { Id = Model.CourseId }, null)</button>
+
+
+                            <input type="submit" value="Undo" class="btn btn-default" />
+                            <input type="submit" value="Delete" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
 }
 
 <div>
