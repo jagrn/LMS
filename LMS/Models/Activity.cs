@@ -13,8 +13,6 @@ namespace LMS.Models
         public ActivityType ActitvityType { get; set; }
         public int ModuleId { get; set; }
 
-
-
     }
 
     public enum ActivityType
