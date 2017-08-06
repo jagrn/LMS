@@ -254,6 +254,9 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ActivityRepo.cs" />
+    <Compile Include="Repositories\CourseRepo.cs" />
+    <Compile Include="Repositories\ModuleRepo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\ManageNavigationViewModels.cs" />
   </ItemGroup>

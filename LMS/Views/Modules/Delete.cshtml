@@ -68,7 +68,7 @@
     @Html.AntiForgeryToken()
     <div class="form-actions no-color">
         <button type="submit" class="btn btn-default">CONFIRM</button>    
-        <button class="btn btn-default">@Html.ActionLink("CANCEL", "Manage", "Modules", new { courseId = Model.CourseId, deleteType = Model.DeleteType }, null)</button>
+        <button class="btn btn-default">@Html.ActionLink("CANCEL", "Manage", "Modules", new { courseId = Model.CourseId, getOperation = "New" }, null)</button>
     </div>
 }
 </div>

@@ -68,7 +68,7 @@
                         @*Clear form button without saving module data, remain with same module identity in form*@
                         <p class="btn btn-default" onclick="ClearModuleForm(@clearDate, @clearDate)">CLEAR</p>
                         @*GET button to Clear form without saving module data, requesting a zero module identity in form*@
-                        <button class="btn btn-default">@Html.ActionLink("NEW", "Manage", new { id = 0, courseId = Model.CourseId, viewMessage = "Form cleared for new module" })</button>
+                        <button class="btn btn-default">@Html.ActionLink("NEW", "Manage", new { id = 0, courseId = Model.CourseId, getOperation = "New", viewMessage = "Form cleared for new module" })</button>
                     </div>
                 </div>
 
@@ -109,7 +109,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-3 col-md-6">
                         @*Navigation button for return to manage course view without saving module data*@
-                        <button class="btn btn-default">@Html.ActionLink("RETURN", "Manage", "Courses", new { Id = Model.CourseId }, null)</button>
+                        <button class="btn btn-default">@Html.ActionLink("RETURN", "Manage", "Courses", new { Id = Model.CourseId, getOperation = "Load" }, null)</button>
                     </div>
                 </div>
             </div> @*End of form-horizontal*@
@@ -117,17 +117,24 @@
             <div class="col-md-offset-1 col-md-5" style="background-color:antiquewhite;">
                 <h4>Modules for the @Model.CourseName course:</h4>
                 <br />
-                <div>
-                    @*GET button to reach delete module view*@
-                    <button class="btn btn-default">@Html.ActionLink("REMOVE ALL", "Delete", new { courseId = Model.CourseId, deleteType = "All" })</button>
-                    <br />
-                    <br />
-                </div>
-                <table class="table">
-                    @foreach (var module in Model.CourseModules)
+
+                @{
+                    if (Model.CourseModules != null)
                     {
-                        <tr>
-                            <td>
+                        if (Model.CourseModules.Count != 0)
+                        {
+                        <div>
+                            @*GET button to reach delete module view*@
+                            <button class="btn btn-default">@Html.ActionLink("REMOVE ALL", "Delete", new { courseId = Model.CourseId, deleteType = "All" })</button>
+                            <br />
+                            <br />
+                        </div>
+
+                        <table class="table">
+                        @foreach (var module in Model.CourseModules)
+                        {
+                            <tr>
+                                <td>
                                 @{
                                     string moduleText = "";
                                     if (module.Id == Model.Id)
@@ -140,16 +147,19 @@
                                     }
                                 }
                                 @moduleText
-                            </td>
-                            <td>
-                                @*GET button to load selected module into form and remain in manage module view*@
-                                <button class="btn btn-default">@Html.ActionLink("LOAD", "Manage", new { id = module.Id, courseId = Model.CourseId })</button>
-                                @*GET button to reach delete module view*@
-                                <button class="btn btn-default">@Html.ActionLink("REMOVE", "Delete", new { id = module.Id, courseId = Model.CourseId, deleteType = "Single" })</button>
-                            </td>
-                        </tr>
+                                </td>
+                                <td>
+                                    @*GET button to load selected module into form and remain in manage module view*@
+                                    <button class="btn btn-default">@Html.ActionLink("LOAD", "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })</button>
+                                    @*GET button to reach delete module view*@
+                                    <button class="btn btn-default">@Html.ActionLink("REMOVE", "Delete", new { id = module.Id, courseId = Model.CourseId, deleteType = "Single" })</button>
+                                </td>
+                            </tr>
+                        }
+                        </table>
+                        }
                     }
-                </table>
+                }
             </div>
                 
         </div> @*End of first row*@
