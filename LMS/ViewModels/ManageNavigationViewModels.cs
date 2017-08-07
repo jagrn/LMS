@@ -6,6 +6,12 @@ using System.Web;
 
 namespace LMS.ViewModels
 {
+    public struct CourseListData
+    {
+        public int Id;
+        public string Name;
+    }
+
     public struct ModuleListData
 	{
         public int Id;
