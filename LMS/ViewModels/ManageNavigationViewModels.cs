@@ -24,6 +24,36 @@ namespace LMS.ViewModels
         public string Name;
     }
 
+    public class CourseViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
+        public List<CourseListData> AllCourses { get; set; }
+        public int ModuleId { get; set; }
+        public List<ModuleListData> CourseModules { get; set; }
+
+        public string PostMessage { get; set; }
+        public string PostNavigation { get; set; }
+        public string PostOperation { get; set; }
+    }
+
+    public class CourseDeleteViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
+        public List<CourseListData> AllCourses { get; set; }
+
+        public string DeleteType { get; set; }
+    }
+
     public class ModuleViewModel
     {
         public int Id { get; set; }        
