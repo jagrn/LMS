@@ -81,10 +81,10 @@
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @courseId, 0)">SAVE(U)</button>
+                                <button type="submit" class="btn btn-default" onclick="CoursePostConfig('Save', 'Update', @courseId, 0)">SAVE(U)</button>
                             }
                         }
-                        <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @courseId, 0)">SAVE(N)</button>
+                        <button type="submit" class="btn btn-default" onclick="CoursePostConfig('Save', 'New', @courseId, 0)">SAVE(N)</button>
                     </div>
                 </div>
 
@@ -98,10 +98,10 @@
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'Update', @courseId, 0)">SAVE(U)/R</button>
+                                <button type="submit" class="btn btn-default" onclick="CoursePostConfig('SaveRet', 'Update', @courseId, 0)">SAVE(U)/R</button>
                             }
                         }
-                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'New', @courseId, 0)">SAVE(N)/R</button>
+                        <button type="submit" class="btn btn-default" onclick="CoursePostConfig('SaveRet', 'New', @courseId, 0)">SAVE(N)/R</button>
                     </div>
                 </div>
 
@@ -176,7 +176,7 @@
                                                                     <br />
                                                                     <div>
                                                                         @*POST button to save module (module update) and proceed to manage activity view*@
-                                                                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveAct', 'New', @courseId, 0)">NEW</button>
+                                                                        <button type="submit" class="btn btn-default" onclick="CoursePostConfig('SaveAct', 'New', @courseId, 0)">NEW</button>
                                                                         <br />
                                                                         <br />
                                                                     </div>
@@ -193,7 +193,7 @@
                                                                                         </td>
                                                                                         <td>
                                                                                             @*POST buttons for save course (course update) and proceed to manage module view*@
-                                                                                            <button type="submit" class="btn btn-default" onclick="PostConfig('SaveAct', 'Update', @courseId, @module.Id)">MANAGE</button>
+                                                                                            <button type="submit" class="btn btn-default" onclick="CoursePostConfig('SaveAct', 'Update', @courseId, @module.Id)">MANAGE</button>
                                                                                         </td>
                                                                                     </tr>
                                                                                 }

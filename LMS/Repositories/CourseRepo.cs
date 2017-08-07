@@ -50,12 +50,12 @@ namespace LMS.Repositories
         public static string RetrieveCourseName(int? courseId)
         {
             if ((courseId == null) || (courseId == 0))
-                return "No name retrieved: Undefined module ID";
+                return "No name retrieved: Undefined course ID";
 
             var courses = db.Courses.Where(c => c.Id == courseId).ToList();
             if (courses.Count != 1)
             {
-                return "No name retrieved: Module ID not found";
+                return "No name retrieved: Course ID not found";
             }
             return courses.First().Name;
         }
@@ -115,7 +115,7 @@ namespace LMS.Repositories
             if (course.Id == 0)
                 return CourseRepoResult.BadRequest;
 
-            var courses = db.Courses.Where(c => c.Id == c.Id).ToList();
+            var courses = db.Courses.Where(c => c.Id == course.Id).ToList();
             if (courses.Count != 1)
                 return CourseRepoResult.NotFound;
 
@@ -135,7 +135,7 @@ namespace LMS.Repositories
             if ((courseId == null) || (courseId == 0))
                 return CourseRepoResult.BadRequest;
 
-            var courses = db.Courses.Where(c => c.Id == c.Id).ToList();
+            var courses = db.Courses.Where(c => c.Id == courseId).ToList();
             if (courses.Count != 1)
                 return CourseRepoResult.NotFound;
 

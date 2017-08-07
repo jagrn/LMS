@@ -11,6 +11,19 @@
     //alert(document.forms[0]["ActivityId"].value);
 }
 
+function CoursePostConfig(postNav, postFormObj, id, moduleId) {
+    document.forms[0]["PostNavigation"].value = postNav;
+    document.forms[0]["PostOperation"].value = postFormObj;
+    document.forms[0]["Id"].value = id;
+    document.forms[0]["ModuleId"].value = moduleId;
+    // Debug support
+    //alert("PostConfig");
+    //alert(document.forms[0]["PostNavigation"].value);
+    //alert(document.forms[0]["PostOperation"].value);
+    //alert(document.forms[0]["Id"].value);
+    //alert(document.forms[0]["ActivityId"].value);
+}
+
 function ClearCourseForm() {
     document.forms[0]["Name"].value = "";
     document.forms[0]["Description"].value = "";
