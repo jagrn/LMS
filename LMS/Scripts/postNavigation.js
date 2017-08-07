@@ -11,6 +11,19 @@
     //alert(document.forms[0]["ActivityId"].value);
 }
 
+function ClearCourseForm() {
+    document.forms[0]["Name"].value = "";
+    document.forms[0]["Description"].value = "";
+    document.forms[0]["StartDate"].value = arguments[0];
+    document.forms[0]["EndDate"].value = arguments[1];
+    // Debug support
+    //alert("ClearModuleForm");
+    //alert(document.forms[0]["Name"].value);
+    //alert(document.forms[0]["Description"].value);
+    //alert(document.forms[0]["StartDate"].value);
+    //alert(document.forms[0]["EndDate"].value);
+}
+
 function ClearModuleForm() {
     document.forms[0]["Name"].value = "";
     document.forms[0]["Description"].value = "";
