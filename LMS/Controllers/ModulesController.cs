@@ -118,6 +118,46 @@ namespace LMS.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
+                if (viewModel.PostOperation == "New")
+                {
+                    viewModel.Id = 0;
+                }
+
+                // Input validation
+                var validMess = ModuleRepo.IsModuleNameValid(viewModel.CourseId, viewModel.Id, viewModel.Name);
+                if (validMess == null)
+                {
+                    if (viewModel.StartDate >= viewModel.EndDate)
+                        validMess = "Modulens start ligger efter modulens slut eller samtidigt";
+                }
+                if (validMess == null)
+                {
+                    validMess = ModuleRepo.IsModuleSpanValid(viewModel.CourseId, viewModel.Id, viewModel.StartDate, viewModel.EndDate);
+                }
+                if (validMess != null)
+                {
+                    // Load view model with additional display info wrt parent course               
+                    var courseModuleList = ModuleRepo.RetrieveCourseModuleList(viewModel.CourseId);
+                    if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+                    viewModel.CourseModules = courseModuleList.moduleList;
+                    viewModel.CourseName = CourseRepo.RetrieveCourseName(viewModel.CourseId);
+
+                    // Load view model with additional display info wrt module activities
+                    var moduleActivityList = ActivityRepo.RetrieveModuleActivityList(viewModel.Id);
+                    if (moduleActivityList.repoResult == ActivityRepoResult.NotFound)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+                    viewModel.ModuleActivities = moduleActivityList.activityList;
+
+                    viewModel.PostMessage = validMess;
+                    return View(viewModel);
+                }
+                // End of input validation
+
                 // Create the module prototype             
                 Module module = new Module();
                 module.Name = viewModel.Name;
@@ -126,14 +166,11 @@ namespace LMS.Controllers
                 module.EndDate = viewModel.EndDate;
                 module.CourseId = viewModel.CourseId;
 
-                var courseSpan = ModuleRepo.RetrieveCourseSpan(viewModel.CourseId);
-
-
                 // Perform Add or Update operation against DB
                 if (viewModel.PostOperation == "New")
                 {
                     viewModel.Id = ModuleRepo.AddModule(module);
-                    viewModel.PostMessage = "The new " + viewModel.Name + " module was successfully saved";
+                    viewModel.PostMessage = "Den nya modulen " + viewModel.Name + " är sparad";
                 }
                 if (viewModel.PostOperation == "Update")
                 {
@@ -143,7 +180,7 @@ namespace LMS.Controllers
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }       
-                    viewModel.PostMessage = "The " + viewModel.Name + " module was successfully updated";
+                    viewModel.PostMessage = "Modulen " + viewModel.Name + " är uppdaterad";
                 }
 
                 if (viewModel.PostNavigation == "Save")
@@ -168,7 +205,14 @@ namespace LMS.Controllers
                         viewModel.ModuleActivities = moduleActivityList.activityList;
                     }
                 }
- 
+
+                // Adjust the course span according to posted module
+                CourseRepoResult adjustResult = CourseRepo.UpdateCourseSpan(viewModel.CourseId);           
+                if (adjustResult == CourseRepoResult.NotFound)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+
                 switch (viewModel.PostNavigation)
                 {
                     case "Save":
@@ -184,7 +228,7 @@ namespace LMS.Controllers
                         break;
                 }
             }
-            viewModel.PostMessage = "Error (model state invalid), no module saving performed";
+            viewModel.PostMessage = "ERROR: Misslyckad POST operation for modul";
             return View(viewModel);
         }
 
@@ -247,12 +291,12 @@ namespace LMS.Controllers
             if (deleteType == "Single")
             {
                 string moduleName = ModuleRepo.RetrieveModuleName(id);
-                message = "The " + moduleName + " activity was removed";
+                message = "Modulen " + moduleName + " är borttagen";
                 result = ModuleRepo.RemoveModule(courseId, id);
             }
             else // deleteType == "All"
             {
-                message = "All modules removed";
+                message = "Alla moduler är borttagna för aktuell kurs";
                 result = ModuleRepo.RemoveCourseModules(courseId);
             }
 
@@ -260,6 +304,14 @@ namespace LMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
+
+            // Adjust the course span according to removed module(s)
+            CourseRepoResult adjustResult = CourseRepo.UpdateCourseSpan(courseId);
+            if (adjustResult == CourseRepoResult.NotFound)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
             return RedirectToAction("Manage", "Modules", new { courseId = courseId, getOperation = "New", viewMessage = message });
         }
 

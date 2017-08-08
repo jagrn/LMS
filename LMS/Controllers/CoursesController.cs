@@ -54,7 +54,7 @@ namespace LMS.Controllers
             {
                 // Create new, reached from course views only              
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
-                viewModel.EndDate = DateTime.Parse("2017-12-31");
+                viewModel.EndDate = DateTime.Parse("2017-01-01");
             }
             else // getOperation == "Load"
             {
@@ -72,12 +72,12 @@ namespace LMS.Controllers
                 viewModel.EndDate = singleCourse.course.EndDate;
 
                 // Load view model with additional display info wrt module activities
-                var courseModuleList_ = ModuleRepo.RetrieveCourseModuleList(id);
-                if (courseModuleList_.repoResult == ModuleRepoResult.NotFound)
+                var courseModuleList = ModuleRepo.RetrieveCourseModuleList(id);
+                if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
-                viewModel.CourseModules = courseModuleList_.moduleList;
+                viewModel.CourseModules = courseModuleList.moduleList;
             }
 
             // Load view model with additional display info wrt parent course
@@ -91,7 +91,7 @@ namespace LMS.Controllers
             return View(viewModel);
         }
 
-        // POST: Modules/Manage/5
+        // POST: Cources/Manage/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Teacher")]
@@ -104,42 +104,76 @@ namespace LMS.Controllers
                 var actPostOp = viewModel.PostOperation;        // PostOperation concerns activity, not module, in this case
                 if (viewModel.PostNavigation == "SaveAct")
                 {
-                    // Operation on module must be "Update" since parent module is required
+                    // Operation on course must be "Update" since parent course is required
                     viewModel.PostOperation = "Update";
                 }
 
-                if (  ( (viewModel.Id == 0) && (viewModel.PostOperation == "Update") )  )
+                if ((viewModel.Id == 0) && (viewModel.PostOperation == "Update"))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                // Create the module prototype             
+                if (viewModel.PostOperation == "New")
+                {
+                    viewModel.Id = 0;
+                }
+
+                // Input validation
+                var validMess = CourseRepo.IsCourseNameValid(viewModel.Id, viewModel.Name);
+                if (validMess != null)
+                {
+                    // Load view model with additional display info wrt all courses               
+                    var allCoursesList = CourseRepo.RetrieveCourseList();
+                    if (allCoursesList.repoResult == CourseRepoResult.NotFound)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+                    viewModel.AllCourses = allCoursesList.courseList;
+
+                    // Load view model with additional display info wrt module activities
+                    var courseModuleList = ModuleRepo.RetrieveCourseModuleList(viewModel.Id);
+                    if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+                    viewModel.CourseModules = courseModuleList.moduleList;
+
+                    viewModel.PostMessage = validMess;
+                    return View(viewModel);
+                }
+                // End of input validation
+
+                // Create the course prototype             
                 Course course = new Course();
                 course.Name = viewModel.Name;
                 course.Description = viewModel.Description;
-                course.StartDate = viewModel.StartDate;
-                course.EndDate = viewModel.EndDate;
 
                 // Perform Add or Update operation against DB
                 if (viewModel.PostOperation == "New")
                 {
+                    CourseModulesSpan courseSpan = ModuleRepo.RetrieveCourseSpan(0);
+                    course.StartDate = courseSpan.start;
+                    course.EndDate = courseSpan.end;
                     viewModel.Id = CourseRepo.AddCourse(course);
-                    viewModel.PostMessage = "The new course " + viewModel.Name + " was successfully saved";
+                    viewModel.PostMessage = "Den nya kursen " + viewModel.Name + " är sparad";
                 }
                 if (viewModel.PostOperation == "Update")
                 {
                     course.Id = viewModel.Id;       // Use concerned id from view
+                    CourseModulesSpan courseSpan = ModuleRepo.RetrieveCourseSpan(course.Id);
+                    course.StartDate = courseSpan.start;
+                    course.EndDate = courseSpan.end;              
                     CourseRepoResult result = CourseRepo.UpdateCourse(course);
                     if (result == CourseRepoResult.NotFound)
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }
-                    viewModel.PostMessage = "The course " + viewModel.Name + " was successfully updated";
+                    viewModel.PostMessage = "Kursen " + viewModel.Name + " är uppdaterad";
                 }
 
                 if (viewModel.PostNavigation == "Save")
                 {
-                    // Load view model with additional display info wrt parent course               
+                    // Load view model with additional display info wrt all courses               
                     var allCoursesList = CourseRepo.RetrieveCourseList();
                     if (allCoursesList.repoResult == CourseRepoResult.NotFound)
                     {
@@ -174,7 +208,7 @@ namespace LMS.Controllers
                         break;
                 }
             }
-            viewModel.PostMessage = "Error (model state invalid), no module saving performed";
+            viewModel.PostMessage = "ERROR: Misslyckad POST operation for kurs";
             return View(viewModel);
         }
 
@@ -189,7 +223,6 @@ namespace LMS.Controllers
             }
 
             CourseDeleteViewModel viewModel = new CourseDeleteViewModel();
-            viewModel.Id = (int) id;
             viewModel.DeleteType = deleteType;
 
             if (deleteType == "Single")
@@ -238,12 +271,12 @@ namespace LMS.Controllers
             if (deleteType == "Single")
             {
                 string courseName = CourseRepo.RetrieveCourseName(id);
-                message = "The " + courseName + " course was removed";
+                message = "Kursen " + courseName + " är borttagen";
                 result = CourseRepo.RemoveCourse(id);
             }
             else // deleteType == "All"
             {
-                message = "All modules removed";
+                message = "Alla kurser är borttagna";
                 result = CourseRepo.RemoveCourses();
             }
 

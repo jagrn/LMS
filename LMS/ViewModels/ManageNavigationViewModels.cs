@@ -31,12 +31,18 @@ namespace LMS.ViewModels
 	{
         public int Id;
         public string Name;
-	}
+        public string Description;
+        public DateTime StartDate;
+        public DateTime EndDate;
+    }
 
     public struct ActivityListData
     {
         public int Id;
         public string Name;
+        public string Description;
+        public DateTime StartDate;
+        public DateTime EndDate;
     }
 
     public class CourseViewModel
