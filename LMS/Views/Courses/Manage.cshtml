@@ -176,6 +176,7 @@
                                                                     <br />
                                                                     <div>
                                                                         @*POST button to save module (module update) and proceed to manage activity view*@
+                                                                        @Html.ActionLink("NewMODULE", "Manage", "Modules", new { id = 0, courseId = courseId, getOperation = "New" }, null)
                                                                         <button type="submit" class="btn btn-default" onclick="CoursePostConfig('SaveAct', 'New', @courseId, 0)">NEW</button>
                                                                         <br />
                                                                         <br />

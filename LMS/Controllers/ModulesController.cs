@@ -124,7 +124,10 @@ namespace LMS.Controllers
                 module.Description = viewModel.Description;
                 module.StartDate = viewModel.StartDate;
                 module.EndDate = viewModel.EndDate;
-                module.CourseId = viewModel.CourseId;             
+                module.CourseId = viewModel.CourseId;
+
+                var courseSpan = ModuleRepo.RetrieveCourseSpan(viewModel.CourseId);
+
 
                 // Perform Add or Update operation against DB
                 if (viewModel.PostOperation == "New")
