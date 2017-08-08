@@ -1,4 +1,15 @@
-﻿function PostConfig(postNav, postFormObj, id, activityId) {
+﻿function ActivityPostConfig(postNav, postFormObj, id) {
+    document.forms[0]["PostNavigation"].value = postNav;
+    document.forms[0]["PostOperation"].value = postFormObj;
+    document.forms[0]["Id"].value = id;
+    // Debug support
+    //alert("PostConfig");
+    //alert(document.forms[0]["PostNavigation"].value);
+    //alert(document.forms[0]["PostOperation"].value);
+    //alert(document.forms[0]["Id"].value);
+}
+
+function PostConfig(postNav, postFormObj, id, activityId) {
     document.forms[0]["PostNavigation"].value = postNav;
     document.forms[0]["PostOperation"].value = postFormObj;
     document.forms[0]["Id"].value = id;
@@ -21,7 +32,7 @@ function CoursePostConfig(postNav, postFormObj, id, moduleId) {
     //alert(document.forms[0]["PostNavigation"].value);
     //alert(document.forms[0]["PostOperation"].value);
     //alert(document.forms[0]["Id"].value);
-    //alert(document.forms[0]["ActivityId"].value);
+    //alert(document.forms[0]["ModuleId"].value);
 }
 
 function ClearCourseForm() {

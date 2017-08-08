@@ -71,7 +71,7 @@ namespace LMS.Repositories
                 return singleCourse;
             }
 
-            var courses = db.Courses.Where(m => m.Id == courseId).ToList();
+            var courses = db.Courses.Where(c => c.Id == courseId).ToList();
             if (courses.Count != 1)
             {
                 singleCourse.repoResult = CourseRepoResult.NotFound;

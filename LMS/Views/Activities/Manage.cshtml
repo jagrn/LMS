@@ -63,13 +63,13 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ActitvityType, htmlAttributes: new { @class = "control-label col-md-3" })
+                    @Html.LabelFor(model => model.SelectActivityType, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-6">
-                        @Html.EditorFor(model => model.ActitvityType, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ActitvityType, "", new { @class = "text-danger" })
+                        @Html.EnumDropDownListFor(model => model.SelectActivityType, htmlAttributes: new { @class = "form-control" }) 
+                        @Html.ValidationMessageFor(model => model.SelectActivityType, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
+ 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Deadline, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-6">
@@ -97,10 +97,10 @@
                             }
                             else
                             {
-                        <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @activityId)">SAVE(U)</button>
+                        <button type="submit" class="btn btn-default" onclick="ActivityPostConfig('Save', 'Update', @activityId)">SAVE(U)</button>
                             }
                         }
-                        <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @activityId)">SAVE(N)</button>
+                        <button type="submit" class="btn btn-default" onclick="ActivityPostConfig('Save', 'New', @activityId)">SAVE(N)</button>
                     </div>
                 </div>
 
@@ -114,10 +114,10 @@
                             }
                             else
                             {
-                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'Update', @activityId)">SAVE(U)/R</button>
+                        <button type="submit" class="btn btn-default" onclick="ActivityPostConfig('SaveRet', 'Update', @activityId)">SAVE(U)/R</button>
                             }
                         }
-                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'New', @activityId)">SAVE(N)/R</button>
+                        <button type="submit" class="btn btn-default" onclick="ActivityPostConfig('SaveRet', 'New', @activityId)">SAVE(N)/R</button>
                     </div>
                 </div>
 
@@ -204,6 +204,7 @@
 </div>
 
 @section Scripts {
+
     @Scripts.Render("~/bundles/jqueryval")
 }
 

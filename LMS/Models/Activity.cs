@@ -10,7 +10,7 @@ namespace LMS.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime Deadline { get; set; }
-        public ActivityType ActitvityType { get; set; }
+        public ActivityType ActivityType { get; set; }
         public int ModuleId { get; set; }
 
     }

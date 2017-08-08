@@ -6,6 +6,14 @@ using System.Web;
 
 namespace LMS.ViewModels
 {
+    public enum SelectActivityType
+    {
+        Föreläsning,
+        Datorbaserad,
+        Inlämningsuppgift,
+        Övningstillfälle,
+    }
+
     public struct CourseListData
     {
         public int Id;
@@ -95,7 +103,7 @@ namespace LMS.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime Deadline { get; set; }
-        public ActivityType ActitvityType { get; set; }
+        public SelectActivityType SelectActivityType { get; set; }
 
         public int CourseId { get; set; }
         public int ModuleId { get; set; }
@@ -115,7 +123,7 @@ namespace LMS.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime Deadline { get; set; }
-        public ActivityType ActitvityType { get; set; }
+        public SelectActivityType SelectActivityType { get; set; }
 
         public int CourseId { get; set; }
         public int ModuleId { get; set; }

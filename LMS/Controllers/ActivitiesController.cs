@@ -58,7 +58,7 @@ namespace LMS.Controllers
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
                 viewModel.EndDate = DateTime.Parse("2017-01-01");
                 viewModel.Deadline = DateTime.Parse("2017-01-01");
-                viewModel.ActitvityType = ActivityType.E_Learning;      
+                viewModel.SelectActivityType = SelectActivityType.Föreläsning;      // Default selection
             }
             if (getOperation == "Load")
             {
@@ -74,8 +74,8 @@ namespace LMS.Controllers
                 viewModel.Description = singleActivity.activity.Description;
                 viewModel.StartDate = singleActivity.activity.StartDate;
                 viewModel.EndDate = singleActivity.activity.EndDate;
-                viewModel.ActitvityType = singleActivity.activity.ActitvityType;
                 viewModel.Deadline = singleActivity.activity.Deadline;
+                viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
             }
 
             // Load view model with additional display info wrt parent module
@@ -95,7 +95,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,Deadline,ActivityType,ModuleId,CourseId,PostNavigation,PostOperation,PostMessage")] ActivityViewModel viewModel)
+        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,Deadline,ActivityType,SelectActivityType,ModuleId,CourseId,PostNavigation,PostOperation,PostMessage")] ActivityViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -124,7 +124,7 @@ namespace LMS.Controllers
                 activity.Description = viewModel.Description;
                 activity.StartDate = viewModel.StartDate;
                 activity.EndDate = viewModel.EndDate;
-                activity.ActitvityType = viewModel.ActitvityType;
+                activity.ActivityType = (ActivityType) viewModel.SelectActivityType;
                 activity.Deadline = viewModel.Deadline;
                 activity.ModuleId = viewModel.ModuleId;
 
@@ -203,7 +203,7 @@ namespace LMS.Controllers
                 viewModel.Description = singleActivity.activity.Description;
                 viewModel.StartDate = singleActivity.activity.StartDate;
                 viewModel.EndDate = singleActivity.activity.EndDate;
-                viewModel.ActitvityType = singleActivity.activity.ActitvityType;
+                viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
                 viewModel.Deadline = singleActivity.activity.Deadline;
             }
             if (deleteType == "All")
