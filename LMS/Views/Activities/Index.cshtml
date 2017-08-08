@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<LMS.Models.Activity>
+@*@model LMS.ViewModels.ActivityViewModel*@
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @*@Html.ActionLink("New activity", "Manage", "Activities", new { id = 0, moduleId = XXX , courseId = XXX, getOperation = "New" }, null)*@
 </p>
 <table class="table">
     <tr>
@@ -21,17 +22,14 @@
             @Html.DisplayNameFor(model => model.StartDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Deadline)
+            @Html.DisplayNameFor(model => model.ActivityPeriod)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ActivityType)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModuleId)
-        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Deadline)
+        </th>*@       
         <th></th>
     </tr>
 
@@ -47,22 +45,17 @@
             @Html.DisplayFor(modelItem => item.StartDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Deadline)
+            @Html.DisplayFor(modelItem => item.ActivityPeriod)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ActivityType)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModuleId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Deadline)
+        </td>*@
+        @*<td>
+            @Html.ActionLink("Manage", "Manage", "Activities", new { id = item.Id, moduleId = XXX, courseId = XXX, getOperation = "Load" }, null)
+        </td>*@
     </tr>
 }
 
