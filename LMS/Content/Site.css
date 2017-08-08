@@ -26,3 +26,43 @@ textarea {
 .submit-save {
 
 }
+span.glyphicon {
+    color: red;
+
+}
+
+span.glyphiconlg {
+    font-size: 56px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+span.glyphiconsm {
+    font-size: 45px;
+
+
+
+}
+h4 {
+    font-weight: bold;
+
+}
+
+.smallicon {
+    font-size: small;
+
+
+}
+.activity li:nth-child(odd) {
+    background: red;
+}
+
+.activity li:nth-child(even) {
+    background: blue;
+}
+
+.icon-size {
+    font-size: 45px;
+    
+
+}

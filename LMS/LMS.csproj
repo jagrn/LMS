@@ -267,6 +267,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\logo-word-16x9-580.gif" />
+    <Content Include="images\logo.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -336,6 +338,8 @@
     <Content Include="Views\Courses\Manage.cshtml" />
     <Content Include="Views\Modules\Manage.cshtml" />
     <Content Include="Views\Activities\Manage.cshtml" />
+    <Content Include="Views\Shared\_Activities.cshtml" />
+    <Content Include="Views\Shared\_Documents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
