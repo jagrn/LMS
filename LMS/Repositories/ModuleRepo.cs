@@ -29,6 +29,12 @@ namespace LMS.Repositories
         public ModuleRepoResult repoResult;
     }
 
+    public struct CourseModulesSpan
+    {
+        public DateTime start;
+        public DateTime end;
+    }
+
     public class ModuleRepo
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
@@ -58,6 +64,37 @@ namespace LMS.Repositories
                 return "No name retrieved: Module ID not found";
             }
             return modules.First().Name;
+        }
+
+        // RETRIEVE the total time span for all modules within a course
+        public static CourseModulesSpan RetrieveCourseSpan(int? courseId)
+        {
+            var modules = db.Modules.Where(m => m.CourseId == courseId).ToList();
+            var courseSpan = new CourseModulesSpan();
+
+            if (modules.Count < 0)
+            {
+                courseSpan.start = modules.First().StartDate;
+                courseSpan.end = modules.First().EndDate;
+                foreach (var mod in modules)
+                {
+                    if (mod.StartDate < courseSpan.start)
+                    {
+                        courseSpan.start = mod.StartDate;
+                    }
+                    if (mod.EndDate > courseSpan.end)
+                    {
+                        courseSpan.end = mod.EndDate;
+                    }
+                }
+            }
+            else
+            {
+                courseSpan.start = DateTime.Parse("2017-01-01 00:00:00");
+                courseSpan.end = DateTime.Parse("2017-01-01 00:00:00");
+            }
+
+            return courseSpan;
         }
 
         // RETREIVE a single module within a course

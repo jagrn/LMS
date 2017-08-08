@@ -1,5 +1,4 @@
-﻿@*@model LMS.Models.Activity*@
-@model LMS.ViewModels.ActivityDeleteViewModel
+﻿@model LMS.ViewModels.ActivityDeleteViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -46,26 +45,33 @@
             @Html.DisplayFor(model => model.StartDate)
             </dd>
 
-            <dt>
+            @*<dt>
             @Html.DisplayNameFor(model => model.EndDate)
             </dt>
             <dd>
             @Html.DisplayFor(model => model.EndDate)
-            </dd>
+            </dd>*@
 
             <dt>
-            @Html.DisplayNameFor(model => model.ActitvityType)
+                @Html.DisplayNameFor(model => model.Period)
             </dt>
             <dd>
-            @Html.DisplayFor(model => model.ActitvityType)
+                @Html.DisplayFor(model => model.Period)
             </dd>
 
             <dt>
+            @Html.DisplayNameFor(model => model.SelectActivityType)
+            </dt>
+            <dd>
+            @Html.DisplayFor(model => model.SelectActivityType)
+            </dd>
+
+            @*<dt>
             @Html.DisplayNameFor(model => model.Deadline)
             </dt>
             <dd>
             @Html.DisplayFor(model => model.Deadline)
-            </dd>
+            </dd>*@
         </dl>
     }
     if (Model.DeleteType == "All")
