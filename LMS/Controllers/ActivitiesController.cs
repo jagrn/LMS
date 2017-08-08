@@ -56,8 +56,9 @@ namespace LMS.Controllers
             {
                 // Create new, reached from module views only              
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
-                viewModel.EndDate = DateTime.Parse("2017-01-01");
+                //viewModel.EndDate = DateTime.Parse("2017-01-01");
                 viewModel.Deadline = DateTime.Parse("2017-01-01");
+                viewModel.Period = SelectActivityPeriod.Heldag;                     // Deafult selection
                 viewModel.SelectActivityType = SelectActivityType.Föreläsning;      // Default selection
             }
             if (getOperation == "Load")
@@ -73,9 +74,10 @@ namespace LMS.Controllers
                 viewModel.Name = singleActivity.activity.Name;
                 viewModel.Description = singleActivity.activity.Description;
                 viewModel.StartDate = singleActivity.activity.StartDate;
-                viewModel.EndDate = singleActivity.activity.EndDate;
-                viewModel.Deadline = singleActivity.activity.Deadline;
+                //viewModel.EndDate = singleActivity.activity.EndDate;
+                viewModel.Period = (SelectActivityPeriod) singleActivity.activity.ActivityPeriod;
                 viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
+                viewModel.Deadline = singleActivity.activity.Deadline;
             }
 
             // Load view model with additional display info wrt parent module
@@ -95,7 +97,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,Deadline,ActivityType,SelectActivityType,ModuleId,CourseId,PostNavigation,PostOperation,PostMessage")] ActivityViewModel viewModel)
+        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,Period,Deadline,ActivityType,SelectActivityType,ModuleId,CourseId,PostNavigation,PostOperation,PostMessage")] ActivityViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -122,10 +124,34 @@ namespace LMS.Controllers
                 Activity activity = new Activity();
                 activity.Name = viewModel.Name;
                 activity.Description = viewModel.Description;
-                activity.StartDate = viewModel.StartDate;
-                activity.EndDate = viewModel.EndDate;
+                activity.ActivityPeriod = (ActivityPeriod)viewModel.Period;
+
+                // Update StartDate time and EndDate time wrt selected Period
+                var start = viewModel.StartDate.ToShortDateString();
+                var end = viewModel.StartDate.ToShortDateString();
+
+                switch (activity.ActivityPeriod)
+                {
+                    case ActivityPeriod.AM:
+                        start = start + " 08:30:00";
+                        end = end + " 12:00:00";
+                        break;
+                    case ActivityPeriod.FM:
+                        start = start + " 13:00:00";
+                        end = end + " 16:30:00";
+                        break;
+                    case ActivityPeriod.FullDay:
+                        start = start + " 08:30:00";
+                        end = end + " 16:30:00";
+                        break;
+                    default:
+                        break;
+                }
+                activity.StartDate = DateTime.Parse(start);
+                activity.EndDate = DateTime.Parse(end);
+
                 activity.ActivityType = (ActivityType) viewModel.SelectActivityType;
-                activity.Deadline = viewModel.Deadline;
+                activity.Deadline = DateTime.Parse("2017-01-01");                       // Dummy init so far
                 activity.ModuleId = viewModel.ModuleId;
 
                 // Perform Add or Update operation against DB
@@ -202,7 +228,8 @@ namespace LMS.Controllers
                 viewModel.Name = singleActivity.activity.Name;
                 viewModel.Description = singleActivity.activity.Description;
                 viewModel.StartDate = singleActivity.activity.StartDate;
-                viewModel.EndDate = singleActivity.activity.EndDate;
+                //viewModel.EndDate = singleActivity.activity.EndDate;
+                viewModel.Period = (SelectActivityPeriod)singleActivity.activity.ActivityPeriod;
                 viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
                 viewModel.Deadline = singleActivity.activity.Deadline;
             }

@@ -250,6 +250,10 @@
     <Compile Include="Migrations\201708072034587_Corrected Activity model.Designer.cs">
       <DependentUpon>201708072034587_Corrected Activity model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708080834588_Period in Activity.cs" />
+    <Compile Include="Migrations\201708080834588_Period in Activity.Designer.cs">
+      <DependentUpon>201708080834588_Period in Activity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -367,6 +371,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708072034587_Corrected Activity model.resx">
       <DependentUpon>201708072034587_Corrected Activity model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708080834588_Period in Activity.resx">
+      <DependentUpon>201708080834588_Period in Activity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

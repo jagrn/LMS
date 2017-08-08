@@ -135,6 +135,7 @@ namespace LMS.Repositories
             activities.First().Description = activity.Description;
             activities.First().StartDate = activity.StartDate;
             activities.First().EndDate = activity.EndDate;
+            activities.First().ActivityPeriod = activity.ActivityPeriod;
             activities.First().ActivityType = activity.ActivityType;
             activities.First().Deadline = activity.Deadline;
 

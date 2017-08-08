@@ -6,6 +6,13 @@ using System.Web;
 
 namespace LMS.ViewModels
 {
+    public enum SelectActivityPeriod
+    {
+        FM,
+        EM,
+        Heldag,
+    }
+
     public enum SelectActivityType
     {
         Föreläsning,
@@ -101,7 +108,8 @@ namespace LMS.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        //public DateTime EndDate { get; set; }
+        public SelectActivityPeriod Period { get; set; }
         public DateTime Deadline { get; set; }
         public SelectActivityType SelectActivityType { get; set; }
 
@@ -121,7 +129,8 @@ namespace LMS.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        //public DateTime EndDate { get; set; }
+        public SelectActivityPeriod Period { get; set; }
         public DateTime Deadline { get; set; }
         public SelectActivityType SelectActivityType { get; set; }
 

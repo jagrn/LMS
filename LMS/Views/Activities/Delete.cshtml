@@ -45,11 +45,18 @@
             @Html.DisplayFor(model => model.StartDate)
             </dd>
 
-            <dt>
+            @*<dt>
             @Html.DisplayNameFor(model => model.EndDate)
             </dt>
             <dd>
             @Html.DisplayFor(model => model.EndDate)
+            </dd>*@
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Period)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Period)
             </dd>
 
             <dt>
@@ -59,12 +66,12 @@
             @Html.DisplayFor(model => model.SelectActivityType)
             </dd>
 
-            <dt>
+            @*<dt>
             @Html.DisplayNameFor(model => model.Deadline)
             </dt>
             <dd>
             @Html.DisplayFor(model => model.Deadline)
-            </dd>
+            </dd>*@
         </dl>
     }
     if (Model.DeleteType == "All")
