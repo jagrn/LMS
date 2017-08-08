@@ -38,6 +38,7 @@ namespace LMS.Controllers
         }
 
         // GET: Courses/Manage/5
+        [Authorize(Roles = "Teacher")]
         public ActionResult Manage(int? id, string getOperation, string viewMessage)
         {
             if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation == "Load")))
@@ -93,6 +94,7 @@ namespace LMS.Controllers
         // POST: Modules/Manage/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,ModuleId,PostNavigation,PostOperation,PostMessage")] CourseViewModel viewModel)
@@ -178,6 +180,7 @@ namespace LMS.Controllers
 
 
         // GET: Courses/Delete/5
+        [Authorize(Roles = "Teacher")]
         public ActionResult Delete(int? id, string deleteType)
         {
             if ((deleteType == null) || (((id == null) || (id == 0)) && (deleteType == "Single")))
@@ -219,6 +222,7 @@ namespace LMS.Controllers
         }
 
         // POST: Courses/Delete/5
+        [Authorize(Roles = "Teacher")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int? id, string deleteType)
