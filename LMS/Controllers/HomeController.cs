@@ -10,7 +10,8 @@ namespace LMS.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Courses");
+            //return View();
         }
 
         public ActionResult About()

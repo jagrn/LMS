@@ -12,17 +12,20 @@ using LMS.ViewModels;
 
 namespace LMS.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class ActivitiesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Activities
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(db.Activities.ToList());
         }
 
         // GET: Activities/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
