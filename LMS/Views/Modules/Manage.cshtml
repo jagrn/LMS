@@ -59,7 +59,7 @@
                 }
             </div><!--end menu-->
            
-            <div class="form-horizontal col-md-6">
+            <div class="form-horizontal col-md-7">
                 <h2>Hantera moduler för @Model.CourseName</h2>
                 
                 @{
@@ -183,6 +183,8 @@
 
                                 <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
                             </button>
+                            @*GET button to reach delete course view*@
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Modules", new { id = moduleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }
                     }
                     <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { Id = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
@@ -198,9 +200,11 @@
 
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <br />
-                @Html.Partial("_Documents")
+                <br />
+                <br />
+              <!--  @Html.Partial("_Documents")-->
             </div>
 
 
