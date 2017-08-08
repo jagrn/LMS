@@ -12,17 +12,21 @@ using LMS.Repositories;
 
 namespace LMS.Controllers
 {
+
+    [Authorize(Roles = "Teacher")]
     public class ModulesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Modules
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(db.Modules.ToList());
         }
 
         // GET: Modules/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
