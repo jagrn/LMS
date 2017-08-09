@@ -186,7 +186,7 @@
                             </button>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Activities", new { id = 0, courseId = Model.CourseId, getOperation = "New", viewMessage = "Form cleared for new module" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny aktivitet</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Activities", new { id = 0, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny aktivitet</a>
                     @{
                         if (activityId != 0)
                         {
@@ -199,7 +199,7 @@
                             <a class="btn btn-default" href="@Url.Action("Delete", "Activities", new { id = activityId, moduleId=Model.ModuleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { Id = Model.CourseId,courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { Id = Model.ModuleId,courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                     <br />
                     
                 </div><!-- end icons-->

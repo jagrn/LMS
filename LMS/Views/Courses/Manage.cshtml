@@ -85,6 +85,8 @@
                 @Html.HiddenFor(model => model.PostOperation)
                 @Html.HiddenFor(model => model.PostMessage)
                 @Html.HiddenFor(model => model.ModuleId)
+                @Html.HiddenFor(model => model.StartDate)
+                @Html.HiddenFor(model => model.EndDate)
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -104,7 +106,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
 
@@ -120,7 +122,7 @@
                         @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
                     </div>
-                </div>
+                </div>*@
 
                 <div>
                     <!--buttons-->
@@ -170,7 +172,7 @@
                             </button>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { id = 0, getOperation = "New", viewMessage = "Form cleared for new module" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny kurs</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { id = 0, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny kurs</a>
                     @{
                         if (courseId != 0)
                         {
