@@ -123,17 +123,15 @@ namespace LMS.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                // Create the activity prototype
-                Activity activity = new Activity();
-                activity.Name = viewModel.Name;
-                activity.Description = viewModel.Description;
-                activity.ActivityPeriod = (ActivityPeriod)viewModel.Period;
+                if (viewModel.PostOperation == "New")
+                {
+                    viewModel.Id = 0;
+                }
 
-                // Update StartDate time and EndDate time wrt selected Period
+                // Prepare start and end data for activity
                 var start = viewModel.StartDate.ToShortDateString();
                 var end = viewModel.StartDate.ToShortDateString();
-
-                switch (activity.ActivityPeriod)
+                switch ((ActivityPeriod)viewModel.Period)
                 {
                     case ActivityPeriod.AM:
                         start = start + " 08:30:00";
@@ -150,8 +148,44 @@ namespace LMS.Controllers
                     default:
                         break;
                 }
-                activity.StartDate = DateTime.Parse(start);
-                activity.EndDate = DateTime.Parse(end);
+                var StartPoint = DateTime.Parse(start);
+                var EndPoint = DateTime.Parse(end);
+
+                // Input validation
+                var validMess = ActivityRepo.IsActivityNameValid(viewModel.ModuleId, viewModel.Id, viewModel.Name);
+                if (validMess == null)
+                {
+                    validMess = ActivityRepo.IsActivitySpanValid(viewModel.ModuleId, viewModel.Id, StartPoint, EndPoint);
+                }
+                if (validMess == null)
+                {
+                    validMess = ActivityRepo.IsActivitySpanInModule(viewModel.CourseId, viewModel.ModuleId, StartPoint, EndPoint);
+                }
+                if (validMess != null)
+                {
+                    // Load view model with additional display info wrt parent module
+                    var moduleActivityList = ActivityRepo.RetrieveModuleActivityList(viewModel.ModuleId);
+                    if (moduleActivityList.repoResult == ActivityRepoResult.NotFound)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+                    viewModel.ModuleActivities = moduleActivityList.activityList;
+                    viewModel.ModuleName = ModuleRepo.RetrieveModuleName(viewModel.ModuleId);
+
+                    viewModel.PostMessage = validMess;
+                    return View(viewModel);
+                }
+                // End of input validation
+
+                // Create the activity prototype
+                Activity activity = new Activity();
+                activity.Name = viewModel.Name;
+                activity.Description = viewModel.Description;
+                activity.ActivityPeriod = (ActivityPeriod)viewModel.Period;
+
+                // Update StartDate time and EndDate time wrt selected Period               
+                activity.StartDate = StartPoint;
+                activity.EndDate = EndPoint;
 
                 activity.ActivityType = (ActivityType) viewModel.SelectActivityType;
                 activity.Deadline = DateTime.Parse("2017-01-01");                       // Dummy init so far
@@ -161,7 +195,7 @@ namespace LMS.Controllers
                 if (viewModel.PostOperation == "New")
                 {
                     viewModel.Id = ActivityRepo.AddActivity(activity);
-                    viewModel.PostMessage = "The new " + viewModel.Name + " activity was successfully saved";
+                    viewModel.PostMessage = "Den nya aktiviteten " + viewModel.Name + " är sparad";
                 }
                 if (viewModel.PostOperation == "Update")
                 {
@@ -171,7 +205,7 @@ namespace LMS.Controllers
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }
-                    viewModel.PostMessage = "The " + viewModel.Name + " activity was successfully updated";
+                    viewModel.PostMessage = "Aktiviteten " + viewModel.Name + " är uppdaterad";
                 }
 
                 if (viewModel.PostNavigation == "Save")
@@ -200,7 +234,7 @@ namespace LMS.Controllers
                         break;
                 }
             }
-            viewModel.PostMessage = "Error (model state invalid), no module saving performed";
+            viewModel.PostMessage = "ERROR: Misslyckad POST operation for aktivitet";
             return View(viewModel);
         }
 
@@ -266,12 +300,12 @@ namespace LMS.Controllers
             if (deleteType == "Single")
             {         
                 string activityName = ActivityRepo.RetrieveActivityName(id);
-                message = "The " + @activityName + " activity was removed";
+                message = "Aktiviteten " + @activityName + " är borttagen";
                 result = ActivityRepo.RemoveActivity(moduleId, id);            
             }
             else // deleteType == "All"
             {
-                message = "All modules removed";
+                message = "Alla aktiviteter är borttagna för aktuell modul";
                 result =  ActivityRepo.RemoveModuleActivities(moduleId);
             }
 

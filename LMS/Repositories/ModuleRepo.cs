@@ -52,6 +52,50 @@ namespace LMS.Repositories
             return true;
         }
 
+        // QUERY whether a certain module name is valid within a course, i.e. not null and unique against DB
+        public static string IsModuleNameValid(int? courseId, int? moduleId, string name)
+        {
+            if (name == null)
+                return "Modulnamn saknas";
+
+            var modules = db.Modules.Where(m => m.CourseId == courseId).Where(m => m.Name == name).ToList();
+            if (modules.Count == 0)
+                return null;
+
+            if ((modules.Count == 1) && (modules.First().Id == moduleId))
+                return null;
+
+            return "Denna modul finns redan i kursen";
+        }
+
+        // QUERY whether a certain module span is valid within a course, i.e. not overlapping other modules
+        public static string IsModuleSpanValid(int? courseId, int? moduleId, DateTime start, DateTime end)
+        {
+            var modules = db.Modules.Where(m => m.CourseId == courseId).ToList();
+            if (modules.Count == 0)
+                return null;
+
+            bool overlap = false;
+            foreach (var mod in modules)
+            {
+                if (mod.Id != moduleId)
+                {
+                    if ((start >= mod.StartDate) && (start < mod.EndDate))
+                        overlap = true;
+
+                    if ((end > mod.StartDate) && (end <= mod.EndDate))
+                        overlap = true;
+
+                    if ((start <= mod.StartDate) && (end >= mod.EndDate))
+                        overlap = true;
+                }
+            }
+            if (!overlap)
+                return null;
+
+            return "Denna modul överlappar existerande modul(er)";
+        }
+
         // RETREIVE a module name, non-protected method without RepoResult
         public static string RetrieveModuleName(int? moduleId)
         {
@@ -72,7 +116,7 @@ namespace LMS.Repositories
             var modules = db.Modules.Where(m => m.CourseId == courseId).ToList();
             var courseSpan = new CourseModulesSpan();
 
-            if (modules.Count < 0)
+            if (modules.Count > 0)
             {
                 courseSpan.start = modules.First().StartDate;
                 courseSpan.end = modules.First().EndDate;
@@ -120,7 +164,7 @@ namespace LMS.Repositories
             return singleModule;
         }
 
-        // RETREIVE a list of modules (id + name) within a course
+        // RETREIVE a list of modules (id + name + etc) within a course
         public static CourseModuleList RetrieveCourseModuleList(int? courseId)
         {
             var courseModuleList = new CourseModuleList();
@@ -144,6 +188,9 @@ namespace LMS.Repositories
                 ModuleListData courseModule = new ModuleListData();
                 courseModule.Id = mod.Id;
                 courseModule.Name = mod.Name;
+                courseModule.Description = mod.Description;
+                courseModule.StartDate = mod.StartDate;
+                courseModule.EndDate = mod.EndDate;
                 courseModuleList.moduleList.Add(courseModule);
             }
             courseModuleList.repoResult = ModuleRepoResult.Success;

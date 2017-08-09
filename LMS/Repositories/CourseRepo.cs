@@ -46,6 +46,22 @@ namespace LMS.Repositories
             return true;
         }
 
+        // QUERY whether a certain course name is valid, i.e. not null and unique against DB
+        public static string IsCourseNameValid(int? courseId, string name)
+        {
+            if (name == null)
+                return "Kursnamn saknas";
+
+            var courses = db.Courses.Where(c => c.Name == name).ToList();
+            if (courses.Count == 0)
+                return null;
+
+            if ((courses.Count == 1) && (courses.First().Id == courseId))
+                return null;
+
+            return "Denna kurs finns redan";
+        }
+
         // RETREIVE a course name, non-protected method without RepoResult
         public static string RetrieveCourseName(int? courseId)
         {
@@ -126,6 +142,28 @@ namespace LMS.Repositories
 
             db.Entry(courses.First()).State = EntityState.Modified;
             db.SaveChanges();
+            return CourseRepoResult.Success;
+        }
+
+        // UPDATE the course time span according to present modules within
+        public static CourseRepoResult UpdateCourseSpan(int? courseId)
+        {
+            if ((courseId == null) || (courseId == 0))
+                return CourseRepoResult.BadRequest;
+
+            SingleCourse singleCourse = CourseRepo.RetrieveCourse(courseId);
+            if (singleCourse.repoResult == CourseRepoResult.NotFound)
+            {
+                return CourseRepoResult.NotFound;
+            }
+            CourseModulesSpan courseSpan = ModuleRepo.RetrieveCourseSpan(courseId);
+            singleCourse.course.StartDate = courseSpan.start;
+            singleCourse.course.EndDate = courseSpan.end;
+            CourseRepoResult result = CourseRepo.UpdateCourse(singleCourse.course);
+            if (result == CourseRepoResult.NotFound)
+            {
+                return CourseRepoResult.NotFound;
+            }
             return CourseRepoResult.Success;
         }
 

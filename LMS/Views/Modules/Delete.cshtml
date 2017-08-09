@@ -7,20 +7,20 @@
 @{
     if (Model.DeleteType == "Single")
     {
-        <h2>Remove module @Model.Name</h2>
-        <h3>Are you sure you want to permanently remove this module?</h3>
+        <h2>Ta bort modulen @Model.Name</h2>
+        <h3>Är du säker på att du vill ta bort den här modulen permanent?</h3>
     }
     if (Model.DeleteType == "All")
     {
-        <h2>Remove all modules</h2>
-        <h3>Are you sure you want to permanently remove all listed modules?</h3>
+        <h2>Ta bort alla moduler for aktuell kurs</h2>
+        <h3>Är du säker på att du vill ta bort alla listade moduler permanent?</h3>
     }
 }
 <div>
 @{
     if (Model.DeleteType == "Single")
     {
-        <h4>Module details</h4>
+        <h4>Moduldetaljer:</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
@@ -54,7 +54,7 @@
     }
     if (Model.DeleteType == "All")
     {
-        <h4>Concerned modules:</h4>
+        <h4>Modullista:</h4>
         <hr />
         foreach (var module in Model.CourseModules)
         {
@@ -66,8 +66,8 @@
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     <div class="form-actions no-color">
-        <button type="submit" class="btn btn-default">CONFIRM</button>    
-        <button class="btn btn-default">@Html.ActionLink("CANCEL", "Manage", "Modules", new { courseId = Model.CourseId, getOperation = "New" }, null)</button>
+        <button type="submit" class="btn btn-default">Bekräfta</button>    
+        <button class="btn btn-default">@Html.ActionLink("Avbryt", "Manage", "Modules", new { courseId = Model.CourseId, getOperation = "New" }, null)</button>
     </div>
 }
 </div>

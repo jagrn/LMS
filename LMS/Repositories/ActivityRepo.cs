@@ -46,6 +46,59 @@ namespace LMS.Repositories
             return true;
         }
 
+        // QUERY whether a certain activity name is valid within a module, i.e. not null and unique against DB
+        public static string IsActivityNameValid(int? moduleId, int? activityId, string name)
+        {
+            if (name == null)
+                return "Aktivitetsnamn saknas";
+
+            var activities = db.Activities.Where(a => a.ModuleId == moduleId).Where(a => a.Name == name).ToList();
+            if (activities.Count == 0)
+                return null;
+
+            if ((activities.Count == 1) && (activities.First().Id == activityId))
+                return null;
+
+            return "Denna aktivitet finns redan i modulen";
+        }
+
+        // QUERY whether a certain activity span is valid within a module, i.e. not overlapping other activities
+        public static string IsActivitySpanValid(int? moduleId, int? activityId, DateTime start, DateTime end)
+        {
+            var activities = db.Activities.Where(a => a.ModuleId == moduleId).ToList();
+            if (activities.Count == 0)
+                return null;
+
+            bool overlap = false;
+            foreach (var act in activities)
+            {
+                if (act.Id != activityId)
+                {
+                    if ((start >= act.StartDate) && (start < act.EndDate))
+                        overlap = true;
+
+                    if ((end > act.StartDate) && (end <= act.EndDate))
+                        overlap = true;
+
+                    if ((start <= act.StartDate) && (end >= act.EndDate))
+                        overlap = true;
+                }
+            }
+            if (!overlap)
+                return null;
+
+            return "Denna aktivitet överlappar existerande aktivitet(er)";
+        }
+
+        // QUERY whether a certain activity span is valid within a module frame, i.e. not exceeding the module span
+        public static string IsActivitySpanInModule(int? courseId, int? moduleId, DateTime start, DateTime end)
+        {
+            SingleModule singleModule = ModuleRepo.RetrieveModule(courseId, moduleId);
+            if ((start < singleModule.module.StartDate) || (end > singleModule.module.EndDate))
+                return "Denna aktivitet ligger inte inom modulens start och slut";
+            return null;
+        }
+
         // RETREIVE an activity name, non-protected method without RepoResult
         public static string RetrieveActivityName(int? activityId)
         {
@@ -83,7 +136,7 @@ namespace LMS.Repositories
             return singleActivity;
         }
 
-        // RETREIVE a list of activities (id + name) within a module
+        // RETREIVE a list of activities (id + name + etc) within a module
         public static ModuleActivityList RetrieveModuleActivityList(int? moduleId)
         {
             var moduleActivityList = new ModuleActivityList();
@@ -107,6 +160,9 @@ namespace LMS.Repositories
                 ActivityListData moduleActivity = new ActivityListData();
                 moduleActivity.Id = act.Id;
                 moduleActivity.Name = act.Name;
+                moduleActivity.Description = act.Description;
+                moduleActivity.StartDate = act.StartDate;
+                moduleActivity.EndDate = act.EndDate;
                 moduleActivityList.activityList.Add(moduleActivity);
             }
             moduleActivityList.repoResult = ActivityRepoResult.Success;
