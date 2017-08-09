@@ -345,11 +345,12 @@
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\Courses\Manage_old.cshtml" />
     <Content Include="Views\Modules\Manage.cshtml" />
-    <Content Include="Views\Activities\Manage.cshtml" />
+    <Content Include="Views\Activities\Manage_old.cshtml" />
     <Content Include="Views\Shared\_Activities.cshtml" />
     <Content Include="Views\Shared\_Documents.cshtml" />
     <Content Include="Views\Courses\Manage.cshtml" />
     <Content Include="Views\Shared\_Modules.cshtml" />
+    <Content Include="Views\Activities\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

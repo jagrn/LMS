@@ -1,8 +1,6 @@
-﻿using LMS.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel;
 
 namespace LMS.ViewModels
 {
@@ -42,9 +40,13 @@ namespace LMS.ViewModels
     public class CourseViewModel
     {
         public int Id { get; set; }
+        [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Startdatum")]
         public DateTime StartDate { get; set; }
+        [DisplayName("Slutdatum")]
         public DateTime EndDate { get; set; }
 
         public List<CourseListData> AllCourses { get; set; }
@@ -59,9 +61,13 @@ namespace LMS.ViewModels
     public class CourseDeleteViewModel
     {
         public int Id { get; set; }
+        [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Startdatum")]
         public DateTime StartDate { get; set; }
+        [DisplayName("Slutdatum")]
         public DateTime EndDate { get; set; }
 
         public List<CourseListData> AllCourses { get; set; }
@@ -71,10 +77,14 @@ namespace LMS.ViewModels
 
     public class ModuleViewModel
     {
-        public int Id { get; set; }        
+        public int Id { get; set; }
+        [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Startdatum")]
         public DateTime StartDate { get; set; }
+        [DisplayName("Slutdatum")]
         public DateTime EndDate { get; set; }
 
         public int CourseId { get; set; }
@@ -91,9 +101,13 @@ namespace LMS.ViewModels
     public class ModuleDeleteViewModel
     {
         public int Id { get; set; }
+        [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Startdatum")]
         public DateTime StartDate { get; set; }
+        [DisplayName("Slutdatum")]
         public DateTime EndDate { get; set; }
 
         public int CourseId { get; set; }
@@ -105,12 +119,17 @@ namespace LMS.ViewModels
     public class ActivityViewModel
     {
         public int Id { get; set; }
+        [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Startdatum")]
         public DateTime StartDate { get; set; }
         //public DateTime EndDate { get; set; }
+        [DisplayName("Period")]
         public SelectActivityPeriod Period { get; set; }
         public DateTime Deadline { get; set; }
+        [DisplayName("Aktivitetstyp")]
         public SelectActivityType SelectActivityType { get; set; }
 
         public int CourseId { get; set; }
@@ -126,12 +145,16 @@ namespace LMS.ViewModels
     public class ActivityDeleteViewModel
     {
         public int Id { get; set; }
+        [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Startdatum")]
         public DateTime StartDate { get; set; }
         //public DateTime EndDate { get; set; }
         public SelectActivityPeriod Period { get; set; }
         public DateTime Deadline { get; set; }
+        [DisplayName("Aktivitetstyp")]
         public SelectActivityType SelectActivityType { get; set; }
 
         public int CourseId { get; set; }
