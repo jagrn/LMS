@@ -26,7 +26,7 @@ namespace LMS.ViewModels
     }
 
     public struct ModuleListData
-	{
+    {
         public int Id;
         public string Name;
         public string Description;
@@ -101,7 +101,7 @@ namespace LMS.ViewModels
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
-        public string PostOperation { get; set; }     
+        public string PostOperation { get; set; }
     }
 
     public class ModuleDeleteViewModel
@@ -169,4 +169,22 @@ namespace LMS.ViewModels
 
         public string DeleteType { get; set; }
     }
+
+    public struct SchemeActivity
+    {
+        public int ActivityType;    // According to SelectActivityType and -1 => "Ledig"
+        public string NameText;
+        public string TypeText;
+        public int ActivityId;
+    }
+
+    public class SchemeViewModel
+    {
+        public List<SchemeActivity> WeekActivities { get; set; }
+        public int Year { get; set; }
+        public int Week { get; set; }
+        public int MoveWeek { get; set; }
+    }
+
+
 }
