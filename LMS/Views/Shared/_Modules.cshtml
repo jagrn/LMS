@@ -6,8 +6,6 @@
 
 <!-- activities-->
 
-
-
     @{
         if (courseId != 0)
         {
@@ -20,9 +18,9 @@
                 {
                     <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                         <p>
-                           2017-09-05 &nbsp; <a href="@Url.Action("Manage", "Modules", new { id = module.Id, courseId = courseId, getOperation = "Load", viewMessage = "" })">@module.Name</a>
+                            @module.StartDate &nbsp; <a href="@Url.Action("Manage", "Modules", new { id = module.Id, courseId = courseId, getOperation = "Load", viewMessage = "" })">@module.Name</a>
                         </p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                        <p>@module.Description</p>
 
                     </div>
                 }
