@@ -1,0 +1,49 @@
+﻿@model LMS.ViewModels.SchemeViewModel
+
+@{
+    ViewBag.Title = "Veckoschema";
+}
+
+<br />
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container-fluid">
+
+        <h2>ViewBag.Title</h2>
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <p>vänsterkolumnen</p>
+
+            </div>
+
+            @foreach (var weekActivitiy in Model.WeekActivities)
+            {
+
+                <div class="col-md-1">
+
+                    @weekActivitiy.NameText
+                    @weekActivitiy.TypeText
+
+                </div>
+            }
+
+            <br />
+            @Html.ActionLink("<<< prev <<<", "Sheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 }))
+            @Html.ActionLink(">>> Next >>>", "Sheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 }))
+            @Html.ActionLink(">>> This <<<", "Sheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 }))
+
+        </div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
