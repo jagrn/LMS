@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.ViewModels
 {
@@ -130,6 +131,11 @@ namespace LMS.ViewModels
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         [DisplayName("Startdatum")]
+        //
+        // följande två rader ger en datepicker till startDate
+        //
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         //public DateTime EndDate { get; set; }
         [DisplayName("Period")]
