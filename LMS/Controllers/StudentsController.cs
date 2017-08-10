@@ -13,16 +13,15 @@ namespace LMS.Controllers
         public ActionResult Scheme(int courseId, int year, int week, int moveWeek)
         {
             SchemeViewModel viewModel = new SchemeViewModel();
-            viewModel.Year = 2017;
+            viewModel.Year = year + 1;
             viewModel.Week = week + moveWeek;
             viewModel.Period = "2017-04-10 -- 2017-04-15";
             viewModel.WeekActivities = new List<SchemeActivity>();
 
-            int index = 0;
-            SchemeActivity schemeAct = new SchemeActivity();
-            foreach (var viewMod in viewModel.WeekActivities)
+            for (int index = 0; index < 10; index++)
             {
-                if (index == 0)
+                SchemeActivity schemeAct = new SchemeActivity();
+                if ((index == 0)|| (index == 5) || (index == 6) || (index == 7))
                 {
                     schemeAct.ActivityType = -1;
                     schemeAct.NameText = "";
@@ -60,8 +59,10 @@ namespace LMS.Controllers
                     schemeAct.ActivityId = 1;
                 }
                 viewModel.WeekActivities.Add(schemeAct);
-                index++;
             }
+
+
+            
 
             return View(viewModel);
         }
