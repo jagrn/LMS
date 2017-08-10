@@ -10,11 +10,11 @@ namespace LMS.Controllers
     public class StudentsController : Controller
     {
         // GET: Students/Scheme
-        public ActionResult Scheme()
+        public ActionResult Scheme(int courseId, int year, int week, int moveWeek)
         {
             SchemeViewModel viewModel = new SchemeViewModel();
             viewModel.Year = 2017;
-            viewModel.Week = 10;
+            viewModel.Week = week + moveWeek;
             viewModel.Period = "2017-04-10 -- 2017-04-15";
             viewModel.WeekActivities = new List<SchemeActivity>();
 
