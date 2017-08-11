@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LMS.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -42,6 +43,15 @@ namespace LMS.ViewModels
         public string Description;
         public DateTime StartDate;
         public DateTime EndDate;
+    }
+
+    public struct PeriodActivityListData
+    {
+        public string Name;
+        public string ModuleName;
+        public DateTime StartDate;
+        public SelectActivityType ActivityType;
+        public ActivityPeriod ActivityPeriod;
     }
 
     public class CourseViewModel
@@ -181,6 +191,7 @@ namespace LMS.ViewModels
         public int ActivityType;    // According to SelectActivityType and -1 => "Ledig"
         public string NameText;
         public string TypeText;
+        public string ModuleNameText;
         public int ActivityId;
     }
 

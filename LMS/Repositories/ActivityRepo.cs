@@ -29,6 +29,13 @@ namespace LMS.Repositories
         public ActivityRepoResult repoResult;
     }
 
+    public struct PeriodActivityList
+    {
+        public List<PeriodActivityListData> periodActivityList;
+        public ActivityRepoResult repoResult;
+        public DateTime startOfWeek;
+    }
+
     public static class ActivityRepo
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
@@ -167,6 +174,45 @@ namespace LMS.Repositories
             }
             moduleActivityList.repoResult = ActivityRepoResult.Success;
             return moduleActivityList;
+        }
+
+        // RETREIVE a list of activities (name + start + type) within a course and for a defined time period
+        public static PeriodActivityList RetrievePeriodActivities(int? courseId, DateTime start, DateTime  end)
+        {
+            PeriodActivityList periodActivities = new PeriodActivityList();
+
+            if ((courseId == null) || (courseId == 0))
+            {
+                periodActivities.repoResult = ActivityRepoResult.BadRequest;
+                return periodActivities;
+            }
+            
+            if (!CourseRepo.IsCoursePresent(courseId))
+            {
+                periodActivities.repoResult = ActivityRepoResult.NotFound;
+                return periodActivities;
+            }
+
+            periodActivities.startOfWeek = start;
+            periodActivities.periodActivityList = new List<PeriodActivityListData>();
+
+            var modules = db.Modules.Where(m => m.CourseId == courseId).Where(m => m.StartDate < end).Where(m => m.EndDate > start).ToList();
+            foreach (var mod in modules)
+            {
+                int moduleId = mod.Id;
+                var activities = db.Activities.Where(a => a.ModuleId == moduleId).Where(a => a.StartDate < end).Where(a => a.EndDate > start).ToList();                
+                foreach (var act in activities)
+                {
+                    PeriodActivityListData periodActivity = new PeriodActivityListData();
+                    periodActivity.Name = act.Name;
+                    periodActivity.ModuleName = mod.Name;
+                    periodActivity.StartDate = act.StartDate;
+                    periodActivity.ActivityType = (SelectActivityType)act.ActivityType;
+                    periodActivity.ActivityPeriod = act.ActivityPeriod;
+                    periodActivities.periodActivityList.Add(periodActivity);
+                }
+            }
+            return periodActivities;
         }
 
         // ADD a single activity to a module

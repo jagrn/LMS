@@ -1,7 +1,9 @@
-﻿using LMS.ViewModels;
+﻿using LMS.Repositories;
+using LMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -58,15 +60,39 @@ namespace LMS.Controllers
                 nextMonday = GetMonday(year, week);
                 nextMonday = nextMonday.AddDays(7 * moveWeek);
             }
-       
+
             PeriodData periodData = new PeriodData();
-            periodData.Start = nextMonday;
-            periodData.End = nextMonday.AddDays(4);
+            var monday = nextMonday.ToShortDateString() + " 08:30:00";
+            periodData.Start = DateTime.Parse(monday);
+            var friday = nextMonday.AddDays(4).ToShortDateString() + " 16:30:00";
+            periodData.End = DateTime.Parse(friday);
             periodData.Year = nextMonday.Year;
             periodData.Week = GetWeek(nextMonday);
             return periodData;
         }
 
+        private int GetIndex(PeriodActivityListData activityData, DateTime startOfWeek, bool fullDay)
+        {
+            // Returns a session index reflecting the scheme position (within a week)
+            // AM sessions are indexed 0..4
+            // PM sessions are indexed 5..9
+            // Fullday sessions are indexed 10.14
+
+            var index = ((int)(activityData.StartDate.DayOfWeek + 6)) % 7;       // Day offset: Monday = 0, Tuesday = 1, etc
+            var indexStart = startOfWeek.AddDays(index);
+            if (fullDay)
+            {
+                index = index + 10;         // Full day sessions
+            }
+            else
+            {
+                if (activityData.StartDate != indexStart)
+                {                  
+                    index = index + 5;      // Afternoon session
+                }
+            }
+            return index;
+        }
 
         public ActionResult About()
         {
@@ -93,53 +119,92 @@ namespace LMS.Controllers
             viewModel.Week = periodData.Week;
             viewModel.Monday = periodData.Start;
             viewModel.Period = periodData.Start.Date + " -- " + periodData.End.Date;
-            viewModel.WeekActivities = new List<SchemeActivity>();
+            
+            PeriodActivityList activityList = ActivityRepo.RetrievePeriodActivities(courseId, periodData.Start, periodData.End);
+            if (activityList.repoResult == ActivityRepoResult.NotFound)
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
+            viewModel.WeekActivities = new List<SchemeActivity>();
             for (int index = 0; index < 10; index++)
             {
                 SchemeActivity schemeAct = new SchemeActivity();
-                if ((index == 0)|| (index == 5) || (index == 6) || (index == 7))
-                {
-                    schemeAct.ActivityType = -1;
-                    schemeAct.NameText = "";
-                    schemeAct.TypeText = "";
-                    schemeAct.ActivityId = 1;
-                }
-
-                if (index == 2)
-                {
-                    schemeAct.ActivityType = 0;
-                    schemeAct.NameText = "Java introduction";
-                    schemeAct.TypeText = "Föreläsning";
-                    schemeAct.ActivityId = 1;
-                }
-
-                if ((index == 3) || (index == 4))
-                {
-                    schemeAct.ActivityType = 1;
-                    if (index == 3)
-                        schemeAct.NameText = "Become a Java coder";
-                    else
-                        schemeAct.NameText = "Advanced techniques in Java";
-                    schemeAct.TypeText = "Datorbaserad";
-                    schemeAct.ActivityId = 1;
-                }
-
-                if ((index == 1) || (index > 7))
-                {
-                    schemeAct.ActivityType = 3;
-                    if (index == 1)
-                        schemeAct.NameText = "Java övning 1";
-                    else
-                        schemeAct.NameText = "Java övning 2";
-                    schemeAct.TypeText = "Övning";
-                    schemeAct.ActivityId = 1;
-                }
+                schemeAct.ActivityType = -1;
+                schemeAct.NameText = "";
+                schemeAct.TypeText = "";
+                schemeAct.ModuleNameText = "";
+                schemeAct.ActivityId = 1;
                 viewModel.WeekActivities.Add(schemeAct);
             }
 
+            foreach (var act in activityList.periodActivityList)
+            {
+                SchemeActivity schemeAct = new SchemeActivity();
+                schemeAct.ActivityType = (int) act.ActivityType;
+                schemeAct.NameText = act.Name;
 
-            
+                string type = act.ActivityType.ToString();
+
+                schemeAct.TypeText = type;
+                schemeAct.ModuleNameText = act.ModuleName;
+                schemeAct.ActivityId = 1;
+                
+                var index = GetIndex(act, activityList.startOfWeek, (act.ActivityPeriod == Models.ActivityPeriod.FullDay));
+                if (index < 10)
+                {
+                    viewModel.WeekActivities.RemoveAt(index);
+                    viewModel.WeekActivities.Insert(index, schemeAct);
+                }
+                else
+                {
+                    viewModel.WeekActivities.RemoveAt(index-10);
+                    viewModel.WeekActivities.Insert(index-10, schemeAct);
+                    viewModel.WeekActivities.RemoveAt(index - 5);
+                    viewModel.WeekActivities.Insert(index - 5, schemeAct);
+                }
+            }
+
+            //for (int index = 0; index < 10; index++)
+            //{
+            //    SchemeActivity schemeAct = new SchemeActivity();
+            //    if ((index == 0)|| (index == 5) || (index == 6) || (index == 7))
+            //    {
+            //        schemeAct.ActivityType = -1;
+            //        schemeAct.NameText = "";
+            //        schemeAct.TypeText = "";
+            //        schemeAct.ActivityId = 1;
+            //    }
+
+            //    if (index == 2)
+            //    {
+            //        schemeAct.ActivityType = 0;
+            //        schemeAct.NameText = "Java introduction";
+            //        schemeAct.TypeText = "Föreläsning";
+            //        schemeAct.ActivityId = 1;
+            //    }
+
+            //    if ((index == 3) || (index == 4))
+            //    {
+            //        schemeAct.ActivityType = 1;
+            //        if (index == 3)
+            //            schemeAct.NameText = "Become a Java coder";
+            //        else
+            //            schemeAct.NameText = "Advanced techniques in Java";
+            //        schemeAct.TypeText = "Datorbaserad";
+            //        schemeAct.ActivityId = 1;
+            //    }
+
+            //    if ((index == 1) || (index > 7))
+            //    {
+            //        schemeAct.ActivityType = 3;
+            //        if (index == 1)
+            //            schemeAct.NameText = "Java övning 1";
+            //        else
+            //            schemeAct.NameText = "Java övning 2";
+            //        schemeAct.TypeText = "Övning";
+            //        schemeAct.ActivityId = 1;
+            //    }
+            //    viewModel.WeekActivities.Add(schemeAct);
+            //}
 
             return View(viewModel);
         }
