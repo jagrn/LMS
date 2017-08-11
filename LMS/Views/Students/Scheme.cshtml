@@ -16,7 +16,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="container-fluid">
+    <div class="container">
 
         <h2>@ViewBag.Title</h2>
         @Model.Year
@@ -34,7 +34,7 @@
 
             <div class="col-sm-1" style="background-color:ghostwhite">
 
-                @Html.ActionLink("<<<", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })
+                @Html.ActionLink("<<<", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })
 
             </div>
 
@@ -58,58 +58,57 @@
 
             <div class="col-sm-1" style="background-color:ghostwhite">
 
-                @Html.ActionLink(">>>", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
+                @Html.ActionLink(">>>", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
 
             </div>
         </div>
 
         <div class="row">
 
-        @foreach (var weekActivitiy in Model.WeekActivities)
+            @foreach (var weekActivitiy in Model.WeekActivities)
                 {
                     i++;
                     if (i == 1 || i == 6)
                     {
-                <div class="col-sm-1" style="color:white; background-color:black">
+                    <div class="col-sm-1" style="color:white; background-color:black">
 
-                    <p>vänster</p>
+                        <p>vänster</p>
 
-                </div>
-            }
-            string s = "white";
-            switch (weekActivitiy.ActivityType)
-            {
-                case 1: s = "crimson"; break;
-                case 2: s = "red"; break;
-                case 3: s = "yellow"; break;
-                case 4: s = "blue"; break;
-                case 5: s = "green"; break;
-                default: break;
-            }
-            @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\">")
+                    </div>
+                }
+                string s = "white";
+                switch (weekActivitiy.ActivityType)
+                {
+                    case 1: s = "crimson"; break;
+                    case 2: s = "red"; break;
+                    case 3: s = "yellow"; break;
+                    case 4: s = "blue"; break;
+                    case 5: s = "green"; break;
+                    default: break;
+                }
+                @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\">")
 
-            @weekActivitiy.NameText
-            <br />
+                @weekActivitiy.NameText
+                <br />
                 @weekActivitiy.TypeText
 
                 @Html.Raw("</div>")
 
-            if (i == 5 || i == 10)
-            {
-                <div class="col-sm-1" style="background-color:floralwhite">
+                if (i == 5 || i == 10)
+                {
+                    <div class="col-sm-1" style="background-color:floralwhite">
 
-                    <p>höger</p>
+                        <p>höger</p>
 
-                </div>
+                    </div>
+                }
+
             }
 
-        }
-
-        <br />
+        </div>
         
-        @Html.ActionLink(">>> This <<<", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 })
+        @Html.ActionLink(">>> This <<<", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 })
 
-    </div>
     </div>
                 }
 @section Scripts {

@@ -68,17 +68,14 @@ namespace LMS.Controllers
         }
 
 
-        public ActionResult About()
+        public ActionResult About(int? courseId, int? year, int? week, int? moveWeek)
         {
             ViewBag.Message = "Your application description page.";
 
-            return View();
+            return View(GetSchemeViewModel(courseId, year, week, moveWeek));
         }
 
-
-
-        // GET: Students/Scheme
-        public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)
+        private SchemeViewModel GetSchemeViewModel(int? courseId, int? year, int? week, int? moveWeek)
         {
             SchemeViewModel viewModel = new SchemeViewModel();
             if (courseId == null)
@@ -98,7 +95,7 @@ namespace LMS.Controllers
             for (int index = 0; index < 10; index++)
             {
                 SchemeActivity schemeAct = new SchemeActivity();
-                if ((index == 0)|| (index == 5) || (index == 6) || (index == 7))
+                if ((index == 0) || (index == 5) || (index == 6) || (index == 7))
                 {
                     schemeAct.ActivityType = -1;
                     schemeAct.NameText = "";
@@ -137,11 +134,22 @@ namespace LMS.Controllers
                 }
                 viewModel.WeekActivities.Add(schemeAct);
             }
-
-
             
-
-            return View(viewModel);
+            return viewModel;
         }
+
+
+        // GET: Students/Scheme
+        public ActionResult SchemePartial(int? courseId, int? year, int? week, int? moveWeek)
+        {
+            return PartialView("Scheme", GetSchemeViewModel(courseId, year, week, moveWeek));
+        }
+
+
+        public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)
+        {
+            return View("Scheme",GetSchemeViewModel(courseId, year, week, moveWeek));
+        }
+
     }
 }

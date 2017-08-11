@@ -1,6 +1,35 @@
-﻿@{
-    ViewBag.Title = "About";
+﻿@model LMS.ViewModels.SchemeViewModel
+
+
+@{
+    ViewBag.Title = "Aboutt";
 }
 <h2>@ViewBag.Title.</h2>
 
+
+<div class="row">
+
+    <button id="priorWeek"> /< </button>
+
+    @*@Html.ActionLink("<<<", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })*@
+
+</div>
+
+
+<div id="schedule" class="row">
+
+
+</div>
+
+@Html.Action("SchemePartial", "Students", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 })
+
+<div id="show" align="center"></div>
+
 <p> An example LMS Application</p>
+
+<script>
+  
+
+                
+
+</script>
