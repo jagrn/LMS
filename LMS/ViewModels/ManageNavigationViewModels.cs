@@ -189,8 +189,8 @@ namespace LMS.ViewModels
         public List<SchemeActivity> WeekActivities { get; set; }
         public int Year { get; set; }
         public int Week { get; set; }
+        public DateTime Monday { get; set; }
         public string Period { get; set; }
-        //public int MoveWeek { get; set; }
     }
 
 
