@@ -1,0 +1,118 @@
+﻿@model LMS.ViewModels.SchemeViewModel
+
+@{
+    ViewBag.Title = "Veckoschema";
+    var i = 0;
+    DateTime datum0 = new DateTime(2017, 8, 7);
+    DateTime datum;
+    string sDatum;
+    string veckodag;
+}
+
+<br />
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container-fluid">
+
+        <h2>@ViewBag.Title</h2>
+        @Model.Year
+        @Model.Week
+        <br />
+        <br />
+        @Model.Period
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row">
+
+
+            <div class="col-sm-1" style="background-color:ghostwhite">
+
+                @Html.ActionLink("<<<", "Sheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })
+
+            </div>
+
+            @{
+                for (i = 0; i < 5; i++)
+                {
+                    datum = datum0.AddDays(i);
+                    sDatum = datum.ToString("yyyy-MM-dd");
+                    veckodag = datum.ToString("dddd");
+
+
+                    <div class="col-sm-2 col-md-2" style="background-color:lightyellow">
+
+                        <p>@sDatum</p>
+                        <p>@veckodag</p>
+
+                    </div>
+                }
+                i = 0;
+            }
+
+            <div class="col-sm-1" style="background-color:ghostwhite">
+
+                @Html.ActionLink(">>>", "Sheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
+
+            </div>
+        </div>
+
+        <div class="row">
+
+        @foreach (var weekActivitiy in Model.WeekActivities)
+                {
+                    i++;
+                    if (i == 1 || i == 6)
+                    {
+                <div class="col-sm-1" style="color:white; background-color:black">
+
+                    <p>vänster</p>
+
+                </div>
+            }
+            string s = "white";
+            switch (weekActivitiy.ActivityType)
+            {
+                case 1: s = "crimson"; break;
+                case 2: s = "red"; break;
+                case 3: s = "yellow"; break;
+                case 4: s = "blue"; break;
+                case 5: s = "green"; break;
+                default: break;
+            }
+            @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\">")
+
+            @weekActivitiy.NameText
+            <br />
+                @weekActivitiy.TypeText
+
+                @Html.Raw("</div>")
+
+            if (i == 5 || i == 10)
+            {
+                <div class="col-sm-1" style="background-color:floralwhite">
+
+                    <p>höger</p>
+
+                </div>
+            }
+
+        }
+
+        <br />
+        
+        @Html.ActionLink(">>> This <<<", "Sheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 })
+
+    </div>
+    </div>
+                }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
