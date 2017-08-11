@@ -25,19 +25,45 @@ namespace LMS.Controllers
             /// If December 28 is a Monday, December 31 is a Thursday and week 1 starts January 4.
             /// If December 28 is a Sunday, December 31 is a Wednesday and week 1 starts December 29 previous year.
             var dec28 = new DateTime (year - 1, 12, 28);
-            var dec28DayOffset = ((int)dec28.DayOfWeek + 6) % 7;    // monday = 0, tuesday = 1, etc
+            var dec28DayOffset = ((int)dec28.DayOfWeek + 6) % 7;    // Monday = 0, Tuesday = 1, etc
             return dec28.AddDays(7 * week - dec28DayOffset);
+        }
+
+        private DateTime GetThisMonday()
+        {
+            var today = new DateTime();
+            today = DateTime.Now;
+            var dayOffset = ((int)(today.DayOfWeek + 6)) % 7;       // Monday = 0, Tuesday = 1, etc
+            return today.AddDays(-dayOffset);
+        }
+  
+        private int GetWeek(DateTime monday)
+        {
+            /// Converts a monday date to a corresponding week number.
+            /// ISO 8601 week 1 is the week that contains the first Thursday that year.
+            var thursday = monday.AddDays(3);
+            return (thursday.DayOfYear - 1) / 7 + 1;
         }
 
         private PeriodData GetWeekPeriod(int year, int week, int moveWeek)
         {
+            // Get next Monday reference based on old year/week and moveWeek
+            DateTime nextMonday = new DateTime();
+            if (moveWeek == 0)
+            {
+                nextMonday = GetThisMonday();
+            }
+            else
+            {
+                nextMonday = GetMonday(year, week);
+                nextMonday.AddDays(7 * moveWeek);
+            }
+       
             PeriodData periodData = new PeriodData();
-            periodData.Year = year;
-            periodData.Week = week + moveWeek;
-
-            periodData.Start = GetMonday(year, week);
-            periodData.End = periodData.Start.AddDays(4);
-
+            periodData.Start = nextMonday;
+            periodData.End = nextMonday.AddDays(4);
+            periodData.Year = nextMonday.Year;
+            periodData.Week = GetWeek(nextMonday);
             return periodData;
         }
 
@@ -48,15 +74,15 @@ namespace LMS.Controllers
             if (courseId == null)
             {
                 year = 2017;
-                week = 10;
+                week = 1;
                 moveWeek = 0;
             }
-            viewModel.Year = (int) year + 1;
-            viewModel.Week = (int) week + (int) moveWeek;
 
             var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
+            viewModel.Year = periodData.Year;
+            viewModel.Week = periodData.Week;
             viewModel.Monday = periodData.Start;
-            viewModel.Period = "2017-04-10 -- 2017-04-15";
+            viewModel.Period = periodData.Start.Date + " -- " + periodData.End.Date;
             viewModel.WeekActivities = new List<SchemeActivity>();
 
             for (int index = 0; index < 10; index++)
