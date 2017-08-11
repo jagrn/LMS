@@ -64,9 +64,11 @@ namespace LMS.Models
 
     public class RegisterViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Användarnamn/mailadress")]
         public string Email { get; set; }
 
         [Required]
