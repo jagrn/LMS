@@ -56,7 +56,7 @@ namespace LMS.Controllers
             else
             {
                 nextMonday = GetMonday(year, week);
-                nextMonday.AddDays(7 * moveWeek);
+                nextMonday = nextMonday.AddDays(7 * moveWeek);
             }
        
             PeriodData periodData = new PeriodData();
@@ -66,6 +66,16 @@ namespace LMS.Controllers
             periodData.Week = GetWeek(nextMonday);
             return periodData;
         }
+
+
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+
 
         // GET: Students/Scheme
         public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)

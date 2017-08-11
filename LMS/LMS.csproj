@@ -354,6 +354,7 @@
     <Content Include="Views\Shared\_Modules.cshtml" />
     <Content Include="Views\Activities\Manage.cshtml" />
     <Content Include="Views\Students\Scheme.cshtml" />
+    <Content Include="Views\Students\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
