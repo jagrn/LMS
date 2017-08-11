@@ -1,4 +1,4 @@
-﻿@model LMS.ViewModels.CourseViewModel
+﻿@model LMS.ViewModels.ActivityViewModel
 
 @{
     ViewBag.Title = "Manage";
@@ -8,7 +8,7 @@
 <br />
 
 @{
-    var courseId = Model.Id;
+    var activityId = Model.Id;
     var clearDate = "'2017-01-01'";
 }
 
@@ -25,30 +25,30 @@
             <div class="col-md-3">
                 <!--menu-->
                 <br />
-                <h4>Alla kurser</h4>
+                <h4>Aktiviteter för @Model.ModuleName:</h4>
 
                 @{
-                    if (Model.AllCourses != null)
+                    if (Model.ModuleActivities != null)
                     {
-                        if (Model.AllCourses.Count != 0)
+                        if (Model.ModuleActivities.Count != 0)
                         {
                             <table class="table">
-                                @foreach (var course in Model.AllCourses)
+                                @foreach (var activity in Model.ModuleActivities)
                                 {
                                 <tr>
                                     <td>
                                         @{
-                                            string courseText = "";
-                                            if (course.Id == Model.Id)
+                                            string moduleText = "";
+                                            if (activity.Id == Model.Id)
                                             {
-                                                courseText = "=> " + @course.Name;
+                                                moduleText = "=> " + @activity.Name;
                                             }
                                             else
                                             {
-                                                courseText = "   " + @course.Name;
+                                                moduleText = "   " + @activity.Name;
                                             }
                                         }
-                                        @Html.ActionLink(courseText, "Manage", new { id = course.Id, getOperation = "Load" })
+                                        @Html.ActionLink(moduleText, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })
                                     </td>
 
                                 </tr>
@@ -59,17 +59,17 @@
                 }
             </div><!--end menu-->
            
-            <div class="form-horizontal col-md-6">
-                <h2>Hantera kursinformation för @Model.Name</h2>
+            <div class="form-horizontal col-md-7">
+                <h2>Hantera aktiviteter för @Model.ModuleName</h2>
                 
                 @{
-                    if (courseId == 0)
+                    if (activityId == 0)
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny aktivitet</h4>
                     }
                     else
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera kursen @Model.Name</h4>
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera aktiviteten @Model.Name</h4>
                     }
                 }
           
@@ -84,13 +84,13 @@
                 @Html.HiddenFor(model => model.PostNavigation)
                 @Html.HiddenFor(model => model.PostOperation)
                 @Html.HiddenFor(model => model.PostMessage)
+                @Html.HiddenFor(model => model.CourseId)
                 @Html.HiddenFor(model => model.ModuleId)
-                @Html.HiddenFor(model => model.StartDate)
-                @Html.HiddenFor(model => model.EndDate)
+            
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
 
                         @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control " } })
                         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
@@ -98,24 +98,38 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 " })
-                    <div class="col-md-10">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3 " })
+                    <div class="col-md-9">
 
                         @Html.TextAreaFor(model => model.Description, 6, 40, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
 
                         @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Period, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EnumDropDownListFor(model => model.Period, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Period, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
                 <div class="form-group">
+                    @Html.LabelFor(model => model.SelectActivityType, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EnumDropDownListFor(model => model.SelectActivityType, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SelectActivityType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*<div class="form-group">
                     @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
 
@@ -159,43 +173,39 @@
 
                     <!-- icons-->
                     @{
-                        if (courseId != 0)
+                        if (activityId != 0)
                         {
-                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @courseId, 0)" aria-label="Left Align">
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @activityId, 0)" aria-label="Left Align">
                                 <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Updatera
                             </button>
                         }
                         else
                         {
-                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @courseId, 0)" aria-label="Left Align">
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @activityId, 0)" aria-label="Left Align">
                                 <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Spara
                             </button>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { id = 0, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny kurs</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Activities", new { id = 0, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny aktivitet</a>
                     @{
-                        if (courseId != 0)
+                        if (activityId != 0)
                         {
-                            <button type="submit" class="btn btn-default" onclick="PostConfig('SaveAct', 'New', @courseId, 0)" aria-label="Left Align">
-                                <span class="glyphicon glyphiconsm glyphicon-tasks" aria-hidden="true"></span><br />Ny modul
-                            </button>
-
+      
                             <button type="button" class="btn btn-default" aria-label="Left Align">
 
                                 <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
                             </button>
                             @*GET button to reach delete course view*@
-                            <a class="btn btn-default" href="@Url.Action("Delete", "Courses", new { id = courseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
-                        
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Activities", new { id = activityId, moduleId=Model.ModuleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Index", "Courses")"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { Id = Model.ModuleId,courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                     <br />
                     
                 </div><!-- end icons-->
 
                 <div>
-                    @Html.Partial("_Modules")
+                   
 
                 </div>
 
@@ -204,7 +214,9 @@
 
             <div class="col-md-2">
                 <br />
-       
+                <br />
+                <br />
+           
             </div>
 
 
