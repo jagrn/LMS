@@ -208,6 +208,10 @@ namespace LMS.Controllers
             //    viewModel.WeekActivities.Add(schemeAct);
             //}
 
+
+
+            viewModel.Notifications = NotificationRepo.RetrieveCourseNotes((int) courseId);
+
             return View(viewModel);
         }
     }

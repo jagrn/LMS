@@ -11,6 +11,13 @@
 
 <br />
 
+@*@{ 
+    foreach(var note in Model.Notifications)
+    {
+        <p>@note.ChangeText</p>
+    }
+}*@
+
 
 @using (Html.BeginForm())
 {

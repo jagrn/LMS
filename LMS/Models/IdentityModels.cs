@@ -30,6 +30,7 @@ namespace LMS.Models
         public DbSet<Course> Courses { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<Activity> Activities { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
 
         public ApplicationDbContext()

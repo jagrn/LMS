@@ -203,6 +203,8 @@ namespace LMS.ViewModels
         public int Week { get; set; }
         public DateTime Monday { get; set; }
         public string Period { get; set; }
+
+        public List<Notification> Notifications { get; set; }
     }
 
 

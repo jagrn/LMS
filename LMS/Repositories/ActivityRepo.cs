@@ -223,6 +223,8 @@ namespace LMS.Repositories
         // ADD a single activity to a module
         public static int AddActivity(Activity activity)
         {
+            NotificationRepo.AddNewActivityNote(activity);
+
             db.Activities.Add(activity);
             db.SaveChanges();
             return activity.Id;               // Return newly checked out id to caller      
@@ -238,6 +240,8 @@ namespace LMS.Repositories
             if (activities.Count != 1)
                 return ActivityRepoResult.NotFound;
 
+            NotificationRepo.AddChangedActivityNote(activities.First(), activity);
+
             activities.First().Name = activity.Name;
             activities.First().Description = activity.Description;
             activities.First().StartDate = activity.StartDate;
@@ -247,7 +251,7 @@ namespace LMS.Repositories
             activities.First().Deadline = activity.Deadline;
 
             db.Entry(activities.First()).State = EntityState.Modified;
-            db.SaveChanges();
+            db.SaveChanges();      
             return ActivityRepoResult.Success;     
         }
 
@@ -261,8 +265,10 @@ namespace LMS.Repositories
             if (activities.Count != 1)
                 return ActivityRepoResult.NotFound;
 
+            NotificationRepo.AddRemovedActivityNote(activities.First());
+
             db.Activities.Remove(activities.First());
-            db.SaveChanges();
+            db.SaveChanges();           
             return ActivityRepoResult.Success;
         }
 
