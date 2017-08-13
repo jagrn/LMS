@@ -72,6 +72,10 @@ namespace LMS.Repositories
         // QUERY whether a certain activity span is valid within a module, i.e. not overlapping other activities
         public static string IsActivitySpanValid(int? moduleId, int? activityId, DateTime start, DateTime end)
         {
+            // Check if activity selected for weekend
+            if ((start.DayOfWeek == DayOfWeek.Saturday) || (start.DayOfWeek == DayOfWeek.Sunday))
+                return "Denna aktivitet ligger på en helg";
+
             var activities = db.Activities.Where(a => a.ModuleId == moduleId).ToList();
             if (activities.Count == 0)
                 return null;
