@@ -107,13 +107,15 @@ namespace LMS.Controllers
         public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)
         {
             SchemeViewModel viewModel = new SchemeViewModel();
-            if (courseId == null)
+            if ((courseId == null) || (courseId == 0))
             {
-                year = 2017;
-                week = 1;
-                moveWeek = 0;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //year = 2017;
+                //week = 1;
+                //moveWeek = 0;
             }
 
+            viewModel.courseId = (int) courseId;
             var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
             viewModel.Year = periodData.Year;
             viewModel.Week = periodData.Week;

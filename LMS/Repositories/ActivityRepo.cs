@@ -212,6 +212,7 @@ namespace LMS.Repositories
                     periodActivities.periodActivityList.Add(periodActivity);
                 }
             }
+            periodActivities.repoResult = ActivityRepoResult.Success;
             return periodActivities;
         }
 

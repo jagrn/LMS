@@ -197,6 +197,7 @@ namespace LMS.ViewModels
 
     public class SchemeViewModel
     {
+        public int courseId;
         public List<SchemeActivity> WeekActivities { get; set; }
         public int Year { get; set; }
         public int Week { get; set; }

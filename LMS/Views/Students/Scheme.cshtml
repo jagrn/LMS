@@ -34,7 +34,7 @@
 
             <div class="col-sm-1" style="background-color:ghostwhite">
 
-                @Html.ActionLink("<<<", "Scheme", new { courseId = 2, year = Model.Year, week = Model.Week, moveWeek = -1 })
+                @Html.ActionLink("<<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = -1 })
 
             </div>
 
@@ -58,7 +58,7 @@
 
             <div class="col-sm-1" style="background-color:ghostwhite">
 
-                @Html.ActionLink(">>>", "Scheme", new { courseId = 2, year = Model.Year, week = Model.Week, moveWeek = 1 })
+                @Html.ActionLink(">>>", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 1 })
 
             </div>
         </div>
@@ -119,7 +119,7 @@
 
         <br />
         <br />
-        @Html.ActionLink(">>> Denna vecka <<<", "Scheme", new { courseId = 2, year = Model.Year, week = Model.Week, moveWeek = 0 })
+        @Html.ActionLink(">>> Denna vecka <<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 0 })
 
     </div>
     </div>
