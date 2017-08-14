@@ -20,16 +20,18 @@ namespace LMS.Controllers
     public class StudentsController : Controller
     {
         // GET: Students/MyPage
-        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId)
+        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId) //, string studentId)
         {
-            if ((courseId == 0) || (courseId == null))
+            if ((courseId == 0) || (courseId == null)) // || (studentId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             StudentViewModel viewModel = new StudentViewModel();
             viewModel.CourseId = (int)courseId;
-            
+            //viewModel.StudentId = studentId;
+            viewModel.StudentId = StudentRepo.GetFakeStudentId();
+
             if ((moduleId != null) && (moduleId != 0))
             {
                 viewModel.ModuleId = (int)moduleId;
@@ -86,6 +88,9 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
             viewModel.ModuleActivities = moduleActivityList.activityList;
+
+            viewModel.Notifications = StudentRepo.RetreiveNotesForStudent(viewModel.StudentId);
+            viewModel.NoOfNotifications = viewModel.Notifications.Count;
 
             return View(viewModel);
         }

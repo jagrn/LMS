@@ -192,11 +192,14 @@ namespace LMS.ViewModels
         public int CourseId { get; set; }
         public int ModuleId { get; set; }
         public int ActivityId { get; set; }
+        public string StudentId { get; set; }
         public string CourseName { get; set; }      
         public Module Module { get; set; }
         public Activity Activity { get; set; }
         public List<ModuleListData> CourseModules { get; set; }     
-        public List<ActivityListData> ModuleActivities { get; set; }      
+        public List<ActivityListData> ModuleActivities { get; set; }
+        public int NoOfNotifications { get; set; }
+        public List<Notification> Notifications { get; set; }
     }
 
         public struct SchemeActivity

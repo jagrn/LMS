@@ -38,7 +38,7 @@ namespace LMS.Migrations
                 }
 
             }
-
+            
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
 
@@ -51,7 +51,8 @@ namespace LMS.Migrations
                     var user = new ApplicationUser
                     {
                         UserName = userName,
-                        Email = userName
+                        Email = userName,
+                        CourseId = 10
                     };
                     var result = userManager.Create(user, "123456");
                     if (!result.Succeeded)
