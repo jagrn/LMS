@@ -142,13 +142,17 @@ namespace LMS.Controllers
         // GET: Students/Scheme
         public ActionResult SchemePartial(int? courseId, int? year, int? week, int? moveWeek)
         {
-            return PartialView("Scheme", GetSchemeViewModel(courseId, year, week, moveWeek));
+            return PartialView("_Scheme", GetSchemeViewModel(courseId, year, week, moveWeek));
         }
 
 
         public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)
         {
-            return View("Scheme",GetSchemeViewModel(courseId, year, week, moveWeek));
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Scheme", GetSchemeViewModel(courseId, year, week, moveWeek));
+            }
+            return View("_Scheme",GetSchemeViewModel(courseId, year, week, moveWeek));
         }
 
     }
