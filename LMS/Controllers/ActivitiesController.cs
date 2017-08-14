@@ -155,12 +155,12 @@ namespace LMS.Controllers
                 var validMess = ActivityRepo.IsActivityNameValid(viewModel.ModuleId, viewModel.Id, viewModel.Name);
                 if (validMess == null)
                 {
-                    validMess = ActivityRepo.IsActivitySpanValid(viewModel.ModuleId, viewModel.Id, StartPoint, EndPoint);
+                    validMess = ActivityRepo.IsActivitySpanInModule(viewModel.CourseId, viewModel.ModuleId, StartPoint, EndPoint);
                 }
                 if (validMess == null)
                 {
-                    validMess = ActivityRepo.IsActivitySpanInModule(viewModel.CourseId, viewModel.ModuleId, StartPoint, EndPoint);
-                }
+                    validMess = ActivityRepo.IsActivitySpanValid(viewModel.ModuleId, viewModel.Id, StartPoint, EndPoint);
+                }                
                 if (validMess != null)
                 {
                     // Load view model with additional display info wrt parent module
