@@ -255,6 +255,14 @@
     <Compile Include="Migrations\201708080834588_Period in Activity.Designer.cs">
       <DependentUpon>201708080834588_Period in Activity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708131828038_Notifications support.cs" />
+    <Compile Include="Migrations\201708131828038_Notifications support.Designer.cs">
+      <DependentUpon>201708131828038_Notifications support.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708132120596_Removed moduleId from notes.cs" />
+    <Compile Include="Migrations\201708132120596_Removed moduleId from notes.Designer.cs">
+      <DependentUpon>201708132120596_Removed moduleId from notes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -262,10 +270,12 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Module.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActivityRepo.cs" />
     <Compile Include="Repositories\CourseRepo.cs" />
     <Compile Include="Repositories\ModuleRepo.cs" />
+    <Compile Include="Repositories\NotificationRepo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\ManageNavigationViewModels.cs" />
   </ItemGroup>
@@ -355,6 +365,7 @@
     <Content Include="Views\Activities\Manage.cshtml" />
     <Content Include="Views\Students\Scheme.cshtml" />
     <Content Include="Views\Students\About.cshtml" />
+    <Content Include="Views\Students\Scheme2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -385,6 +396,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708080834588_Period in Activity.resx">
       <DependentUpon>201708080834588_Period in Activity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708131828038_Notifications support.resx">
+      <DependentUpon>201708131828038_Notifications support.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708132120596_Removed moduleId from notes.resx">
+      <DependentUpon>201708132120596_Removed moduleId from notes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
