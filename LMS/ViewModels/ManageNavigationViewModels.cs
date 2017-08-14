@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.ViewModels
 {
@@ -26,7 +27,7 @@ namespace LMS.ViewModels
     }
 
     public struct ModuleListData
-	{
+    {
         public int Id;
         public string Name;
         public string Description;
@@ -101,7 +102,7 @@ namespace LMS.ViewModels
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
-        public string PostOperation { get; set; }     
+        public string PostOperation { get; set; }
     }
 
     public class ModuleDeleteViewModel
@@ -130,6 +131,11 @@ namespace LMS.ViewModels
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         [DisplayName("Startdatum")]
+        //
+        // följande två rader ger en datepicker till startDate
+        //
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         //public DateTime EndDate { get; set; }
         [DisplayName("Period")]
@@ -170,15 +176,22 @@ namespace LMS.ViewModels
         public string DeleteType { get; set; }
     }
 
-    public class LMSUsers
+    public struct SchemeActivity
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string  Password { get; set; }
-
-
-
+        public int ActivityType;    // According to SelectActivityType and -1 => "Ledig"
+        public string NameText;
+        public string TypeText;
+        public int ActivityId;
     }
+
+    public class SchemeViewModel
+    {
+        public List<SchemeActivity> WeekActivities { get; set; }
+        public int Year { get; set; }
+        public int Week { get; set; }
+        public DateTime Monday { get; set; }
+        public string Period { get; set; }
+    }
+
+
 }
