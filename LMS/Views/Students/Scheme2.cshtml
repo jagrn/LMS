@@ -1,0 +1,186 @@
+﻿@model LMS.ViewModels.SchemeViewModel
+
+@{
+    ViewBag.Title = "Veckoschema";
+    var i = 0;
+    DateTime datum0 = new DateTime(2017, 8, 7);
+    DateTime datum;
+    string sDatum;
+    string veckodag;
+}
+
+<br />
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container-fluid">
+
+        <h2>@ViewBag.Title</h2>
+        @Model.Year
+        @Model.Week
+        <br />
+        <br />
+        @Model.Period
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row scheduleHeaderRow">
+
+            <div class="col-sm-1 ">
+                @Html.ActionLink("<<<", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })
+            </div>
+
+            @{
+                for (i = 0; i < 5; i++)
+                {
+                    datum = Model.Monday.AddDays(i);
+                    sDatum = datum.ToString("yyyy-MM-dd");
+                    veckodag = datum.ToString("dddd");
+
+
+                    <div class="col-sm-2 ">
+                        <p>@sDatum</p>
+                        <p>@veckodag</p>
+                    </div>
+                }
+                i = 0;
+            }
+
+
+
+            <div class="col-sm-1 ">
+                @Html.ActionLink(">>>", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            @foreach (var weekActivitiy in Model.WeekActivities)
+            {
+
+                i++;
+
+                if (i == 1)
+                {
+
+
+                    <div class="col-sm-1">@i col1</div>
+
+                }
+
+
+                if (i <= 5)
+                {
+                    <div class="col-sm-2" style="background-color:aquamarine">
+
+                        <p>08.30-12.00</p>@i
+
+                        <p>@weekActivitiy.NameText</p>
+                        <p>@weekActivitiy.TypeText</p>
+
+                    </div>
+
+                }
+
+
+                if (i == 5)
+                {
+
+                    <div class="col-sm-1" style="background-color:red">col7</div>
+
+                }
+            }
+        </div>
+        <div class="row scheduleHeaderRow">
+            @{
+                for (i = 0; i < 5; i++)
+                {
+                    if (i == 0)
+                    {
+
+
+                        <div class="col-sm-1">@i col1</div>
+
+                    }
+
+                    
+                    <div class="col-sm-2">
+                        <p>Lunch</p>
+                    </div>
+
+                    if (i == 4)
+                    {
+
+
+                        <div class="col-sm-1">@i col7</div>
+
+                    }
+
+
+                }
+            }
+
+        </div>
+
+        <div class="row">
+            @{
+                i = 0;
+            }
+
+            @foreach (var weekActivitiy in Model.WeekActivities)
+            {
+
+                i++;
+
+
+
+                if (i == 6)
+                {
+
+
+                    <div class="col-sm-1">@i col1</div>
+
+                }
+
+
+
+
+
+                if (i > 5)
+                {
+                    <div class="col-sm-2">
+
+                        <p>13.00-17.00</p>@i
+
+                        <p>@weekActivitiy.NameText</p>
+                        <p>@weekActivitiy.TypeText</p>
+                    </div>
+
+                }
+
+
+                if (i == 10)
+                {
+
+                    <div class="col-sm-1" style="background-color:red">col7</div>
+
+                }
+            }
+        </div>
+
+    </div>
+
+
+                }
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

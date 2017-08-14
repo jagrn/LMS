@@ -143,5 +143,72 @@ namespace LMS.Controllers
 
             return View(viewModel);
         }
+
+        // GET: Students/Scheme
+        public ActionResult Scheme2(int? courseId, int? year, int? week, int? moveWeek)
+        {
+            SchemeViewModel viewModel = new SchemeViewModel();
+            if (courseId == null)
+            {
+                year = 2017;
+                week = 1;
+                moveWeek = 0;
+            }
+
+            var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
+            viewModel.Year = periodData.Year;
+            viewModel.Week = periodData.Week;
+            viewModel.Monday = periodData.Start;
+            viewModel.Period = periodData.Start.Date + " -- " + periodData.End.Date;
+            viewModel.WeekActivities = new List<SchemeActivity>();
+
+            for (int index = 0; index < 10; index++)
+            {
+                SchemeActivity schemeAct = new SchemeActivity();
+                if ((index == 0) || (index == 5) || (index == 6) || (index == 7))
+                {
+                    schemeAct.ActivityType = -1;
+                    schemeAct.NameText = "";
+                    schemeAct.TypeText = "";
+                    schemeAct.ActivityId = 1;
+                }
+
+                if (index == 2)
+                {
+                    schemeAct.ActivityType = 0;
+                    schemeAct.NameText = "Java introduction";
+                    schemeAct.TypeText = "Föreläsning";
+                    schemeAct.ActivityId = 1;
+                }
+
+                if ((index == 3) || (index == 4))
+                {
+                    schemeAct.ActivityType = 1;
+                    if (index == 3)
+                        schemeAct.NameText = "Become a Java coder";
+                    else
+                        schemeAct.NameText = "Advanced techniques in Java";
+                    schemeAct.TypeText = "Datorbaserad";
+                    schemeAct.ActivityId = 1;
+                }
+
+                if ((index == 1) || (index > 7))
+                {
+                    schemeAct.ActivityType = 3;
+                    if (index == 1)
+                        schemeAct.NameText = "Java övning 1";
+                    else
+                        schemeAct.NameText = "Java övning 2";
+                    schemeAct.TypeText = "Övning";
+                    schemeAct.ActivityId = 1;
+                }
+                viewModel.WeekActivities.Add(schemeAct);
+            }
+
+
+
+
+            return View(viewModel);
+        }
     }
 }
