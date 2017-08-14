@@ -186,7 +186,20 @@ namespace LMS.ViewModels
         public string DeleteType { get; set; }
     }
 
-    public struct SchemeActivity
+
+    public class StudentViewModel
+    {
+        public int CourseId { get; set; }
+        public int ModuleId { get; set; }
+        public int ActivityId { get; set; }
+        public string CourseName { get; set; }      
+        public Module Module { get; set; }
+        public Activity Activity { get; set; }
+        public List<ModuleListData> CourseModules { get; set; }     
+        public List<ActivityListData> ModuleActivities { get; set; }      
+    }
+
+        public struct SchemeActivity
     {
         public int ActivityType;    // According to SelectActivityType and -1 => "Ledig"
         public string NameText;
