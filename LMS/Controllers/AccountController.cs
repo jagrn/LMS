@@ -83,8 +83,8 @@ namespace LMS.Controllers
                     {
                         string studentId = StudentRepo.GetStudentId(model.Email);
 
-                        StudentRepo.FakeCourseAttendance(2, studentId);                 // Temporary solution to set a courseId
-                        StudentRepo.FakeStudentFullName(studentId);
+                        //StudentRepo.FakeCourseAttendance(2, studentId);                 // Temporary solution to set a courseId
+                        //StudentRepo.FakeStudentFullName(studentId);
 
                         int courseId = StudentRepo.GetStudentCourse(studentId);
                         return RedirectToAction("MyPage", "Students", new { courseId = courseId, studentId = studentId });
