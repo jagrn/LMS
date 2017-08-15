@@ -1,0 +1,70 @@
+﻿@model LMS.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>@ViewBag.Title.</h2>
+<div  id="CreateNewUserDiv">test</div>
+@using (Html.BeginForm("Register", "AdminUsers", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Ny användare.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.CourseId)
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+}
+<a href="#" onclick="javascript:ShowCreateNewUserDiv();">Ny användare</a>
+<div class="well">
+
+    @using (Html.BeginForm("Register", "AdminUsers", FormMethod.Get))
+    {
+        <p>Ange sökkriterie:</p>
+        <div class="form-inline">
+            <input name="SearchString" class="form-control" placeholder="Ange namn eller email" type="text" />
+            @*@Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })*@
+            <input type="submit" class="btn btn-default" value="Sök" />
+        </div>
+        <div class="info infoTextWarning"><p>@ViewBag.Description</p></div>
+    }
+</div>
+<div>
+    @{ Html.RenderAction("_ListUsers"); }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

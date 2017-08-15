@@ -66,3 +66,20 @@ h4 {
     
 
 }
+
+#CreateNewUserDiv {
+    display:none;
+
+}
+
+.scheduleHeaderRow {
+    background-color:lightgray;
+    
+
+}
+
+.scheduleLunchRow {
+   background-color:gainsboro;
+    
+
+}

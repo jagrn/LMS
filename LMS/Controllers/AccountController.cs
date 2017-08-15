@@ -1,14 +1,13 @@
-﻿using System;
-using System.Globalization;
+﻿using LMS.Models;
+using LMS.Repositories;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using LMS.Models;
 
 namespace LMS.Controllers
 {
@@ -79,7 +78,21 @@ namespace LMS.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    bool inRoleStudent = StudentRepo.CheckRoleAs(model.Email, "Student");
+                    if (inRoleStudent)
+                    {
+                        string studentId = StudentRepo.GetStudentId(model.Email);
+
+                        //StudentRepo.FakeCourseAttendance(2, studentId);                 // Temporary solution to set a courseId
+                        //StudentRepo.FakeStudentFullName(studentId);
+
+                        int courseId = StudentRepo.GetStudentCourse(studentId);
+                        return RedirectToAction("MyPage", "Students", new { courseId = courseId, studentId = studentId });
+                    }
+                    else
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -401,6 +414,20 @@ namespace LMS.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        //
+        // GET: /Account/ResetPasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult ManageUsers()
+        {
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+                   
+
+            return View(userStore.Users.ToList());
         }
 
         protected override void Dispose(bool disposing)

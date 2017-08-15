@@ -1,0 +1,99 @@
+﻿@model IEnumerable<LMS.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "ListUsers";
+}
+
+
+<div class="row">
+
+    <div class="col-sm-1 scheduleHeaderRow">Bakåt</div>
+
+
+    @for (var i = 1; i <= 5; i++)
+    {
+        <div class="col-sm-2 scheduleHeaderRow">
+            @switch (i)
+            {
+                case 1:
+                    <p>Måndag</p>
+                    break;
+                case 2:
+                    <p>Tisdag</p>
+                    break;
+                case 3:
+                    <p>Onsdag</p>
+                    break;
+                case 4:
+                    <p>Torsdag</p>
+                    break;
+                case 5:
+                    <p>Fredag</p>
+                    break;
+
+            }
+        </div>
+    }
+
+    <div class="col-sm-1 scheduleHeaderRow">Framåt</div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-1">&nbsp;</div>
+
+
+    @for (var i = 1; i <= 5; i++)
+    {
+        <div class="col-sm-2">
+            <div><p>08.30-12.00</p>
+            </div>
+            <p>Aktivitet FM @i.ToString()</p>
+        </div>
+    }
+
+    <div class="col-sm-1">&nbsp;</div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-1">&nbsp;</div>
+
+
+    @for (var i = 1; i <= 5; i++)
+    {
+        <div class="col-sm-2 scheduleLunchRow">
+            <div>
+                <p>12.00-13.00</p>
+            </div>
+            <p>Lunch</p>
+        </div>
+    }
+
+    <div class="col-sm-1">&nbsp;</div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-1"></div>
+
+
+    @for (var i = 1; i <= 5; i++)
+    {
+        <div class="col-sm-2">
+            <div>
+                <p>13.00-17.00</p>
+            </div>
+
+            <p>Aktivitet EM @i.ToString()</p>
+        </div>
+    }
+
+    <div class="col-sm-1">&nbsp;</div>
+
+</div>
+
+

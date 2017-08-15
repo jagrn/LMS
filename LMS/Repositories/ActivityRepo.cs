@@ -29,6 +29,13 @@ namespace LMS.Repositories
         public ActivityRepoResult repoResult;
     }
 
+    public struct PeriodActivityList
+    {
+        public List<PeriodActivityListData> periodActivityList;
+        public ActivityRepoResult repoResult;
+        public DateTime startOfWeek;
+    }
+
     public static class ActivityRepo
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
@@ -65,6 +72,10 @@ namespace LMS.Repositories
         // QUERY whether a certain activity span is valid within a module, i.e. not overlapping other activities
         public static string IsActivitySpanValid(int? moduleId, int? activityId, DateTime start, DateTime end)
         {
+            // Check if activity selected for weekend
+            if ((start.DayOfWeek == DayOfWeek.Saturday) || (start.DayOfWeek == DayOfWeek.Sunday))
+                return "Denna aktivitet ligger på en helg";
+
             var activities = db.Activities.Where(a => a.ModuleId == moduleId).ToList();
             if (activities.Count == 0)
                 return null;
@@ -169,9 +180,51 @@ namespace LMS.Repositories
             return moduleActivityList;
         }
 
+        // RETREIVE a list of activities (name + start + type) within a course and for a defined time period
+        public static PeriodActivityList RetrievePeriodActivities(int? courseId, DateTime start, DateTime  end)
+        {
+            PeriodActivityList periodActivities = new PeriodActivityList();
+
+            if ((courseId == null) || (courseId == 0))
+            {
+                periodActivities.repoResult = ActivityRepoResult.BadRequest;
+                return periodActivities;
+            }
+            
+            if (!CourseRepo.IsCoursePresent(courseId))
+            {
+                periodActivities.repoResult = ActivityRepoResult.NotFound;
+                return periodActivities;
+            }
+
+            periodActivities.startOfWeek = start;
+            periodActivities.periodActivityList = new List<PeriodActivityListData>();
+
+            var modules = db.Modules.Where(m => m.CourseId == courseId).Where(m => m.StartDate < end).Where(m => m.EndDate > start).ToList();
+            foreach (var mod in modules)
+            {
+                int moduleId = mod.Id;
+                var activities = db.Activities.Where(a => a.ModuleId == moduleId).Where(a => a.StartDate < end).Where(a => a.EndDate > start).ToList();                
+                foreach (var act in activities)
+                {
+                    PeriodActivityListData periodActivity = new PeriodActivityListData();
+                    periodActivity.Name = act.Name;
+                    periodActivity.ModuleName = mod.Name;
+                    periodActivity.StartDate = act.StartDate;
+                    periodActivity.ActivityType = (SelectActivityType)act.ActivityType;
+                    periodActivity.ActivityPeriod = act.ActivityPeriod;
+                    periodActivities.periodActivityList.Add(periodActivity);
+                }
+            }
+            periodActivities.repoResult = ActivityRepoResult.Success;
+            return periodActivities;
+        }
+
         // ADD a single activity to a module
         public static int AddActivity(Activity activity)
         {
+            NotificationRepo.AddNewActivityNote(activity);
+
             db.Activities.Add(activity);
             db.SaveChanges();
             return activity.Id;               // Return newly checked out id to caller      
@@ -187,6 +240,8 @@ namespace LMS.Repositories
             if (activities.Count != 1)
                 return ActivityRepoResult.NotFound;
 
+            NotificationRepo.AddChangedActivityNote(activities.First(), activity);
+
             activities.First().Name = activity.Name;
             activities.First().Description = activity.Description;
             activities.First().StartDate = activity.StartDate;
@@ -196,7 +251,7 @@ namespace LMS.Repositories
             activities.First().Deadline = activity.Deadline;
 
             db.Entry(activities.First()).State = EntityState.Modified;
-            db.SaveChanges();
+            db.SaveChanges();      
             return ActivityRepoResult.Success;     
         }
 
@@ -210,8 +265,10 @@ namespace LMS.Repositories
             if (activities.Count != 1)
                 return ActivityRepoResult.NotFound;
 
+            NotificationRepo.AddRemovedActivityNote(activities.First());
+
             db.Activities.Remove(activities.First());
-            db.SaveChanges();
+            db.SaveChanges();           
             return ActivityRepoResult.Success;
         }
 

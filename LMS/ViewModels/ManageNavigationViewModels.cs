@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LMS.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -42,6 +43,15 @@ namespace LMS.ViewModels
         public string Description;
         public DateTime StartDate;
         public DateTime EndDate;
+    }
+
+    public struct PeriodActivityListData
+    {
+        public string Name;
+        public string ModuleName;
+        public DateTime StartDate;
+        public SelectActivityType ActivityType;
+        public ActivityPeriod ActivityPeriod;
     }
 
     public class CourseViewModel
@@ -176,21 +186,51 @@ namespace LMS.ViewModels
         public string DeleteType { get; set; }
     }
 
-    public struct SchemeActivity
+
+    public class StudentViewModel
+    {
+        public int CourseId { get; set; }
+        public int ModuleId { get; set; }
+        public int ActivityId { get; set; }
+        public string StudentId { get; set; }
+        public string CourseName { get; set; }
+        public string StudentName { get; set; }
+        public Module Module { get; set; }
+        public Activity Activity { get; set; }
+        public List<ModuleListData> CourseModules { get; set; }     
+        public List<ActivityListData> ModuleActivities { get; set; }
+        public int NoOfNotifications { get; set; }
+        public List<Notification> Notifications { get; set; }
+
+        public int SchemeYear { get; set; }
+        public int SchemeWeek { get; set; }
+        public int SchemeMoveWeek { get; set; }
+    }
+
+        public struct SchemeActivity
     {
         public int ActivityType;    // According to SelectActivityType and -1 => "Ledig"
         public string NameText;
         public string TypeText;
+        public string ModuleNameText;
         public int ActivityId;
     }
 
     public class SchemeViewModel
     {
+        public int courseId;
+
+        public int MyPageModuleId { get; set; }
+        public int MyPageActivityId { get; set; }
+        public string MyPageStudentId { get; set; }
+
         public List<SchemeActivity> WeekActivities { get; set; }
         public int Year { get; set; }
         public int Week { get; set; }
         public DateTime Monday { get; set; }
         public string Period { get; set; }
+
+        public List<Notification> Notifications { get; set; }
     }
 
 
