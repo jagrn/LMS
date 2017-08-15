@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Manage";
+    string[] activityType = new string[5] { "Föreläsning", "Datorbaserad", "Inlämningsuppgift", "Övningstillfälle", "reserv" };
+    // Föreläsning / Datorbaserad / Inlämningsuppgift / Övningstillfälle / reserv
 }
 
 <br />
@@ -29,10 +31,10 @@
     }
 }
 
+@*<h2>Week: @Model.SchemeWeek</h2>*@
 <h1>Välkommen till din sida @Model.StudentName</h1>
-
 @Html.Action("Scheme", "Students", new { courseId = courseId, year = Model.SchemeYear, week = Model.SchemeWeek, moveWeek = Model.SchemeMoveWeek, myPageModuleId = Model.ModuleId, myPageActivityId = Model.ActivityId, myPageStudentId = Model.StudentId })
-
+ 
 <br />
 <br />
 
@@ -45,8 +47,8 @@
                     if ((moduleId != 0) && (activityId == 0))
                     {
                         <h4>Detaljer om modulen @Model.Module.Name</h4>
-                        <p>Start: @Model.Module.StartDate</p>
-                        <p>Slut: @Model.Module.EndDate</p>
+                        <p>Start: @Model.Module.StartDate.ToShortDateString() @Model.Module.StartDate.TimeOfDay</p>
+                        <p>Slut: @Model.Module.EndDate.ToShortDateString() @Model.Module.EndDate.TimeOfDay</p>
                         <p>Modulbeskrivning: @Model.Module.Description</p>
                     }
                     else
@@ -54,9 +56,9 @@
                         if (activityId != 0)
                         {
                             <h4>Detaljer om aktiviteten @Model.Activity.Name</h4>
-                            <p>Start: @Model.Activity.StartDate</p>
-                            <p>Slut: @Model.Activity.EndDate</p>
-                            <p>Aktivitetstyp: @Model.Activity.ActivityType</p>
+                            <p>Start: @Model.Activity.StartDate.ToShortDateString() @Model.Activity.StartDate.TimeOfDay</p>
+                            <p>Slut: @Model.Activity.EndDate.ToShortDateString() @Model.Activity.EndDate.TimeOfDay</p>
+                            <p>Aktivitetstyp: @activityType[(int) Model.Activity.ActivityType]</p>
                             <p>Aktivitetsbeskrivning: @Model.Activity.Description</p>
                         }
                         else
@@ -82,7 +84,8 @@
                     {
                         <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                             <p>
-                                @module.StartDate &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId })">@module.Name</a>
+                                @module.StartDate.ToShortDateString() @module.StartDate.TimeOfDay &nbsp;
+                                <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek })">@module.Name</a>
                             </p>
                             <p>Modulbeskrivning: @module.Description</p>
 
@@ -103,7 +106,8 @@
                         {
                             <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                                 <p>
-                                    @activity.StartDate &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId })">@activity.Name</a>
+                                    @activity.StartDate.ToShortDateString() @activity.StartDate.TimeOfDay &nbsp; 
+                                    <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek })">@activity.Name</a>
                                 </p>
                                 <p>Aktivitetsbeskrivning: @activity.Description</p>
 

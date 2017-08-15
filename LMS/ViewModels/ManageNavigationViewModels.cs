@@ -204,7 +204,7 @@ namespace LMS.ViewModels
 
         public int SchemeYear { get; set; }
         public int SchemeWeek { get; set; }
-        public int SchemeMoveWeek { get; set; }
+        public int? SchemeMoveWeek { get; set; }
     }
 
         public struct SchemeActivity

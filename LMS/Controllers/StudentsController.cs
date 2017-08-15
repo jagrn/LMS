@@ -104,11 +104,11 @@ namespace LMS.Controllers
             }
             viewModel.SchemeWeek = (int) schemeWeek;
 
-            if (schemeMoveWeek == null)
-            {
-                schemeMoveWeek = 0;
-            }
-            viewModel.SchemeMoveWeek = (int) schemeMoveWeek;
+            //if (schemeMoveWeek == null)
+            //{
+            //    schemeMoveWeek = 0;
+            //}
+            viewModel.SchemeMoveWeek = schemeMoveWeek;
 
             return View(viewModel);
         }
@@ -214,7 +214,16 @@ namespace LMS.Controllers
             viewModel.MyPageActivityId = myPageActivityId;
             viewModel.MyPageStudentId = myPageStudentId;
 
-            var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
+            PeriodData periodData; //= GetWeekPeriod((int)year, (int)week, (int)moveWeek);
+            if (moveWeek != null)
+            {
+                periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
+            }
+            else
+            {
+                periodData = GetWeekPeriod((int)year, (int)week-1, 1);
+            }
+
             viewModel.Year = periodData.Year;
             viewModel.Week = periodData.Week;
             viewModel.Monday = periodData.Start;
@@ -256,8 +265,11 @@ namespace LMS.Controllers
                 }
                 else
                 {
+                    string typeText = schemeAct.TypeText;
+                    schemeAct.TypeText = typeText + " (del 1)";
                     viewModel.WeekActivities.RemoveAt(index-10);
                     viewModel.WeekActivities.Insert(index-10, schemeAct);
+                    schemeAct.TypeText = typeText + " (del 2)";
                     viewModel.WeekActivities.RemoveAt(index - 5);
                     viewModel.WeekActivities.Insert(index - 5, schemeAct);
                 }
