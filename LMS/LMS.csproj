@@ -264,6 +264,18 @@
     <Compile Include="Migrations\201708132120596_Removed moduleId from notes.Designer.cs">
       <DependentUpon>201708132120596_Removed moduleId from notes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708141706110_MyNotes in applUser.cs" />
+    <Compile Include="Migrations\201708141706110_MyNotes in applUser.Designer.cs">
+      <DependentUpon>201708141706110_MyNotes in applUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708141734490_UserNotification.cs" />
+    <Compile Include="Migrations\201708141734490_UserNotification.Designer.cs">
+      <DependentUpon>201708141734490_UserNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708141802322_Rename to StudentNotification.cs" />
+    <Compile Include="Migrations\201708141802322_Rename to StudentNotification.Designer.cs">
+      <DependentUpon>201708141802322_Rename to StudentNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -272,11 +284,13 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\StudentNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActivityRepo.cs" />
     <Compile Include="Repositories\CourseRepo.cs" />
     <Compile Include="Repositories\ModuleRepo.cs" />
     <Compile Include="Repositories\NotificationRepo.cs" />
+    <Compile Include="Repositories\StudentRepo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\ManageNavigationViewModels.cs" />
   </ItemGroup>
@@ -364,6 +378,10 @@
     <Content Include="Views\Courses\Manage.cshtml" />
     <Content Include="Views\Shared\_Modules.cshtml" />
     <Content Include="Views\Activities\Manage.cshtml" />
+    <Content Include="Views\Students\SchemeOld.cshtml" />
+    <Content Include="Views\Students\About.cshtml" />
+    <Content Include="Views\Students\SchemeR2.cshtml" />
+    <Content Include="Views\Students\MyPage.cshtml" />
     <Content Include="Views\Students\Scheme.cshtml" />
     <Content Include="Views\Students\About.cshtml" />
     <Content Include="Views\Students\Scheme2.cshtml" />
@@ -413,6 +431,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708132120596_Removed moduleId from notes.resx">
       <DependentUpon>201708132120596_Removed moduleId from notes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708141706110_MyNotes in applUser.resx">
+      <DependentUpon>201708141706110_MyNotes in applUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708141734490_UserNotification.resx">
+      <DependentUpon>201708141734490_UserNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708141802322_Rename to StudentNotification.resx">
+      <DependentUpon>201708141802322_Rename to StudentNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

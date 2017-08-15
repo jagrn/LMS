@@ -11,8 +11,12 @@
     @if (User.IsInRole("Teacher"))
     {
         @Html.ActionLink("New course", "Manage", "Courses", new { id = 0, getOperation = "New" }, null)
+        <br />
 
-        @*@Html.ActionLink("Scheme10", "Scheme", "Students", new { courseId = 10, year=2017, week=32, moveWeek=0 }, null)*@
+        @Html.ActionLink("Scheme10", "Scheme", "Students", new { courseId = 2, year=2017, week=32, moveWeek=0 }, null)
+        <br />
+
+        @Html.ActionLink("MyPage", "MyPage", "Students", new { courseId = 2 }, null)
     }
 
 </p>

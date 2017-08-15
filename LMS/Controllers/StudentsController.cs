@@ -19,6 +19,100 @@ namespace LMS.Controllers
 
     public class StudentsController : Controller
     {
+        // GET: Students/MyPage
+        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek)
+        {
+            if ((courseId == 0) || (courseId == null) || (studentId == null))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            StudentViewModel viewModel = new StudentViewModel();
+            viewModel.CourseId = (int)courseId;
+            viewModel.StudentId = studentId;
+            viewModel.StudentName = StudentRepo.GetStudentName(studentId);
+            //viewModel.StudentId = StudentRepo.GetFakeStudentId();
+
+            if ((moduleId != null) && (moduleId != 0))
+            {
+                viewModel.ModuleId = (int)moduleId;
+                // Load a selected module
+                viewModel.Module = new Models.Module();
+                var singleModule = ModuleRepo.RetrieveModule(courseId, moduleId);
+                if (singleModule.repoResult == ModuleRepoResult.NotFound)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+                viewModel.Module.Name = singleModule.module.Name;
+                viewModel.Module.Description = singleModule.module.Description;
+                viewModel.Module.StartDate = singleModule.module.StartDate;
+                viewModel.Module.EndDate = singleModule.module.EndDate;
+            }
+            else
+            {
+                viewModel.ModuleId = 0;
+            }
+            if ((activityId != null) && (activityId != 0))
+            {
+                viewModel.ActivityId = (int)activityId;
+                // Load a selected activity
+                viewModel.Activity = new Models.Activity();
+                var singleActvivity = ActivityRepo.RetrieveActivity(moduleId, activityId);
+                if (singleActvivity.repoResult == ActivityRepoResult.NotFound)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+                viewModel.Activity.Name = singleActvivity.activity.Name;
+                viewModel.Activity.Description = singleActvivity.activity.Description;
+                viewModel.Activity.StartDate = singleActvivity.activity.StartDate;
+                viewModel.Activity.EndDate = singleActvivity.activity.EndDate;
+                viewModel.Activity.ActivityType = singleActvivity.activity.ActivityType;
+            }
+            else
+            {
+                viewModel.ActivityId = 0;
+            }
+
+            // Load view model with additional display info wrt course modules
+            var courseModuleList = ModuleRepo.RetrieveCourseModuleList(courseId);
+            if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+            viewModel.CourseModules = courseModuleList.moduleList;
+            viewModel.CourseName = CourseRepo.RetrieveCourseName(courseId);
+
+            // Load view model with additional display info wrt module activities
+            var moduleActivityList = ActivityRepo.RetrieveModuleActivityList(moduleId);
+            if (moduleActivityList.repoResult == ActivityRepoResult.NotFound)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+            viewModel.ModuleActivities = moduleActivityList.activityList;
+
+            viewModel.Notifications = StudentRepo.RetreiveNotesForStudent(viewModel.StudentId);
+            viewModel.NoOfNotifications = viewModel.Notifications.Count;
+
+            if (schemeYear == null)
+            {
+                schemeYear = 2000;
+            }
+            viewModel.SchemeYear = (int) schemeYear;
+            if (schemeWeek == null)
+            {
+                schemeWeek = 1;
+            }
+            viewModel.SchemeWeek = (int) schemeWeek;
+
+            if (schemeMoveWeek == null)
+            {
+                schemeMoveWeek = 0;
+            }
+            viewModel.SchemeMoveWeek = (int) schemeMoveWeek;
+
+            return View(viewModel);
+        }
+
         private DateTime GetMonday(int year, int week)
         {
             /// Converts a week number to corresponding monday date.
@@ -104,7 +198,7 @@ namespace LMS.Controllers
 
 
         // GET: Students/Scheme
-        public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)
+        public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek, int myPageModuleId, int myPageActivityId, string myPageStudentId)
         {
             SchemeViewModel viewModel = new SchemeViewModel();
             if ((courseId == null) || (courseId == 0))
@@ -115,7 +209,11 @@ namespace LMS.Controllers
                 //moveWeek = 0;
             }
 
-            viewModel.courseId = (int) courseId;
+            viewModel.courseId = (int) courseId;           
+            viewModel.MyPageModuleId = myPageModuleId;
+            viewModel.MyPageActivityId = myPageActivityId;
+            viewModel.MyPageStudentId = myPageStudentId;
+
             var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
             viewModel.Year = periodData.Year;
             viewModel.Week = periodData.Week;
@@ -165,54 +263,9 @@ namespace LMS.Controllers
                 }
             }
 
-            //for (int index = 0; index < 10; index++)
-            //{
-            //    SchemeActivity schemeAct = new SchemeActivity();
-            //    if ((index == 0)|| (index == 5) || (index == 6) || (index == 7))
-            //    {
-            //        schemeAct.ActivityType = -1;
-            //        schemeAct.NameText = "";
-            //        schemeAct.TypeText = "";
-            //        schemeAct.ActivityId = 1;
-            //    }
-
-            //    if (index == 2)
-            //    {
-            //        schemeAct.ActivityType = 0;
-            //        schemeAct.NameText = "Java introduction";
-            //        schemeAct.TypeText = "Föreläsning";
-            //        schemeAct.ActivityId = 1;
-            //    }
-
-            //    if ((index == 3) || (index == 4))
-            //    {
-            //        schemeAct.ActivityType = 1;
-            //        if (index == 3)
-            //            schemeAct.NameText = "Become a Java coder";
-            //        else
-            //            schemeAct.NameText = "Advanced techniques in Java";
-            //        schemeAct.TypeText = "Datorbaserad";
-            //        schemeAct.ActivityId = 1;
-            //    }
-
-            //    if ((index == 1) || (index > 7))
-            //    {
-            //        schemeAct.ActivityType = 3;
-            //        if (index == 1)
-            //            schemeAct.NameText = "Java övning 1";
-            //        else
-            //            schemeAct.NameText = "Java övning 2";
-            //        schemeAct.TypeText = "Övning";
-            //        schemeAct.ActivityId = 1;
-            //    }
-            //    viewModel.WeekActivities.Add(schemeAct);
-            //}
-
-
-
             viewModel.Notifications = NotificationRepo.RetrieveCourseNotes((int) courseId);
 
-            return View(viewModel);
+            return PartialView(viewModel);
         }
 
         // GET: Students/Scheme

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace LMS.Models
         public string LastName { get; set; }
         public string FullName { get { return FirstName + " " + LastName; }  }
         public int? CourseId { get; set; }
-
+        public virtual ICollection<StudentNotification> StudentNotifications { get; set; }
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -32,6 +33,7 @@ namespace LMS.Models
         public DbSet<Module> Modules { get; set; }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<StudentNotification> StudentNotifications { get; set; }
 
 
         public ApplicationDbContext()
