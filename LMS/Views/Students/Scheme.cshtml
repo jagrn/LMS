@@ -2,21 +2,21 @@
 
 @{
     ViewBag.Title = "Veckoschema";
-    DateTime datum0 = new DateTime(2017, 8, 7);
 }
 
 
-@using(Ajax.BeginForm(
-    new AjaxOptions{
-        HttpMethod="get",
-        InsertionMode=InsertionMode.Replace,
-        UpdateTargetId= "shemeDiv"}))
+@using (Ajax.BeginForm(
+    new AjaxOptions
+    {
+        HttpMethod = "Get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "shemeDiv"
+    })){
 
-{
-    @Html.AntiForgeryToken()
-    @Ajax.ActionLink("<<<")
-
-    @Html.ActionLink(">>>", "ShemePartial", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
+    <input type="search" value="test" />
+    <input type="submit" value="dodatest" />
+}
+    @*@Html.ActionLink(">>>", "ShemePartial", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })*@
 
 
     <div class="container">
@@ -32,14 +32,18 @@
         <br />
         <br />
         <br />
-        <div id="shemeDiv">
 
-@Html.Action("SchemePartial", "Students", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 })
+<div id="shemeDiv">
 
-        </div>
+    @Html.Partial("_Scheme",Model)
+
+</div>
+
+
+
 
     </div>
-                }
+                   
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
