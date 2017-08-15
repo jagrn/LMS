@@ -1,4 +1,5 @@
 ﻿using LMS.Models;
+using LMS.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -77,7 +78,21 @@ namespace LMS.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    bool inRoleStudent = StudentRepo.CheckRoleAs(model.Email, "Student");
+                    if (inRoleStudent)
+                    {
+                        string studentId = StudentRepo.GetStudentId(model.Email);
+
+                        StudentRepo.FakeCourseAttendance(2, studentId);                 // Temporary solution to set a courseId
+                        StudentRepo.FakeStudentFullName(studentId);
+
+                        int courseId = StudentRepo.GetStudentCourse(studentId);
+                        return RedirectToAction("MyPage", "Students", new { courseId = courseId, studentId = studentId });
+                    }
+                    else
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

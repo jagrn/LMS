@@ -36,7 +36,9 @@
         <div class="row scheduleHeaderRow">
 
             <div class="col-sm-1 ">
-                <a class="btn" href="@Url.Action("Scheme", "Students", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = -1 })"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true" style="border:0;"></span><br />V.@(Model.Week - 1)</a>
+                <a class="btn" href="@Url.Action("MyPage", "Students", new { courseId = Model.courseId, schemeYear = Model.Year, schemeWeek = Model.Week, schemeMoveWeek = -1, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId })"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true" style="border:0;"></span><br />V.@(Model.Week - 1)</a>
+
+                @*<a class="btn" href="@Url.Action("Scheme", "Students", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = -1 })"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true" style="border:0;"></span><br />V.@(Model.Week - 1)</a>*@
 
                 @*@Html.ActionLink("MyPage", "MyPage", "Students", new { courseId = 3 }, null)*@
 
@@ -63,7 +65,7 @@
 
             <div class="col-sm-1 ">
                 @*<span class="glyphicon glyphiconsm glyphicon-circle-arrow-right" aria-hidden="true"></span>*@
-                <a class="btn" href="@Url.Action("Scheme", "Students", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 1 })"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-right" aria-hidden="true"></span><br />V.@(Model.Week + 1)</a>
+                <a class="btn" href="@Url.Action("MyPage", "Students", new { courseId = Model.courseId, schemeYear = Model.Year, schemeWeek = Model.Week, schemeMoveWeek = 1, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId })"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-right" aria-hidden="true"></span><br />V.@(Model.Week + 1)</a>
 
                 @*@Html.ActionLink(">>>", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 1 })*@
 
@@ -184,7 +186,7 @@
 @*if(Model.Week!=DateTime.Now.week){*@
 <div style="text-align:center">
 
-    <a class="btn" href="@Url.Action("Scheme", "Students", new {  courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 0 })"> <span class="glyphicon glyphiconsm glyphicon glyphicon-home" aria-hidden="true" style="border:0;"></span><br />Aktuell vecka</a>
+    <a class="btn" href="@Url.Action("MyPage", "Students", new {  courseId = Model.courseId, schemeYear = Model.Year, schemeWeek = Model.Week, schemeMoveWeek = 0, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId })"> <span class="glyphicon glyphiconsm glyphicon glyphicon-home" aria-hidden="true" style="border:0;"></span><br />Aktuell vecka</a>
 
 
     @*@Html.ActionLink(">>> Denna vecka <<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 0 })*@

@@ -11,6 +11,7 @@
     var courseId = Model.CourseId;
     var moduleId = Model.ModuleId;
     var activityId = Model.ActivityId;
+    var studentId = Model.StudentId;
 }
 
 
@@ -36,9 +37,9 @@
 
 
 
-<h1>Välkommen till din sida "elevnamn"</h1>
+<h1>Välkommen till din sida @Model.StudentName</h1>
 
-@Html.Action("Scheme", "Students", new { courseId = courseId, year = 2017, week = 32, moveWeek = 0 })
+@Html.Action("Scheme", "Students", new { courseId = courseId, year = Model.SchemeYear, week = Model.SchemeWeek, moveWeek = Model.SchemeMoveWeek, myPageModuleId = Model.ModuleId, myPageActivityId = Model.ActivityId, myPageStudentId = Model.StudentId })
 
 
 <br />
@@ -78,7 +79,7 @@
                                                 moduleText = "   " + @module.Name;
                                             }
                                         }
-                                        @Html.ActionLink(moduleText, "MyPage", new { courseId = courseId, moduleId = module.Id, activityId = 0})
+                                        @Html.ActionLink(moduleText, "MyPage", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId})
                                     </td>
 
                                 </tr>
@@ -126,7 +127,7 @@
                             {
                                 <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                                     <p>
-                                        @activity.StartDate &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id })">@activity.Name</a>
+                                        @activity.StartDate &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId })">@activity.Name</a>
                                     </p>
                                     <p>@activity.Description</p>
 

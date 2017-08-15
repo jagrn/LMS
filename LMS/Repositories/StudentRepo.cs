@@ -11,23 +11,72 @@ namespace LMS.Repositories
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
 
-        public static string GetFakeStudentId()
-        {
-            var students = db.Users.Where(u => u.Email == "student@lms.se").ToList();
-            return students.First().Id;
-        }
+        //public static string GetFakeStudentId()
+        //{
+        //    var students = db.Users.Where(u => u.Email == "student@lms.se").ToList();
+        //    return students.First().Id;
+        //}
 
-        private static void FakeCourseAttendance(int courseId)
+        public static void FakeCourseAttendance(int courseId, string studentId)
         {
             //IdentityUserRole role = new IdentityUserRole();
             //role.RoleId = "Student";
             //var students = db.Users.Where(u => u.Roles.Contains(role)).ToList();
 
-            var students = db.Users.Where(u => u.Email == "student@lms.se").ToList();
+            var students = db.Users.Where(u => u.Id == studentId).ToList();
             students.First().CourseId = courseId;
 
             db.Entry(students.First()).State = EntityState.Modified;
-            db.SaveChanges();        
+            db.SaveChanges();
+        }
+
+        public static void FakeStudentFullName(string studentId)
+        {
+            var students = db.Users.Where(u => u.Id == studentId).ToList();
+            students.First().FirstName = students.First().Email;
+            db.Entry(students.First()).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+
+        public static bool CheckRoleAs(string email, string valRole)
+        {
+            var user = db.Users.Where(u => u.Email == email).ToList();
+            var roles = user.First().Roles.ToList();
+            bool roleFound = false;
+
+            foreach (var role in roles)
+            {
+                var roleId = role.RoleId;
+                var roleName = db.Roles.Where(r => r.Id == roleId).ToList();
+                if (roleName.First().Name == valRole)
+                {
+                    roleFound = true;
+                }
+            }
+
+            if (roleFound)
+                return true;
+            else
+                return false;
+        }
+
+        public static string GetStudentId(string email)
+        {
+            var students = db.Users.Where(u => u.Email == email).ToList();
+            return students.First().Id;
+        }
+
+        public static int GetStudentCourse(string studentId)
+        {
+            var students = db.Users.Where(u => u.Id == studentId).ToList();
+            return (int) students.First().CourseId;
+        }
+
+        public static string GetStudentName(string studentId)
+        {
+            var students = db.Users.Where(u => u.Id == studentId).ToList();
+            return students.First().FullName;
         }
 
         // ADD a student notification to all students attending the concerned course
@@ -35,8 +84,6 @@ namespace LMS.Repositories
         {
             if ((courseId == 0) || (notificationId == 0))
                 return;
-
-            FakeCourseAttendance(courseId); ////////////////////////////
 
             var students = db.Users.Where(u => u.CourseId == courseId).ToList();
             foreach (var student in students)
