@@ -80,6 +80,11 @@ h4 {
 
 .scheduleLunchRow {
    background-color:gainsboro;
-    
-
+}
+.MyPageTitleWeek{
+    font-size:larger;
+    font-weight:bold;
+}
+.MyPageTitleWeek{
+    font-size:small;
 }
