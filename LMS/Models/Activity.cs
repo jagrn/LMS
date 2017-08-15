@@ -9,12 +9,18 @@ namespace LMS.Models
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public ActivityPeriod ActivityPeriod  { get; set; }
         public DateTime Deadline { get; set; }
-        public ActivityType ActitvityType { get; set; }
+        public ActivityType ActivityType { get; set; }
         public int ModuleId { get; set; }
 
+    }
 
-
+    public enum ActivityPeriod
+    {
+        AM,
+        FM,
+        FullDay,
     }
 
     public enum ActivityType

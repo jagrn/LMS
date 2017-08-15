@@ -1,0 +1,252 @@
+﻿@model LMS.ViewModels.SchemeViewModel
+
+@{
+    ViewBag.Title = "Veckoschema";
+    var i = 0;
+    DateTime datum0 = new DateTime(2017, 8, 7);
+    DateTime datum;
+    string sDatum;
+    string veckodag;
+}
+
+<br />
+@*@{
+        foreach(var note in Model.Notifications)
+        {
+            <p>@note.ChangeText</p>
+        }
+    }*@
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container-fluid">
+
+        <h2>@ViewBag.Title</h2>
+        @Model.Year
+        @Model.Week
+        <br />
+        <br />
+        @Model.Period
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row scheduleHeaderRow">
+
+            <div class="col-sm-1 ">
+                @Html.ActionLink("<<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = -1 })
+            </div>
+
+            @{
+                for (i = 0; i < 5; i++)
+                {
+                    datum = Model.Monday.AddDays(i);
+                    sDatum = datum.ToString("yyyy-MM-dd");
+                    veckodag = datum.ToString("dddd");
+
+
+                    <div class="col-sm-2 ">
+                        <p>@sDatum</p>
+                        <p>@veckodag</p>
+                    </div>
+                }
+                i = 0;
+            }
+
+
+
+            <div class="col-sm-1 ">
+                @Html.ActionLink(">>>", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 1 })
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            @foreach (var weekActivitiy in Model.WeekActivities)
+
+                {
+                string s = "white";
+
+                switch(weekActivitiy.ActivityType) {
+                    case 0: s = "lightgreen"; break;
+                    case 1: s = "crimson"; break;
+                    case 2: s = "red"; break;
+                    case 3: s = "yellow"; break;
+                    case 4: s = "blue"; break;
+
+                    default: break;
+                }
+
+
+
+                i++;
+
+                if (i == 1)
+                {
+
+
+                    <div class="col-sm-1">@i col1</div>
+
+                }
+
+
+                if (i <= 5)
+                {
+                    @*<div class="col-sm-2" style="background-color:aquamarine">*@
+                        @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\" >")
+
+
+                        <p>08.30-12.00</p>
+
+                        <p>@weekActivitiy.NameText</p>
+                        <p>@weekActivitiy.TypeText</p>
+                        <p>@weekActivitiy.ModuleNameText</p>
+
+                        @Html.Raw("</div>")
+
+                }
+
+
+                        if(i == 5) {
+
+                    <div class="col-sm-1" style="background-color:red">col7</div>
+
+                }
+            }
+        </div>
+        <div class="row scheduleHeaderRow">
+            @{
+                for (i = 0; i < 5; i++)
+                {
+                    if (i == 0)
+                    {
+
+
+                        <div class="col-sm-1">@i col1</div>
+
+                    }
+
+                    
+                    <div class="col-sm-2">
+                        <p>Lunch</p>
+                    </div>
+
+                    if (i == 4)
+                    {
+
+
+                        <div class="col-sm-1">@i col7</div>
+
+                    }
+
+
+                }
+            }
+
+        </div>
+
+        <div class="row">
+            @{
+                i = 0;
+            }
+
+            @foreach (var weekActivitiy in Model.WeekActivities)
+            {
+                string s = "white";
+
+                switch(weekActivitiy.ActivityType) {
+                    case 0: s = "lightgreen"; break;
+                    case 1: s = "crimson"; break;
+                    case 2: s = "red"; break;
+                    case 3: s = "yellow"; break;
+                    case 4: s = "blue"; break;
+
+                    default: break;
+                }
+                i++;
+
+
+
+                if (i == 6)
+                {
+
+
+                    <div class="col-sm-1">@i col1</div>
+
+                }
+
+
+
+
+
+                if (i > 5)
+                {
+                    @*<div class="col-sm-2">*@
+                        @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\" >")
+
+
+                        <p>13.00-17.00</p>
+
+                        <p>@weekActivitiy.NameText</p>
+                        <p>@weekActivitiy.TypeText</p>
+                        <p>@weekActivitiy.ModuleNameText</p>
+                    @*</div>*@
+                    @Html.Raw("</div>")
+
+                }
+
+
+                if(i == 10) {
+
+                    <div class="col-sm-1" style="background-color:red">col7</div>
+
+                }
+            }
+        </div>
+
+    </div>
+
+
+                }
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

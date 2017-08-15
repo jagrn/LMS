@@ -1,56 +1,74 @@
-﻿@model LMS.Models.Course
+﻿@model LMS.ViewModels.CourseDeleteViewModel
 
 @{
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+@{
+    if (Model.DeleteType == "Single")
+    {
+        <h2>Ta bort kursen @Model.Name</h2>
+        <h3>Är du säker på att du vill ta bort den här kursen permanent?</h3>
+    }
+    if (Model.DeleteType == "All")
+    {
+        <h2>Ta bort alla kurser</h2>
+        <h3>Är du säker på att du vill ta bort alla kurser permanent?</h3>
+    }
+}
 <div>
-    <h4>Course</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+    @{
+        if (Model.DeleteType == "Single")
+        {
+            <h4>Kursdetaljer:</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.StartDate)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.EndDate)
+                </dd>
+            </dl>
+        }
+        if (Model.DeleteType == "All")
+        {
+            <h4>Kurslista:</h4>
+            <hr />
+            foreach (var course in Model.AllCourses)
+            {
+                <p>@course.Name</p>
+            }
+        }
+    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
-
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <button type="submit" class="btn btn-default">Bekräfta</button>
+            <button class="btn btn-default">@Html.ActionLink("Avbryt", "Manage", "Courses", new { getOperation = "New" }, null)</button>
         </div>
     }
 </div>

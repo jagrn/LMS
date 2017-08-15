@@ -1,148 +1,218 @@
-﻿@*@model LMS.Models.Module*@
-@model LMS.ViewModels.ManageModuleViewModel
+﻿@model LMS.ViewModels.ModuleViewModel
 
 @{
     ViewBag.Title = "Manage";
 }
 
-<h2>Manage</h2>
+
+<br />
 
 @{
-    Model.ProceedPath = "Default";
+    var moduleId = Model.Id;
+    var clearDate = "'2017-01-01'";
 }
 
 @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+{
+    @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-        <h4>Module</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ProceedPath)
+    //First container to include input section and module information
+    <div class="container-fluid">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <div class="row">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <div class="col-md-3">
+                <!--menu-->
+                <br />
+                <h4>Kursmoduler för @Model.CourseName:</h4>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                @{
+                    if (Model.CourseModules != null)
+                    {
+                        if (Model.CourseModules.Count != 0)
+                        {
+                            <table class="table">
+                                @foreach (var module in Model.CourseModules)
+                                {
+                                <tr>
+                                    <td>
+                                        @{
+                                            string moduleText = "";
+                                            if (module.Id == Model.Id)
+                                            {
+                                                moduleText = "=> " + @module.Name;
+                                            }
+                                            else
+                                            {
+                                                moduleText = "   " + @module.Name;
+                                            }
+                                        }
+                                        @Html.ActionLink(moduleText, "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })
+                                    </td>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CourseId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                </tr>
+                                            }
+                            </table>
+                                                }
+                                            }
+                }
+            </div><!--end menu-->
+           
+            <div class="form-horizontal col-md-7">
+                <h2>Hantera moduler för @Model.CourseName</h2>
+                
+                @{
+                    if (moduleId == 0)
+                    {
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny modul</h4>
+                    }
+                    else
+                    {
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera modulen @Model.Name</h4>
+                    }
+                }
+          
+                @{
+                    if (Model.PostMessage != "")
+                    {
+                        <h5 class="text-danger">@Model.PostMessage</h5>
+                    }
+                }
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.PostNavigation)
+                @Html.HiddenFor(model => model.PostOperation)
+                @Html.HiddenFor(model => model.PostMessage)
+                @Html.HiddenFor(model => model.CourseId)
+                @Html.HiddenFor(model => model.ActivityId)
 
                 <div class="form-group">
-                    
-                   
-                    </div>
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-
-                            
-
-                            <h2>Proceed path : @Model.ProceedPath</h2>
-                            <h2>Name : @Model.Name</h2>
-                            <h2>CourseID : @Model.CourseId</h2>
-                            <script>
-
-                                console.log("RUNNING - OUTSIDE");
-                            </script>
-
-
-                            @*<input type="submit" value="Save" class="btn btn-default" />
-
-                            <input type="submit" value="Save/Return" class="btn btn-default" />*@
-
-                            
-
-                            <button type="submit" class="btn btn-default submit-save" onclick="SetProceedPath()">SAVE</button>
-
-                            @*@{ 
-                                var saveString = "SAVE";
-                            }
-                            <button type="submit" class="btn btn-default submit-save" onclick="{@{Model.ProceedPath = saveString;}">SAVE2</button>*@
-                            
-                            
-                            <button type="submit" class="btn btn-default">SAVE&RETURN</button>
-
-                            <button type="submit" class="btn btn-default">SAVE&Next</button>
-
-
-
-                            @*<button type="submit" class="btn btn-default">@Html.ActionLink("SAVE/RETURN", "Manage", "Modules", new { courseId = Model.CourseId }, null)</button>*@
-
-                            @*<input type="submit" value="Save/Next" class="btn btn-default" />*@
-
-                            @*This button directs the user to the manage course view without saving any module data*@
-                            <button class="btn btn-default">@Html.ActionLink("RETURN", "Manage", "Courses", new { Id = Model.CourseId }, null)</button>
-
-
-                            <input type="submit" value="Undo" class="btn btn-default" />
-                            <input type="submit" value="Delete" class="btn btn-default" />
-                        </div>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control " } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 " })
+                    <div class="col-md-10">
+
+                        @Html.TextAreaFor(model => model.Description, 6, 40, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div>
+                    <!--buttons-->
+                    <br />
+                    @*POST buttons for save (new or update) and return to manage course view
+                @{
+                    if (moduleId == 0)
+                    {
+                        <p class="btn btn-default">SAVE(U)/R</p>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'Update', @moduleId, 0)">SAVE(U)/R</button>
+                    }
+                }
+                <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'New', @moduleId, 0)">SAVE(N)/R</button>
+                @*POST buttons for save (new or update) and remain in manage module view*@
+                    @*@{
+                    if (moduleId == 0)
+                    {
+                        <p class="btn btn-default">SAVE(U)</p>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @moduleId, 0)">SAVE(U)</button>
+                    }
+                }*@
+                    @*<button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @moduleId, 0)">SAVE(N)</button>
+                @*Clear form button without saving module data, remain with same module identity in form*@
+                    @*<p class="btn btn-default" onclick="ClearModuleForm(@clearDate, @clearDate)">CLEAR</p>*@
+                </div> @*end buttons*@
+
+                <div class="btn-toolbar">
+
+                    <!-- icons-->
+                    @{
+                        if (moduleId != 0)
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @moduleId, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Updatera
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @moduleId, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Spara
+                            </button>
+                        }
+                    }
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { id = 0, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny modul</a>
+                    @{
+                        if (moduleId != 0)
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('SaveAct', 'New', @moduleId, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-tasks" aria-hidden="true"></span><br />Ny aktivitet
+                            </button>
+
+                            <button type="button" class="btn btn-default" aria-label="Left Align">
+
+                                <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
+                            </button>
+                            @*GET button to reach delete course view*@
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Modules", new { id = moduleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
+                        }
+                    }
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { Id = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    <br />
+                    
+                </div><!-- end icons-->
+
+                <div>
+                    @Html.Partial("_Activities")
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-2">
+                <br />
+                <br />
+                <br />
+              <!--  @Html.Partial("_Documents")-->
+            </div>
+
+
+        </div>
+    </div>
+
 }
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
 
-<script>
-                                function SetProceedPath() {
-                                    console.log("RUNNING SET FUNCTION");
-                                    //console.log(arguments[0]);
-                                    //while (true)
-                                    //{
-
-                                    //}
-                                    
-                                    //$Model.ProceedPath = "SAVE";
-                                }
-
-
-                                //$(document).ready(function () {
-                                //    $('.submit-save').click(function () {
-                                //        //window.alert("RUNNING");
-
-                                //        console.log("RUNNING");
-                                //        Model.ProceedPath = "SAVE";
-
-                                //        //$(this).closest('form')[0].submit();
-                                //    });
-                                //})
-</script>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
