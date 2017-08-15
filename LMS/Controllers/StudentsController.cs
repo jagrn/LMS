@@ -20,16 +20,19 @@ namespace LMS.Controllers
     public class StudentsController : Controller
     {
         // GET: Students/MyPage
-        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId)
+        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek)
         {
-            if ((courseId == 0) || (courseId == null))
+            if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             StudentViewModel viewModel = new StudentViewModel();
             viewModel.CourseId = (int)courseId;
-            
+            viewModel.StudentId = studentId;
+            viewModel.StudentName = StudentRepo.GetStudentName(studentId);
+            //viewModel.StudentId = StudentRepo.GetFakeStudentId();
+
             if ((moduleId != null) && (moduleId != 0))
             {
                 viewModel.ModuleId = (int)moduleId;
@@ -86,6 +89,26 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
             viewModel.ModuleActivities = moduleActivityList.activityList;
+
+            viewModel.Notifications = StudentRepo.RetreiveNotesForStudent(viewModel.StudentId);
+            viewModel.NoOfNotifications = viewModel.Notifications.Count;
+
+            if (schemeYear == null)
+            {
+                schemeYear = 2000;
+            }
+            viewModel.SchemeYear = (int) schemeYear;
+            if (schemeWeek == null)
+            {
+                schemeWeek = 1;
+            }
+            viewModel.SchemeWeek = (int) schemeWeek;
+
+            if (schemeMoveWeek == null)
+            {
+                schemeMoveWeek = 0;
+            }
+            viewModel.SchemeMoveWeek = (int) schemeMoveWeek;
 
             return View(viewModel);
         }
@@ -175,7 +198,7 @@ namespace LMS.Controllers
 
 
         // GET: Students/Scheme
-        public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek)
+        public ActionResult Scheme(int? courseId, int? year, int? week, int? moveWeek, int myPageModuleId, int myPageActivityId, string myPageStudentId)
         {
             SchemeViewModel viewModel = new SchemeViewModel();
             if ((courseId == null) || (courseId == 0))
@@ -186,7 +209,11 @@ namespace LMS.Controllers
                 //moveWeek = 0;
             }
 
-            viewModel.courseId = (int) courseId;
+            viewModel.courseId = (int) courseId;           
+            viewModel.MyPageModuleId = myPageModuleId;
+            viewModel.MyPageActivityId = myPageActivityId;
+            viewModel.MyPageStudentId = myPageStudentId;
+
             var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
             viewModel.Year = periodData.Year;
             viewModel.Week = periodData.Week;

@@ -192,11 +192,19 @@ namespace LMS.ViewModels
         public int CourseId { get; set; }
         public int ModuleId { get; set; }
         public int ActivityId { get; set; }
-        public string CourseName { get; set; }      
+        public string StudentId { get; set; }
+        public string CourseName { get; set; }
+        public string StudentName { get; set; }
         public Module Module { get; set; }
         public Activity Activity { get; set; }
         public List<ModuleListData> CourseModules { get; set; }     
-        public List<ActivityListData> ModuleActivities { get; set; }      
+        public List<ActivityListData> ModuleActivities { get; set; }
+        public int NoOfNotifications { get; set; }
+        public List<Notification> Notifications { get; set; }
+
+        public int SchemeYear { get; set; }
+        public int SchemeWeek { get; set; }
+        public int SchemeMoveWeek { get; set; }
     }
 
         public struct SchemeActivity
@@ -211,6 +219,11 @@ namespace LMS.ViewModels
     public class SchemeViewModel
     {
         public int courseId;
+
+        public int MyPageModuleId { get; set; }
+        public int MyPageActivityId { get; set; }
+        public string MyPageStudentId { get; set; }
+
         public List<SchemeActivity> WeekActivities { get; set; }
         public int Year { get; set; }
         public int Week { get; set; }
