@@ -37,11 +37,8 @@
         <br />
         <div class="row">
 
-
-            <div class="col-sm-1" style="background-color:ghostwhite">
-
-                @Html.ActionLink("<<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = -1 })
-
+            <div class="col-sm-1 ">
+                @Html.ActionLink("<<<", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })
             </div>
 
             @{
@@ -65,6 +62,8 @@
 
                 @Html.ActionLink(">>>", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 1 })
 
+            <div class="col-sm-1 ">
+                @Html.ActionLink(">>>", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
             </div>
         </div>
 
@@ -105,7 +104,12 @@
 
                 @weekActivitiy.TypeText
 
-                @Html.Raw("</div>")
+                        <p>08.30-12.00</p>@i
+
+                        <p>@weekActivitiy.NameText</p>
+                        <p>@weekActivitiy.TypeText</p>
+
+                        @Html.Raw("</div>")
 
 
                 if(i == 5 || i == 10) {
@@ -124,10 +128,79 @@
             <br />
             @Html.ActionLink(">>> Denna vecka <<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 0 })
 
+                    default: break;
+                }
+                i++;
+
+
+
+                if (i == 6)
+                {
+
+
+                    <div class="col-sm-1">@i col1</div>
+
+                }
+
+
+
+
+
+                if (i > 5)
+                {
+                    @*<div class="col-sm-2">*@
+                        @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\" >")
+
+
+                        <p>13.00-17.00</p>@i
+
+                        <p>@weekActivitiy.NameText</p>
+                        <p>@weekActivitiy.TypeText</p>
+                    @*</div>*@
+                    @Html.Raw("</div>")
+
+                }
+
+
+                if(i == 10) {
+
+                    <div class="col-sm-1" style="background-color:red">col7</div>
+
+                }
+            }
         </div>
     </div>
                 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

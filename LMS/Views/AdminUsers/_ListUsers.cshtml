@@ -1,0 +1,58 @@
+﻿@model IEnumerable<LMS.Models.EditUserViewModel>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Förnamn", "Register", new { sortOrder = "firstname_desc" })
+            @*@Html.DisplayNameFor(model => model.FirstName)
+        </th>*@
+        <th>
+            @Html.ActionLink("Efternamn", "Register", new { sortOrder = "lastname_desc" })
+            @*@Html.DisplayNameFor(model => model.LastName)*@
+        </th>
+        <th>
+            @Html.ActionLink("Roll", "Register", new { sortOrder = "role_desc" })
+            @*@Html.DisplayNameFor(model => model.UserRole)*@
+        </th>
+        <th>
+            @Html.ActionLink("Emailaddress", "Register", new { sortOrder = "email_desc" })
+            @*@Html.DisplayNameFor(model => model.Email)*@
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @if (item.CourseId == 0 || item.CourseId == null)
+            {
+                <span>Teacher</span>
+
+            }
+            else
+            {
+                <span>Student</span>
+            }
+         
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+      
+        <td>
+            @Html.ActionLink("Edit", "EditUser", new { id=item.Id}) |
+
+            @Html.ActionLink("Ta bort", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

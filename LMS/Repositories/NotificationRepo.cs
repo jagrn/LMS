@@ -46,7 +46,8 @@ namespace LMS.Repositories
             db.Notifications.Add(notification);
             db.SaveChanges();
 
-            // CALL A STUDENT REPO METHOD TO UPDATE ALL STUDENTS OF THE COURSE WITH THIS ITEM TO myNotes
+            // Update all students of the course with this item to their myNotes
+            StudentRepo.AddNoteToStudents(module.CourseId, notification.Id);
         }
 
         // ADD a notification about a removed module
@@ -75,7 +76,8 @@ namespace LMS.Repositories
             db.Notifications.Add(notification);
             db.SaveChanges();
 
-            // CALL A STUDENT REPO METHOD TO UPDATE ALL STUDENTS OF THE COURSE WITH THIS ITEM TO myNotes
+            // Update all students of the course with this item to their myNotes
+            StudentRepo.AddNoteToStudents(module.CourseId, notification.Id);
         }
 
         // ADD a notification about a changed module
@@ -118,7 +120,8 @@ namespace LMS.Repositories
                 notification.ChangeText = changeText;
                 db.Notifications.Add(notification);
                 db.SaveChanges();
-                // CALL A STUDENT REPO METHOD TO UPDATE ALL STUDENTS OF THE COURSE WITH THIS ITEM TO myNotes
+                // Update all students of the course with this item to their myNotes
+                StudentRepo.AddNoteToStudents(newModule.CourseId, notification.Id);
             }
         }
 
@@ -145,7 +148,8 @@ namespace LMS.Repositories
             db.Notifications.Add(notification);
             db.SaveChanges();
 
-            // CALL A STUDENT REPO METHOD TO UPDATE ALL STUDENTS OF THE COURSE WITH THIS ITEM TO myNotes
+            // Update all students of the course with this item to their myNotes
+            StudentRepo.AddNoteToStudents(courseId, notification.Id);
         }
 
         // ADD a notification about a removed activity
@@ -171,7 +175,8 @@ namespace LMS.Repositories
             db.Notifications.Add(notification);
             db.SaveChanges();
 
-            // CALL A STUDENT REPO METHOD TO UPDATE ALL STUDENTS OF THE COURSE WITH THIS ITEM TO myNotes
+            // Update all students of the course with this item to their myNotes
+            StudentRepo.AddNoteToStudents(courseId, notification.Id);
         }
 
         // ADD a notification about a changed activity
@@ -223,7 +228,8 @@ namespace LMS.Repositories
                 notification.ChangeText = changeText;
                 db.Notifications.Add(notification);
                 db.SaveChanges();
-                // CALL A STUDENT REPO METHOD TO UPDATE ALL STUDENTS OF THE COURSE WITH THIS ITEM TO myNotes
+                // Update all students of the course with this item to their myNotes
+                StudentRepo.AddNoteToStudents(courseId, notification.Id);
             }
         }
 
