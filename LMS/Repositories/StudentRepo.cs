@@ -67,6 +67,12 @@ namespace LMS.Repositories
             return students.First().Id;
         }
 
+        public static ApplicationUser GetUser(string userId)
+        {
+            var users = db.Users.Where(u => u.Id == userId).ToList();
+            return users.First();
+        }
+
         public static int GetStudentCourse(string studentId)
         {
             var students = db.Users.Where(u => u.Id == studentId).ToList();

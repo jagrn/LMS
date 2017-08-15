@@ -1,4 +1,5 @@
 ﻿using LMS.Models;
+using LMS.Repositories;
 using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
 using System.Data;
@@ -518,7 +519,11 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+        //public Task<ActionResult> EditUser([Bind(Include = "Id,FirstName,LastName,CourseId,Email")] EditUserViewModel currentUser)
         public ActionResult EditUser([Bind(Include = "Id,FirstName,LastName,CourseId,Email")] EditUserViewModel currentUser)
+
+
         {
             if (ModelState.IsValid)
             {
@@ -528,19 +533,29 @@ namespace LMS.Controllers
                     currentUser.CourseId = 0;
                 }
 
+                //if (ModelState.IsValid)
+                //{
+                //    db.Entry(applicationUser).State = EntityState.Modified;
+                //    db.SaveChanges();
+                //    return RedirectToAction("Index");
+                //}
 
 
-                ApplicationUser applicationUser = new ApplicationUser()
-                {
-                    Id = currentUser.Id,
-                    FirstName = currentUser.FirstName,
-                    LastName = currentUser.LastName,
-                    Email = currentUser.Email,
-                    CourseId = currentUser.CourseId
-                };
 
+
+                //ApplicationUser applicationUser = StudentRepo.GetUser(currentUser.Id);
+
+                ApplicationUser applicationUser = db.Users.Find(currentUser.Id);
+
+
+                //applicationUser.Id = currentUser.Id;
+                applicationUser.FirstName = currentUser.FirstName;
+                applicationUser.LastName = currentUser.LastName;
+                applicationUser.Email = currentUser.Email;
+                applicationUser.CourseId = currentUser.CourseId;
                 
-                //db.Entry(applicationUser).State = EntityState.Modified;
+                db.Entry(applicationUser).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return View(currentUser); 
             }
