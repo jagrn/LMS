@@ -76,3 +76,11 @@ function ClearActivityForm() {
     //alert(document.forms[1]["Deadline"].value);
 }
 
+function ShowCreateNewUserDiv() {
+    var x = document.getElementById('CreateNewUserDiv');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}

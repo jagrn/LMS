@@ -43,9 +43,18 @@ namespace LMS.Models
 
         public static ApplicationDbContext Create()
         {
+            var db = new ApplicationDbContext();
             return new ApplicationDbContext();
         }
 
+        //public System.Data.Entity.DbSet<LMS.Models.RegisterViewModel> RegisterViewModels { get; set; }
 
+        //public System.Data.Entity.DbSet<LMS.Models.EditUserViewModel> EditUserViewModels { get; set; }
+
+        //public System.Data.Entity.DbSet<LMS.Models.RegisterViewModel> RegisterViewModels { get; set; }
+
+        //public System.Data.Entity.DbSet<LMS.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        //public System.Data.Entity.DbSet<LMS.Models.ApplicationUser> Users { get; set; }
     }
 }

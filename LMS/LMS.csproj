@@ -223,6 +223,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Controllers\AdminUsersController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -382,6 +383,18 @@
     <Content Include="Views\Students\SchemeR2.cshtml" />
     <Content Include="Views\Students\MyPage.cshtml" />
     <Content Include="Views\Students\Scheme.cshtml" />
+    <Content Include="Views\Students\About.cshtml" />
+    <Content Include="Views\Students\Scheme2.cshtml" />
+    <Content Include="Views\AdminUsers\Create.cshtml" />
+    <Content Include="Views\AdminUsers\Delete.cshtml" />
+    <Content Include="Views\AdminUsers\Details.cshtml" />
+    <Content Include="Views\AdminUsers\Edit.cshtml" />
+    <Content Include="Views\AdminUsers\Index2.cshtml" />
+    <Content Include="Views\AdminUsers\_ListUsers.cshtml" />
+    <Content Include="Views\AdminUsers\Register.cshtml" />
+    <Content Include="Views\AdminUsers\Index.cshtml" />
+    <Content Include="Views\AdminUsers\EditUser.cshtml" />
+    <Content Include="Views\AdminUsers\CreateUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
