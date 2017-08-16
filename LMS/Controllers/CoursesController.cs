@@ -17,6 +17,7 @@ namespace LMS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Courses
+        [Authorize(Roles = "Teacher")]
         public ActionResult Index()
         {
             return View(db.Courses.ToList());
