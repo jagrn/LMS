@@ -528,10 +528,10 @@ namespace LMS.Controllers
             if (ModelState.IsValid)
             {
 
-                if (currentUser.CourseId == null)
-                {
-                    currentUser.CourseId = 0;
-                }
+                //if (currentUser.CourseId == null)
+                //{
+                //    currentUser.CourseId = 0;
+                //}
 
                 //if (ModelState.IsValid)
                 //{
@@ -548,7 +548,7 @@ namespace LMS.Controllers
                 ApplicationUser applicationUser = db.Users.Find(currentUser.Id);
 
 
-                //applicationUser.Id = currentUser.Id;
+                applicationUser.Id = currentUser.Id;
                 applicationUser.FirstName = currentUser.FirstName;
                 applicationUser.LastName = currentUser.LastName;
                 applicationUser.Email = currentUser.Email;
