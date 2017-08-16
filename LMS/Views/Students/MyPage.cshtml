@@ -16,7 +16,7 @@
 }
 
 @{    
-    <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Nya notifieringar (@Model.NoOfNotifications)</h4>
+    <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Notiser (@Model.NoOfNotifications)</h4>
 
     if (Model.Notifications != null)
     {
@@ -24,7 +24,7 @@
         {
             <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
             <p>
-                @notification.ChangeText &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activityId })">Läst</a>
+                @notification.ChangeText &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activityId })">Ok</a>
             </p>
             </div>
         }
@@ -74,7 +74,7 @@
                
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-offset-1 col-md-5">
             @{
                 <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Moduler i kursen @Model.CourseName</h4>
 
@@ -94,7 +94,7 @@
                 }
             }
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             @{
                 if (moduleId != 0)
                 {
