@@ -230,6 +230,7 @@ namespace LMS.Repositories
             if (modules.Count != 1)
                 return ModuleRepoResult.NotFound;
 
+            NotificationRepo.AddChangedModuleNote(modules.First(), module);
             modules.First().Name = module.Name;
             modules.First().Description = module.Description;
             modules.First().StartDate = module.StartDate;
