@@ -85,7 +85,7 @@
                         <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                             <p>
                                 @module.StartDate.ToShortDateString() @module.StartDate.TimeOfDay &nbsp;
-                                <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek })">@module.Name</a>
+                                <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })">@module.Name</a>
                             </p>
                             <p>Modulbeskrivning: @module.Description</p>
 
@@ -107,7 +107,7 @@
                             <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                                 <p>
                                     @activity.StartDate.ToShortDateString() @activity.StartDate.TimeOfDay &nbsp; 
-                                    <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek })">@activity.Name</a>
+                                    <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })">@activity.Name</a>
                                 </p>
                                 <p>Aktivitetsbeskrivning: @activity.Description</p>
 

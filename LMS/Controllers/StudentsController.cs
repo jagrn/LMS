@@ -20,7 +20,7 @@ namespace LMS.Controllers
     public class StudentsController : Controller
     {
         // GET: Students/MyPage
-        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek)
+        public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek, bool fromMyPage)
         {
             if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
@@ -33,6 +33,7 @@ namespace LMS.Controllers
             viewModel.StudentName = StudentRepo.GetStudentName(studentId);
             //viewModel.StudentId = StudentRepo.GetFakeStudentId();
 
+            bool showModuleDetails = false;
             if ((moduleId != null) && (moduleId != 0))
             {
                 viewModel.ModuleId = (int)moduleId;
@@ -47,11 +48,14 @@ namespace LMS.Controllers
                 viewModel.Module.Description = singleModule.module.Description;
                 viewModel.Module.StartDate = singleModule.module.StartDate;
                 viewModel.Module.EndDate = singleModule.module.EndDate;
+                showModuleDetails = true;
             }
             else
             {
                 viewModel.ModuleId = 0;
             }
+
+            bool showActivityDetails = false;
             if ((activityId != null) && (activityId != 0))
             {
                 viewModel.ActivityId = (int)activityId;
@@ -67,6 +71,8 @@ namespace LMS.Controllers
                 viewModel.Activity.StartDate = singleActvivity.activity.StartDate;
                 viewModel.Activity.EndDate = singleActvivity.activity.EndDate;
                 viewModel.Activity.ActivityType = singleActvivity.activity.ActivityType;
+                showActivityDetails = true;
+                showModuleDetails = false;
             }
             else
             {
@@ -110,6 +116,22 @@ namespace LMS.Controllers
             //}
             viewModel.SchemeMoveWeek = schemeMoveWeek;
 
+            if (fromMyPage)
+            {
+                if (showModuleDetails)
+                {
+                    var start = viewModel.Module.StartDate;
+                    viewModel.SchemeWeek = GetWeekFromDate(start);
+                    viewModel.SchemeMoveWeek = null;
+                }
+
+                if (showActivityDetails)
+                {
+                    var start = viewModel.Activity.StartDate;
+                    viewModel.SchemeWeek = GetWeekFromDate(start);
+                    viewModel.SchemeMoveWeek = null;
+                }
+            }
             return View(viewModel);
         }
 
@@ -139,6 +161,14 @@ namespace LMS.Controllers
             /// ISO 8601 week 1 is the week that contains the first Thursday that year.
             var thursday = monday.AddDays(3);
             return (thursday.DayOfYear - 1) / 7 + 1;
+        }
+
+        private int GetWeekFromDate(DateTime date)
+        {
+            var dayOffset = ((int)(date.DayOfWeek + 6)) % 7;       // Monday = 0, Tuesday = 1, etc
+            var monday = date.AddDays(-dayOffset);
+            var week = GetWeek(monday);
+            return week;
         }
 
         private PeriodData GetWeekPeriod(int year, int week, int moveWeek)
