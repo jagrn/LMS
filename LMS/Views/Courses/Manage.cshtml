@@ -12,12 +12,14 @@
     var clearDate = "'2017-01-01'";
 }
 
+@*@Html.Action("HeadBanner", "CommonLOs", new { type = "FromCourseMgmnt", linkText0 = "KURSKATALOG", infoText = "THIS IS A COURSE MGMNT LOCATION" })*@
+
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+                @Html.AntiForgeryToken()
 
-    //First container to include input section and module information
-    <div class="container-fluid">
+                //First container to include input section and module information
+                <div class="container-fluid">
 
         <div class="row">
 
@@ -28,34 +30,35 @@
                 <h4>Alla kurser</h4>
 
                 @{
-                    if (Model.AllCourses != null)
-                    {
-                        if (Model.AllCourses.Count != 0)
-                        {
+            if (Model.AllCourses != null)
+            {
+                if (Model.AllCourses.Count != 0)
+                {
                             <table class="table">
                                 @foreach (var course in Model.AllCourses)
-                                {
+        {
                                 <tr>
                                     <td>
                                         @{
-                                            string courseText = "";
-                                            if (course.Id == Model.Id)
-                                            {
-                                                courseText = "=> " + @course.Name;
-                                            }
-                                            else
-                                            {
-                                                courseText = "   " + @course.Name;
-                                            }
-                                        }
-                                        @Html.ActionLink(courseText, "Manage", new { id = course.Id, getOperation = "Load" })
-                                    </td>
+                string courseText = "";
+                if (course.Id == Model.Id)
+                {
+                    courseText = "=> " + @course.Name;
+                }
+                else
+                {
+                    courseText = "   " + @course.Name;
+                }
+            }
+            @Html.ActionLink(courseText, "Manage", new { id = course.Id, getOperation = "Load" })
+        </td>
 
-                                </tr>
+
+    </tr>
                                             }
                             </table>
                                                 }
-                                            }
+}
                 }
             </div><!--end menu-->
            
@@ -63,8 +66,8 @@
                 <h2>Hantera kursinformation för @Model.Name</h2>
                 
                 @{
-                    if (courseId == 0)
-                    {
+    if (courseId == 0)
+    {
                         <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>
                     }
                     else

@@ -12,6 +12,9 @@
     var clearDate = "'2017-01-01'";
 }
 
+@*@Html.Action("HeadBanner", "CommonLOs", new { type = "FromActivityMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, linkText0 = "KURSKATALOG", linkText1 = "KURSHANTERING", linkText2 = "MODULHANTERING", infoText = "THIS IS AN ACTIVITY MGMNT LOCATION" })*@
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

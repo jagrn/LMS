@@ -224,6 +224,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\AdminUsersController.cs" />
+    <Compile Include="Controllers\CommonLOsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Repositories\NotificationRepo.cs" />
     <Compile Include="Repositories\StudentRepo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CommonLOViewModels.cs" />
     <Compile Include="ViewModels\ManageNavigationViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -395,6 +397,7 @@
     <Content Include="Views\AdminUsers\Index.cshtml" />
     <Content Include="Views\AdminUsers\EditUser.cshtml" />
     <Content Include="Views\AdminUsers\CreateUser.cshtml" />
+    <Content Include="Views\CommonLOs\HeadBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
