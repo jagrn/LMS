@@ -45,6 +45,13 @@ namespace LMS.ViewModels
         public DateTime EndDate;
     }
 
+    public struct DocumentListData
+    {
+        public int Id;
+        public string Name;
+    }
+
+
     public struct PeriodActivityListData
     {
         public string Name;
@@ -232,6 +239,38 @@ namespace LMS.ViewModels
 
         public List<Notification> Notifications { get; set; }
     }
+
+    public class DocumentViewModel
+    {
+        public int Id { get; set; }
+        [DisplayName("Namn")]
+        public string Name { get; set; }
+        [DisplayName("Beskrivning")]
+        public string Description { get; set; }
+        public string Format { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayName("Skapat datum")]
+        public DateTime UploadDate { get; set; }
+        public int? CourseId { get; set; }
+        public int? ModuleId { get; set; }
+        public int? ActivityId { get; set; }
+        public string UserId { get; set; }
+        // virtual fields fetched from other tables
+        [DisplayName("Kurs")]
+        public string CourseName { get; set; }
+        [DisplayName("Modul")]
+        public string ModuleName { get; set; }
+        [DisplayName("Aktivitet")]
+        public string ActivityName { get; set; }
+        // virtual fields for passing info back n forth
+        public string PostMessage { get; set; }
+        public string PostNavigation { get; set; }
+        public string PostOperation { get; set; }
+        // list of the other documents having the same owner (course or module etc...)
+        public List<DocumentListData> SiblingDocuments { get; set; }
+    }
+
 
 
 }

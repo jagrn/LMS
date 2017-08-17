@@ -225,6 +225,7 @@
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\AdminUsersController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
@@ -276,10 +277,31 @@
     <Compile Include="Migrations\201708141802322_Rename to StudentNotification.Designer.cs">
       <DependentUpon>201708141802322_Rename to StudentNotification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708161411040_Documents.cs" />
+    <Compile Include="Migrations\201708161411040_Documents.Designer.cs">
+      <DependentUpon>201708161411040_Documents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708161423135_Document fields allow nulls.cs" />
+    <Compile Include="Migrations\201708161423135_Document fields allow nulls.Designer.cs">
+      <DependentUpon>201708161423135_Document fields allow nulls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708161427007_Document.Doc added.cs" />
+    <Compile Include="Migrations\201708161427007_Document.Doc added.Designer.cs">
+      <DependentUpon>201708161427007_Document.Doc added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708170603457_Document model modify.cs" />
+    <Compile Include="Migrations\201708170603457_Document model modify.Designer.cs">
+      <DependentUpon>201708170603457_Document model modify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.cs" />
+    <Compile Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.Designer.cs">
+      <DependentUpon>201708170635007_Added ICollection Documents to course, module, activity, person,.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Module.cs" />
@@ -288,6 +310,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActivityRepo.cs" />
     <Compile Include="Repositories\CourseRepo.cs" />
+    <Compile Include="Repositories\DocumentRepo.cs" />
     <Compile Include="Repositories\ModuleRepo.cs" />
     <Compile Include="Repositories\NotificationRepo.cs" />
     <Compile Include="Repositories\StudentRepo.cs" />
@@ -395,6 +418,12 @@
     <Content Include="Views\AdminUsers\Index.cshtml" />
     <Content Include="Views\AdminUsers\EditUser.cshtml" />
     <Content Include="Views\AdminUsers\CreateUser.cshtml" />
+    <Content Include="Views\Documents\Create.cshtml" />
+    <Content Include="Views\Documents\Delete.cshtml" />
+    <Content Include="Views\Documents\Details.cshtml" />
+    <Content Include="Views\Documents\Edit.cshtml" />
+    <Content Include="Views\Documents\Index.cshtml" />
+    <Content Include="Views\Documents\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -440,6 +469,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708141802322_Rename to StudentNotification.resx">
       <DependentUpon>201708141802322_Rename to StudentNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708161411040_Documents.resx">
+      <DependentUpon>201708161411040_Documents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708161423135_Document fields allow nulls.resx">
+      <DependentUpon>201708161423135_Document fields allow nulls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708161427007_Document.Doc added.resx">
+      <DependentUpon>201708161427007_Document.Doc added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708170603457_Document model modify.resx">
+      <DependentUpon>201708170603457_Document model modify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.resx">
+      <DependentUpon>201708170635007_Added ICollection Documents to course, module, activity, person,.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
