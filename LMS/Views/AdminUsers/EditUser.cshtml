@@ -4,14 +4,14 @@
     ViewBag.Title = "EditUser";
 }
 
-<h2>EditUser</h2>
+<h2>Användarhantering</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>EditUserViewModel</h4>
+        <h4>Ändra användaruppgifter</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
@@ -45,7 +45,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CourseId, Model.Courses, "Välj kurs")
+                @Html.DropDownListFor(model => model.CourseId, Model.Courses, "Välj kurs", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -53,16 +53,23 @@
         <div class="form-group">
             @Html.LabelFor(model => model.UserRole, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.UserRole)
+                <span class="control-label">@Html.DisplayFor(model => model.UserRole)</span> 
+            
           
             </div>
         </div>
 
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+
+            <div class="col-md-offset-2 col-md-2">
                 <input type="submit" value="Spara" class="btn btn-default" />
             </div>
+
+            <div class="col-md-2">
+                <a class="btn btn-default" href="@Url.Action("CreateUser", "AdminUsers")">Ny</a>
+            </div>
+
         </div>
     </div>
 }
@@ -71,7 +78,7 @@
 
     @using (Html.BeginForm("EditUser", "AdminUsers", FormMethod.Get))
     {
-        <p>Ange sökkriterie:</p>
+        <h5>Sök</h5>
         <div class="form-inline">
             <input name="SearchString" class="form-control" placeholder="Ange namn eller email" type="text" />
             @*@Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })*@
@@ -83,6 +90,4 @@
 <div>
     @{ Html.RenderAction("_ListUsers"); }
 </div>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+

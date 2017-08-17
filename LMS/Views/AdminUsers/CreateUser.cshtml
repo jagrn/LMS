@@ -59,7 +59,7 @@
             @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
              
-                @Html.DropDownListFor(model => model.CourseId, Model.Courses, "Välj kurs")
+                @Html.DropDownListFor(model => model.CourseId, Model.Courses, "Välj kurs",  new { @class = "form-control" } )
                 @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -76,7 +76,7 @@
 
     @using (Html.BeginForm("CreateUser", "AdminUsers", FormMethod.Get))
     {
-        <p>Ange sökkriterie:</p>
+        <h4>Sök</h4>
         <div class="form-inline">
             <input name="SearchString" class="form-control" placeholder="Ange namn eller email" type="text" />
             @*@Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })*@

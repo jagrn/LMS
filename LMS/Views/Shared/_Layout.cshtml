@@ -24,13 +24,23 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    @Html.ActionLink("LMS", "Index", "Courses", new { area = "" }, new { @class = "navbar-brand" })
+
+    
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        @Html.ActionLink("LMS", "Index", "Courses", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                
+                    
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        @if (User.IsInRole("Teacher"))
+                        {
+                        <li>@Html.ActionLink("Kurser", "Index", "Courses")</li>
+                        <li>@Html.ActionLink("Användare", "CreateUser", "AdminUsers")</li>
+                        }
+
                     </ul>
                     @Html.Partial("_LoginPartial")
                 </div>

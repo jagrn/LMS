@@ -10,13 +10,7 @@
 
     @if (User.IsInRole("Teacher"))
     {
-        @Html.ActionLink("New course", "Manage", "Courses", new { id = 0, getOperation = "New" }, null)
-        <br />
-
-        @Html.ActionLink("Scheme10", "Scheme", "Students", new { courseId = 2, year=2017, week=32, moveWeek=0 }, null)
-        <br />
-
-        @Html.ActionLink("MyPage", "MyPage", "Students", new { courseId = 2 }, null)
+        @Html.ActionLink("Registrera ny kurs", "Manage", "Courses", new { id = 0, getOperation = "New" }, null)
     }
 
 </p>
@@ -55,7 +49,7 @@
             @if (User.IsInRole("Teacher"))
             {
                 <td>
-                    @Html.ActionLink("Manage", "Manage", "Courses", new { id = item.Id, getOperation = "Load" }, null)
+                    @Html.ActionLink("Hantera", "Manage", "Courses", new { id = item.Id, getOperation = "Load" }, null)
                 </td>
             }
         </tr>
