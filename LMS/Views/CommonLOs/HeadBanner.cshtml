@@ -9,19 +9,26 @@
 @{
     switch (Model.Type)
     {
-        case "FromCourseMgmnt":
-            <a href="@Url.Action("Index", "Courses")">@Model.LinkText0</a>
+        case "CourseMgmnt":
+            <a href="@Url.Action("Index", "Courses")">KURSKATALOG</a>
             break;
 
-        case "FromModuleMgmnt":
-            <a href="@Url.Action("Index", "Courses")">@Model.LinkText0</a>
-            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@Model.LinkText1</a>
+        case "ModuleMgmnt":
+            <a href="@Url.Action("Index", "Courses")">KURSKATALOG</a>
+            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">KURSHANTERING</a>
             break;
 
-        case "FromActivityMgmnt":
-            <a href="@Url.Action("Index", "Courses")">@Model.LinkText0</a>
-            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@Model.LinkText1</a>
-            <a href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "Load" }, null)">@Model.LinkText2</a>
+        case "ActivityMgmnt":
+            <a href="@Url.Action("Index", "Courses")">KURSKATALOG</a>
+            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">KURSHANTERING</a>
+            <a href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "Load" }, null)">MODULHANTERING</a>
+            break;
+
+        case "DocumentMgmnt":
+            <a href="@Url.Action("Index", "Courses")">KURSKATALOG</a>
+            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">KURSHANTERING</a>
+            <a href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "Load" }, null)">MODULHANTERING</a>
+            <a href="@Url.Action("Manage", "Activities", new { Id = Model.Id3, courseId = Model.Id1, moduleId = Model.Id2, getOperation = "Load" }, null)">AKTIVITETSHANTERING</a>
             break;
 
         default:
