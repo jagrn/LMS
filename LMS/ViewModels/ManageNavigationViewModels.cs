@@ -45,6 +45,13 @@ namespace LMS.ViewModels
         public DateTime EndDate;
     }
 
+    public struct DocumentListData
+    {
+        public int Id;
+        public string Name;
+    }
+
+
     public struct PeriodActivityListData
     {
         public string Name;
@@ -186,7 +193,28 @@ namespace LMS.ViewModels
         public string DeleteType { get; set; }
     }
 
-    public struct SchemeActivity
+
+    public class StudentViewModel
+    {
+        public int CourseId { get; set; }
+        public int ModuleId { get; set; }
+        public int ActivityId { get; set; }
+        public string StudentId { get; set; }
+        public string CourseName { get; set; }
+        public string StudentName { get; set; }
+        public Module Module { get; set; }
+        public Activity Activity { get; set; }
+        public List<ModuleListData> CourseModules { get; set; }     
+        public List<ActivityListData> ModuleActivities { get; set; }
+        public int NoOfNotifications { get; set; }
+        public List<Notification> Notifications { get; set; }
+
+        public int SchemeYear { get; set; }
+        public int SchemeWeek { get; set; }
+        public int? SchemeMoveWeek { get; set; }
+    }
+
+        public struct SchemeActivity
     {
         public int ActivityType;    // According to SelectActivityType and -1 => "Ledig"
         public string NameText;
@@ -197,12 +225,56 @@ namespace LMS.ViewModels
 
     public class SchemeViewModel
     {
+        public int courseId;
+
+        public int MyPageModuleId { get; set; }
+        public int MyPageActivityId { get; set; }
+        public string MyPageStudentId { get; set; }
+
         public List<SchemeActivity> WeekActivities { get; set; }
         public int Year { get; set; }
         public int Week { get; set; }
         public DateTime Monday { get; set; }
         public string Period { get; set; }
+
+        public List<Notification> Notifications { get; set; }
     }
+
+    public class DocumentViewModel
+    {
+        public int Id { get; set; }
+        [Required]
+        [DisplayName("Namn")]
+        public string Name { get; set; }
+        [Required]
+        [DisplayName("Beskrivning")]
+        public string Description { get; set; }
+        public string Format { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayName("Skapat datum")]
+        public DateTime UploadDate { get; set; }
+        public int? CourseId { get; set; }
+        public int? ModuleId { get; set; }
+        public int? ActivityId { get; set; }
+        public string UserId { get; set; }
+        // virtual fields fetched from other tables
+        [DisplayName("Kurs")]
+        public string CourseName { get; set; }
+        [DisplayName("Modul")]
+        public string ModuleName { get; set; }
+        [DisplayName("Aktivitet")]
+        public string ActivityName { get; set; }
+        [DisplayName("Ägare")]
+        public string UserName { get; set; }
+        // virtual fields for passing info back n forth
+        public string PostMessage { get; set; }
+        public string PostNavigation { get; set; }
+        public string PostOperation { get; set; }
+        // list of the other documents having the same owner (course or module etc...)
+        public List<DocumentListData> SiblingDocuments { get; set; }
+    }
+
 
 
 }

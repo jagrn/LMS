@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LMS.Models
 {
@@ -13,6 +14,7 @@ namespace LMS.Models
         public DateTime Deadline { get; set; }
         public ActivityType ActivityType { get; set; }
         public int ModuleId { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
 
     }
 

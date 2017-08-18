@@ -1,0 +1,85 @@
+﻿@model LMS.ViewModels.SchemeViewModel
+
+@{
+    var i = 0;
+    DateTime datum0 = new DateTime(2017, 8, 7);
+}
+
+
+
+<div class="row">
+
+    <div class="col-sm-1" style="background-color:ghostwhite">
+
+        @Html.ActionLink("<<<", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })
+
+    </div>
+
+    @{
+        for (i = 0; i < 5; i++)
+        {
+            <div class="col-sm-2 col-md-2" style="background-color:lightyellow">
+
+                <p>@Model.Monday.AddDays(i).ToString("yyyy-MM-dd")</p>
+                <p>@Model.Monday.AddDays(i).ToString("dddd")</p>
+
+            </div>
+        }
+        i = 0;
+    }
+
+    <div class="col-sm-1" style="background-color:ghostwhite">
+
+        @Html.ActionLink(">>>", "Scheme", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    @foreach (var weekActivitiy in Model.WeekActivities)
+            {
+                i++;
+                if (i == 1 || i == 6)
+                {
+            <div class="col-sm-1" style="color:white; background-color:black">
+
+                <p>vänster</p>
+
+            </div>
+        }
+        string colorString = "white";
+        switch (weekActivitiy.ActivityType)
+        {
+            case 1: colorString = "crimson"; break;
+            case 2: colorString = "red"; break;
+            case 3: colorString = "yellow"; break;
+            case 4: colorString = "blue"; break;
+            case 5: colorString = "green"; break;
+            default: break;
+        }
+        @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + colorString + "\">")
+
+        @weekActivitiy.NameText
+        <br />
+        @weekActivitiy.TypeText
+
+        @Html.Raw("</div>")
+
+        if (i == 5 || i == 10)
+        {
+            <div class="col-sm-1" style="background-color:floralwhite">
+
+                <p>höger</p>
+
+            </div>
+        }
+
+    }
+
+</div>
+
+@Html.ActionLink(">>> This <<<", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 0 })
+
+

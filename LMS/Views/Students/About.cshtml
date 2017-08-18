@@ -2,18 +2,21 @@
 
 
 @{
-    ViewBag.Title = "Aboutt";
+    ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 
 
 <div class="row">
 
     <button id="priorWeek"> /< </button>
 
-    @*@Html.ActionLink("<<<", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = -1 })*@
-
 </div>
+
+
+@Html.ActionLink(">>>", "About", new { courseId = 1, year = Model.Year, week = Model.Week, moveWeek = 1 })
+
+
 
 
 <div id="schedule" class="row">

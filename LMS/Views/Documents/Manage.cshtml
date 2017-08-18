@@ -1,0 +1,180 @@
+﻿@model LMS.ViewModels.DocumentViewModel
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    //First container to include input section and module information
+    <div class="container-fluid">
+
+        <div class="row">
+
+
+            <div class="col-md-3">
+                <!--menu-->
+                <br />
+                <h4>Övriga dokument</h4>
+
+                @{
+                    if (Model.SiblingDocuments != null)
+                    {
+                        if (Model.SiblingDocuments.Count != 0)
+                        {
+                            <table class="table">
+                                @foreach (var doc in Model.SiblingDocuments)
+                                {
+                                    <tr>
+                                        <td>
+                                            @{
+                                                string moduleText = @doc.Name;
+                                                if (doc.Id == Model.Id)
+                                                    moduleText = "=> " + moduleText;
+                                            }
+                                            @Html.ActionLink(moduleText, "Manage", "Documents", new { id = doc.Id, getOperation = "Load" })
+                                        </td>
+
+                                    </tr>
+                                                }
+                            </table>
+                                                    }
+                                                }
+                }
+            </div><!--end menu-->
+
+            <div class="form-horizontal col-md-7">
+                <h2>Hantera dokument</h2>
+
+                @if (!(Model.CourseName.IsEmpty()))
+                {
+                    <h3>@Html.LabelFor(model => model.CourseName) <span> : </span> @Model.CourseName</h3>
+                }
+                @if (!(Model.ModuleName.IsEmpty()))
+                {
+                    <h3>@Html.LabelFor(model => model.ModuleName) <span> : </span> @Model.ModuleName</h3>
+                }
+                @if (!(Model.UserName.IsEmpty()))
+                {
+                    <h3>>@Html.LabelFor(model => model.ModuleName) <span> : </span> @Model.UserName</h3>
+                }
+
+
+                @{
+                    if (!(Model.Id > 0))
+                    {
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa nytt dokument</h4>
+                    }
+                    else
+                    {
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera dokument</h4>
+                    }
+                }
+
+                @{
+                    if (Model.PostMessage != "")
+                    {
+                        <h5 class="text-danger">@Model.PostMessage</h5>
+                    }
+                }
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.PostNavigation)
+                @Html.HiddenFor(model => model.PostOperation)
+                @Html.HiddenFor(model => model.PostMessage)
+                @Html.HiddenFor(model => model.CourseId)
+                @Html.HiddenFor(model => model.ModuleId)
+                @Html.HiddenFor(model => model.ActivityId)
+                @Html.HiddenFor(model => model.UserId)
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control " } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3 " })
+                    <div class="col-md-9">
+
+                        @Html.TextAreaFor(model => model.Description, 6, 40, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UploadDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(model => model.UploadDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UploadDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div>
+                    <br />
+                </div>
+
+                <div class="btn-toolbar">
+
+                    <!-- icons-->
+                    @{
+                        if (Model.Id > 0)
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @Model.Id, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Updatera
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Spara
+                            </button>
+                        }
+                    }
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Documents", new { id = 0, activityId = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Nytt dokument</a>
+                    @{
+                        if (Model.Id > 0)
+                        {
+                            @*GET button to reach delete course view*@
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Documents", new { id = Model.Id, activityId = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
+                        }
+                    }
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Documents", new { id = Model.Id, activityId = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    <br />
+
+                </div><!-- end icons-->
+
+                <div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-2">
+                <br />
+                <br />
+                <br />
+
+            </div>
+
+
+        </div>
+    </div>
+                        }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

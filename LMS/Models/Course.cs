@@ -14,6 +14,7 @@ namespace LMS.Models
         public virtual ICollection<Module> Modules { get; set; }
         public virtual ICollection<ApplicationUser> Students { get; set; }
 
-
+        public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
     }
 }

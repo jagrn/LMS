@@ -66,3 +66,25 @@ h4 {
     
 
 }
+
+#CreateNewUserDiv {
+    display:none;
+
+}
+
+.scheduleHeaderRow {
+    background-color:lightgray;
+    
+
+}
+
+.scheduleLunchRow {
+   background-color:gainsboro;
+}
+.MyPageTitleWeek{
+    font-size:larger;
+    font-weight:bold;
+}
+.MyPageTitleWeek{
+    font-size:small;
+}

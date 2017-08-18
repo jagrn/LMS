@@ -1,130 +1,170 @@
 ﻿@model LMS.ViewModels.SchemeViewModel
 
 @{
-    ViewBag.Title = "Veckoschema";
+    ViewBag.Title = "Schema";
     var i = 0;
     DateTime datum0 = new DateTime(2017, 8, 7);
-    DateTime datum;
-    string sDatum;
-    string veckodag;
+    
+    string[] weekDay = new string[5] { "måndag", "tisdag", "onsdag", "torsdag", "fredag" };
+    string[] colorMap = new string[6] { "cornsilk", "lightgreen", "lightblue", "magenta", "yellow", "crimson" };
+    // colorMap mapping: Ingen aktivitet / Föreläsning / Datorbaserad / Inlämningsuppgift / Övningstillfälle / reserv
 }
 
 <br />
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="container-fluid">
-
-        <h2>@ViewBag.Title</h2>
-        @Model.Year
-        @Model.Week
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-8">
+            <h3>Ditt schema för vecka @Model.Week</h3>
+        </div>
+        <div class="col-sm-offset-1">
+            <a class="btn" href="@Url.Action("MyPage", "Students", new { courseId = Model.courseId, schemeYear = Model.Year, schemeWeek = Model.Week, schemeMoveWeek = 0, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId, fromMyPage = false })"> <span class="glyphicon glyphicon-cog" aria-hidden="true" style="border:0; height:0.5%"></span><br />Denna vecka</a>
+        </div>
+            @*<p>
+                @Html.ActionLink(">>> Denna vecka <<<", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 0, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId })&nbsp;&nbsp;&nbsp;
+                @Html.ActionLink("||| Valfri  vecka |||", "Scheme", new { courseId = Model.courseId, year = Model.Year, week = Model.Week, moveWeek = 0, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId })
+            </p>*@
         <br />
-        <br />
-        @Model.Period
+    </div>
+</div>
 
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="row">
-
-
-            <div class="col-sm-1" style="background-color:ghostwhite">
-
-                @Html.ActionLink("<<<", "Scheme", new { courseId = 2, year = Model.Year, week = Model.Week, moveWeek = -1 })
-
-            </div>
-
-            @{
-                for (i = 0; i < 5; i++)
-                {
-                    datum = Model.Monday.AddDays(i);
-                    sDatum = datum.ToString("yyyy-MM-dd");
-                    veckodag = datum.ToString("dddd");
-
-
-                    <div class="col-sm-2 col-md-2" style="background-color:lightyellow">
-
-                        <p>@sDatum</p>
-                        <p>@veckodag</p>
-
-                    </div>
-                }
-                i = 0;
-            }
-
-            <div class="col-sm-1" style="background-color:ghostwhite">
-
-                @Html.ActionLink(">>>", "Scheme", new { courseId = 2, year = Model.Year, week = Model.Week, moveWeek = 1 })
-
-            </div>
+        
+    <div class="row scheduleHeaderRow" style="background-color:white">
+        <div class="col-sm-1" style="">
+            <a class="btn" href="@Url.Action("MyPage", "Students", new { courseId = Model.courseId, schemeYear = Model.Year, schemeWeek = Model.Week, schemeMoveWeek = -1, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId, fromMyPage = false })"> <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span><br />v.@(Model.Week - 1)</a>
         </div>
 
-        <div class="row">
-
-        @foreach (var weekActivitiy in Model.WeekActivities)
-        {
-            i++;
-            
-            if (i == 1 || i == 6)
-            {
-                <div class="col-sm-1" style="color:white; background-color:black; border-color:blue">
-
-                    <p>vänster</p>
-                    <br />
-                    <br />
+        @{
+            for(i = 0; i < 5; i++) {
+                DateTime date = Model.Monday.AddDays(i);
+                string dateString = date.ToString("yyyy-MM-dd");
+                    
+                <div class="col-sm-2" style="border:1px solid black; background-color:whitesmoke; min-height:100%; ">
+                    <p style="font-size:12px; text-align:center; padding-top:7px">@dateString</p>
+                    <p style="font-size:14px; text-align:center">@weekDay[i]</p>
                 </div>
             }
-            string s = "white";
-            switch (weekActivitiy.ActivityType)
-            {
-                case 0: s = "lightgreen"; break;
-                case 1: s = "crimson"; break;
-                case 2: s = "red"; break;
-                case 3: s = "yellow"; break;
-                case 4: s = "blue"; break;
-                
-                default: break;
-            }
-
-            @*<div style="border-color:blue"*@
-
-            @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + s + "\" >")
-
-            @weekActivitiy.NameText
-            <br />
-            @weekActivitiy.ModuleNameText
-            <br />
-
-                @weekActivitiy.TypeText
-
-                @Html.Raw("</div>")
-
-            
-            if (i == 5 || i == 10)
-            {
-                <div class="col-sm-1" style="background-color:floralwhite">
-
-                    <p>höger</p>
-                    <br />
-                    <br />
-                </div>
-
-            }
-            
+            i = 0;
         }
 
-        <br />
-        <br />
-        @Html.ActionLink(">>> Denna vecka <<<", "Scheme", new { courseId = 2, year = Model.Year, week = Model.Week, moveWeek = 0 })
+        <div class="col-sm-1">
+            <a class="btn" href="@Url.Action("MyPage", "Students", new { courseId = Model.courseId, schemeYear = Model.Year, schemeWeek = Model.Week, schemeMoveWeek = 1, moduleId = Model.MyPageModuleId, activityId = Model.MyPageActivityId, studentId = Model.MyPageStudentId, fromMyPage = false })"> <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span><br />v.@(Model.Week + 1)</a>             
+        </div>
+    </div> @*header*@
 
-    </div>
-    </div>
+    <div class="row" style="background-color:white;">
+        
+        @foreach(var weekActivitiy in Model.WeekActivities) {
+         
+            string color = colorMap[weekActivitiy.ActivityType + 1];
+            i++;
+            if(i == 1) {
+                <div class="col-sm-1" style="background-color:white; padding-top:5px; margin-bottom:-10px; padding-left:55px">
+                    <p style="font-size:10px;">
+                        08.30<br /><br /><br /><br /><br />12.00
+                </div>
+            }
+
+            if (i <= 5)
+            {
+                @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + color + "\" >")
+
+                if (!weekActivitiy.TypeText.IsEmpty())
+                {
+                    <div style="border:1px solid black; padding-left:12px; margin-left:-15px; margin-right:-15px">
+                        <p style="font-size:12px; padding-top:7px">@weekActivitiy.TypeText</p>
+                        <p style="font-size:16px">@weekActivitiy.NameText</p>
+                        @Html.Raw("<p style='font-size:12px'>[Modul " + weekActivitiy.ModuleNameText + "]</p>")
+                    </div>
                 }
+                else
+                {
+                    <div style="border:1px solid black; padding-left:12px; margin-left:-15px; margin-right:-15px">
+                        <p style="font-size:12px; padding-top:7px">Ingen aktivitet</p>
+                        <p style="font-size:16px; color:@colorMap[0]">Inget Innehåll</p>
+                        <p style="font-size:12px; color:@colorMap[0]">Inget innehåll</p>
+                    </div>
+                }
+
+                @Html.Raw("</div>")
+            }
+
+            if(i == 5) {
+                <div class="col-sm-1" style="background-color:white">&nbsp;</div>
+            }
+        }
+    </div> @*fm*@
+
+    <div class="row scheduleHeaderRow" style="background-color:white;">
+        @{
+            for(i = 0; i < 5; i++) {
+                if(i == 0) {
+                    <div class="col-sm-1" style="background-color:white"><p style="font-size:x-small;"></div>
+                }
+
+                <div class="col-sm-2" style="border:1px solid black; background-color:whitesmoke;">
+                    <p style="font-size:12px; text-align:center; padding-top:7px">Lunch</p>
+                </div>
+
+                if(i == 4) {
+                    <div class="col-sm-1" style="background-color:white">&nbsp;</div>
+                }
+            }
+        }
+
+    </div> @*lunch*@
+
+    <div class="row" style="background-color:white; display: flex;">
+        @{
+            i = 0;
+        }
+
+        @foreach(var weekActivitiy in Model.WeekActivities) {
+
+            string color = colorMap[weekActivitiy.ActivityType + 1];               
+            i++;
+            if(i == 6) {
+                   
+                <div class="col-sm-1" style="background-color:white; padding-top:5px; margin-bottom:-10px; padding-left:55px"><p style="font-size:10px;">
+                                                13.00<br /><br /><br /><br /><br />16.30</div>                    
+            }
+
+            if (i > 5)
+            {
+                @Html.Raw("<div class=\"col-sm-2\" style=\"background-color:" + color + "\" >")
+
+                if (!weekActivitiy.TypeText.IsEmpty())
+                {
+                    <div style="border:1px solid black; padding-left:12px; margin-left:-15px; margin-right:-15px">
+                        <p style="font-size:12px; padding-top:7px">@weekActivitiy.TypeText</p>
+                        <p style="font-size:16px">@weekActivitiy.NameText</p>
+                        @Html.Raw("<p style='font-size:12px'>[Modul " + weekActivitiy.ModuleNameText + "]</p>")
+                    </div>
+                }
+                else
+                {
+                    <div style="border:1px solid black; padding-left:12px; margin-left:-15px; margin-right:-15px">
+                        <p style="font-size:12px; padding-top:7px">Ingen aktivitet</p>
+                        <p style="font-size:16px; color:@colorMap[0]">Inget Innehåll</p>
+                        <p style="font-size:12px; color:@colorMap[0]">Inget innehåll</p>
+                    </div>
+                }
+
+                @Html.Raw("</div>")
+            }
+
+            if(i == 10) {
+            <div class="col-sm-1" style="background-color:white">&nbsp; </div>
+            }
+        }
+    </div> @*em*@
+</div>
+
+<br />
+<br />
+
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-

@@ -110,6 +110,20 @@ namespace LMS.Repositories
             return modules.First().Name;
         }
 
+        // RETREIVE a modules course Id, non-protected method without RepoResult
+        public static int RetrieveModuleCourseId(int? moduleId)
+        {
+            if ((moduleId == null) || (moduleId == 0))
+                return 0;
+
+            var modules = db.Modules.Where(m => m.Id == moduleId).ToList();
+            if (modules.Count != 1)
+            {
+                return -1;
+            }
+            return modules.First().CourseId;
+        }
+
         // RETRIEVE the total time span for all modules within a course
         public static CourseModulesSpan RetrieveCourseSpan(int? courseId)
         {
@@ -200,6 +214,7 @@ namespace LMS.Repositories
         // ADD a single module to a course
         public static int AddModule(Module module)
         {
+            NotificationRepo.AddNewModuleNote(module);
             db.Modules.Add(module);
             db.SaveChanges();
             return module.Id;               // Return newly checked out id to caller      
@@ -215,6 +230,7 @@ namespace LMS.Repositories
             if (modules.Count != 1)
                 return ModuleRepoResult.NotFound;
 
+            NotificationRepo.AddChangedModuleNote(modules.First(), module);
             modules.First().Name = module.Name;
             modules.First().Description = module.Description;
             modules.First().StartDate = module.StartDate;
@@ -235,6 +251,7 @@ namespace LMS.Repositories
             if (modules.Count != 1)
                 return ModuleRepoResult.NotFound;
 
+            NotificationRepo.AddRemovedModuleNote(modules.First());
             db.Modules.Remove(modules.First());
             db.SaveChanges();
             return ModuleRepoResult.Success;

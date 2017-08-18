@@ -190,13 +190,13 @@
                     @{
                         if (activityId != 0)
                         {
-      
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-
+                            <a class="btn btn-default" href="@Url.Action("Manage", "Documents", new { activityId = Model.Id, getOperation = "Dummy" })">
                                 <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
-                            </button>
+                            </a>
                             @*GET button to reach delete course view*@
-                            <a class="btn btn-default" href="@Url.Action("Delete", "Activities", new { id = activityId, moduleId=Model.ModuleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Activities", new { id = activityId, moduleId=Model.ModuleId, courseId=Model.CourseId, deleteType = "Single" })"> 
+                    
+                    <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }
                     }
                     <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { Id = Model.ModuleId,courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>

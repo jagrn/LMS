@@ -1,0 +1,126 @@
+﻿@model LMS.ViewModels.StudentViewModel
+
+@{
+    ViewBag.Title = "Manage";
+    string[] activityType = new string[5] { "Föreläsning", "Datorbaserad", "Inlämningsuppgift", "Övningstillfälle", "reserv" };
+    // Föreläsning / Datorbaserad / Inlämningsuppgift / Övningstillfälle / reserv
+}
+
+<br />
+
+@{
+    var courseId = Model.CourseId;
+    var moduleId = Model.ModuleId;
+    var activityId = Model.ActivityId;
+    var studentId = Model.StudentId;
+}
+
+@{    
+    <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Notiser (@Model.NoOfNotifications)</h4>
+
+    if (Model.Notifications != null)
+    {
+        foreach (var notification in Model.Notifications)
+        {
+            <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+            <p>
+                @notification.ChangeText &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activityId })">Ok</a>
+            </p>
+            </div>
+        }
+    }
+}
+
+@*<h2>Week: @Model.SchemeWeek</h2>*@
+<h1>Välkommen till din sida @Model.StudentName</h1>
+@Html.Action("Scheme", "Students", new { courseId = courseId, year = Model.SchemeYear, week = Model.SchemeWeek, moveWeek = Model.SchemeMoveWeek, myPageModuleId = Model.ModuleId, myPageActivityId = Model.ActivityId, myPageStudentId = Model.StudentId })
+ 
+<br />
+<br />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-offset-2 col-sm-offset-2">
+            <h2>Detaljer om din kurs @Model.CourseName</h2>
+            <div class="col-md-8 col-sm-8" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+                @{
+                    if ((moduleId != 0) && (activityId == 0))
+                    {
+                        <h4>Detaljer om modulen @Model.Module.Name</h4>
+                        <p>Start: @Model.Module.StartDate.ToShortDateString() @Model.Module.StartDate.TimeOfDay</p>
+                        <p>Slut: @Model.Module.EndDate.ToShortDateString() @Model.Module.EndDate.TimeOfDay</p>
+                        <p>Modulbeskrivning: @Model.Module.Description</p>
+                    }
+                    else
+                    {
+                        if (activityId != 0)
+                        {
+                            <h4>Detaljer om aktiviteten @Model.Activity.Name</h4>
+                            <p>Start: @Model.Activity.StartDate.ToShortDateString() @Model.Activity.StartDate.TimeOfDay</p>
+                            <p>Slut: @Model.Activity.EndDate.ToShortDateString() @Model.Activity.EndDate.TimeOfDay</p>
+                            <p>Aktivitetstyp: @activityType[(int) Model.Activity.ActivityType]</p>
+                            <p>Aktivitetsbeskrivning: @Model.Activity.Description</p>
+                        }
+                        else
+                        {
+                            <h4>Ingen modul eller aktivitet vald</h4>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+               
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-offset-1 col-md-5">
+            @{
+                <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Moduler i kursen @Model.CourseName</h4>
+
+                if ((Model.CourseModules != null) && (Model.CourseModules.Count != 0))
+                {
+                    foreach (var module in Model.CourseModules)
+                    {
+                        <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+                            <p>
+                                @module.StartDate.ToShortDateString() @module.StartDate.TimeOfDay &nbsp;
+                                <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })">@module.Name</a>
+                            </p>
+                            <p>Modulbeskrivning: @module.Description</p>
+
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div class="col-md-5">
+            @{
+                if (moduleId != 0)
+                {
+                    <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Aktiviteter i modulen @Model.Module.Name</h4>
+
+                    if ((Model.ModuleActivities != null) && (Model.ModuleActivities.Count != 0))
+                    {
+                        foreach (var activity in Model.ModuleActivities)
+                        {
+                            <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+                                <p>
+                                    @activity.StartDate.ToShortDateString() @activity.StartDate.TimeOfDay &nbsp; 
+                                    <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })">@activity.Name</a>
+                                </p>
+                                <p>Aktivitetsbeskrivning: @activity.Description</p>
+
+                            </div>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
