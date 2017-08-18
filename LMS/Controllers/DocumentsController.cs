@@ -7,9 +7,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LMS.Models;
+using LMS.ViewModels;
+using LMS.Repositories;
 
 namespace LMS.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class DocumentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -88,6 +91,80 @@ namespace LMS.Controllers
             }
             return View(document);
         }
+
+        //
+        //
+        //
+        // begin manage
+        //
+
+        // GET: Activities/Manage/5
+        public ActionResult Manage(int? id, int? activityId, int? moduleId, int? courseId, string userId, string getOperation, string viewMessage)
+        {
+            DocumentViewModel documentViewModel = DocumentRepo.GetDocumentViewModel(id, courseId, moduleId, activityId, userId, viewMessage);
+            return View(documentViewModel);
+        }
+
+        // POST: Activities/Manage/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public ActionResult Manage([Bind(Include = "Id,Name,Description,Format,UploadDate,CourseId,ModuleId,ActivityId,UserId,PostMessage,PostNavigation,PostOperation")] ActivityViewModel viewModel)
+        public ActionResult Manage(DocumentViewModel documentViewModel)
+
+        {
+            if (ModelState.IsValid)
+            {
+                // Input validation
+                var validMess = DocumentRepo.IsDocumentNameValid(documentViewModel);
+                if (validMess != null)
+                {
+                    documentViewModel.PostMessage = validMess;
+                    return View(documentViewModel);
+                }
+                // End of input validation
+
+                if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
+                    documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat (byt meddelande efter testperiod)";
+                else
+                    documentViewModel.PostMessage = "Den nya dokumentet " + documentViewModel.Name + " är sparad";
+
+                // SPARA SKER HÄR
+                documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
+
+            }
+            if (documentViewModel.PostOperation == "Update")
+            {
+
+                switch (documentViewModel.PostNavigation)
+                {
+                    case "Save":
+                        return View(documentViewModel);
+                    case "SaveRet":
+                        return RedirectToAction("Manage", "Modules", new { id = documentViewModel.ModuleId, courseId = documentViewModel.CourseId, getOperation = "Load" });
+                    // Prototype for the new SaveDoc case
+                    //case "SaveDoc":
+                    //    return RedirectToAction("Manage", "Activities", new { moduleId = viewModel.Id });
+                    ////break;
+                    default:
+                        break;
+                }
+            }
+            documentViewModel.PostMessage = "ERROR: Misslyckad POST operation for aktivitet";
+            return View(documentViewModel);
+        }
+
+
+
+
+
+        //
+        // end manage
+        //
+        //
+        //
+        //
+        //
+        //
 
         // GET: Documents/Delete/5
         public ActionResult Delete(int? id)

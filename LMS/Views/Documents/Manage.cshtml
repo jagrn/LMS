@@ -1,12 +1,5 @@
 ﻿@model LMS.ViewModels.DocumentViewModel
 
-@{
-    ViewBag.Title = "Manage";
-}
-
-
-<br />
-
 
 @using (Html.BeginForm())
 {
@@ -36,11 +29,9 @@
                                             @{
                                                 string moduleText = @doc.Name;
                                                 if (doc.Id == Model.Id)
-                                                {
                                                     moduleText = moduleText + "=> ";
                                             }
-                                            }
-                                            @Html.ActionLink(moduleText, "Manage", new { id = doc.Id, activityId = Model.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })
+                                            @Html.ActionLink(moduleText, "Manage", "Documents", new { id = doc.Id, getOperation = "Load" })
                                         </td>
 
                                     </tr>
@@ -52,7 +43,21 @@
             </div><!--end menu-->
 
             <div class="form-horizontal col-md-7">
-                <h2>Hantera aktiviteter för @Model.ModuleName</h2>
+                <h2>Hantera dokument</h2>
+
+                @if (!(Model.CourseName.IsEmpty()))
+                {
+                    <h3>@Html.LabelFor(model => model.CourseName) <span> : </span> @Model.CourseName</h3>
+                }
+                @if (!(Model.ModuleName.IsEmpty()))
+                {
+                    <h3>@Html.LabelFor(model => model.ModuleName) <span> : </span> @Model.ModuleName</h3>
+                }
+                @if (!(Model.UserName.IsEmpty()))
+                {
+                    <h3>>@Html.LabelFor(model => model.ModuleName) <span> : </span> @Model.UserName</h3>
+                }
+
 
                 @{
                     if (!(Model.Id > 0))
@@ -61,7 +66,7 @@
                     }
                     else
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera dokument @Model.Name</h4>
+                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera dokument</h4>
                     }
                 }
 
@@ -111,7 +116,6 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
-                        @Html.EnumDropDownListFor(model => model.Format, htmlAttributes: new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -119,7 +123,7 @@
 
                 <div>
                     <br />
-                </div> 
+                </div>
 
                 <div class="btn-toolbar">
 
@@ -133,25 +137,20 @@
                         }
                         else
                         {
-                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @Model.Id, 0)" aria-label="Left Align">
+                            <button type="submit" class="btn btn-default" aria-label="Left Align">
                                 <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Spara
                             </button>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Activities", new { id = 0, activityId = Model.ActivityId,  moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny aktivitet</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Documents", new { id = 0, activityId = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Nytt dokument</a>
                     @{
                         if (Model.Id > 0)
                         {
-
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-
-                                <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
-                            </button>
                             @*GET button to reach delete course view*@
-                            <a class="btn btn-default" href="@Url.Action("Delete", "Activities", new { id = Model.Id, activityId = Model.ActivityId, moduleId=Model.ModuleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Documents", new { id = Model.Id, activityId = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { Id = Model.ModuleId,courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Documents", new { id = Model.Id, activityId = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                     <br />
 
                 </div><!-- end icons-->
@@ -174,7 +173,6 @@
 
         </div>
     </div>
-
                         }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

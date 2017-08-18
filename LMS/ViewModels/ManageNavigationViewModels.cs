@@ -243,8 +243,10 @@ namespace LMS.ViewModels
     public class DocumentViewModel
     {
         public int Id { get; set; }
+        [Required]
         [DisplayName("Namn")]
         public string Name { get; set; }
+        [Required]
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         public string Format { get; set; }
@@ -263,6 +265,8 @@ namespace LMS.ViewModels
         public string ModuleName { get; set; }
         [DisplayName("Aktivitet")]
         public string ActivityName { get; set; }
+        [DisplayName("Ägare")]
+        public string UserName { get; set; }
         // virtual fields for passing info back n forth
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
