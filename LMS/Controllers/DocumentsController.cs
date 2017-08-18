@@ -92,11 +92,6 @@ namespace LMS.Controllers
             return View(document);
         }
 
-        //
-        //
-        //
-        // begin manage
-        //
 
         // GET: Activities/Manage/5
         public ActionResult Manage(int? id, int? activityId, int? moduleId, int? courseId, string userId, string getOperation, string viewMessage)
@@ -112,58 +107,40 @@ namespace LMS.Controllers
         public ActionResult Manage(DocumentViewModel documentViewModel)
 
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Input validation
-                var validMess = DocumentRepo.IsDocumentNameValid(documentViewModel);
-                if (validMess != null)
-                {
-                    documentViewModel.PostMessage = validMess;
-                    return View(documentViewModel);
-                }
-                // End of input validation
-
-                if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
-                    documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat (byt meddelande efter testperiod)";
-                else
-                    documentViewModel.PostMessage = "Den nya dokumentet " + documentViewModel.Name + " är sparad";
-
-                // SPARA SKER HÄR
-                documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
-
+                return View(documentViewModel);
             }
-            if (documentViewModel.PostOperation == "Update")
+            // Input validation
+            var validMess = DocumentRepo.IsDocumentNameValid(documentViewModel);
+            if (validMess != null)
             {
-
-                switch (documentViewModel.PostNavigation)
-                {
-                    case "Save":
-                        return View(documentViewModel);
-                    case "SaveRet":
-                        return RedirectToAction("Manage", "Modules", new { id = documentViewModel.ModuleId, courseId = documentViewModel.CourseId, getOperation = "Load" });
-                    // Prototype for the new SaveDoc case
-                    //case "SaveDoc":
-                    //    return RedirectToAction("Manage", "Activities", new { moduleId = viewModel.Id });
-                    ////break;
-                    default:
-                        break;
-                }
+                documentViewModel.PostMessage = validMess;
+                return View(documentViewModel);
             }
-            documentViewModel.PostMessage = "ERROR: Misslyckad POST operation for aktivitet";
-            return View(documentViewModel);
+            // End of input validation
+
+            if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
+                documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat (byt meddelande efter testperiod)";
+            else
+                documentViewModel.PostMessage = "Den nya dokumentet " + documentViewModel.Name + " är sparad";
+
+            // SPARA SKER HÄR
+            documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
+
+
+            return RedirectToAction("Manage", new
+            {
+                id = documentViewModel.Id,
+                moduleId = documentViewModel.ModuleId,
+                courseId = documentViewModel.CourseId,
+                userId = documentViewModel.UserId,
+                getOperation = "Load",
+                viewMessage = documentViewModel.PostMessage
+            });
         }
-
-
-
-
-
         //
         // end manage
-        //
-        //
-        //
-        //
-        //
         //
 
         // GET: Documents/Delete/5
