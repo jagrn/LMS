@@ -4,75 +4,58 @@
     ViewBag.Title = "Manage";
 }
 
-
-<br />
-
 @{
     var courseId = Model.Id;
     var clearDate = "'2017-01-01'";
+    var headBannerInfo = "Hantera kurser";
 }
 
-@Html.Action("HeadBanner", "CommonLOs", new { type = "FromCourseMgmnt", linkText0 = "KURSKATALOG", infoText = "THIS IS A COURSE MGMNT LOCATION" })
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "CourseMgmnt", id1 = Model.Id, infoText = headBannerInfo })
 
 @using (Html.BeginForm())
 {
                 @Html.AntiForgeryToken()
 
                 //First container to include input section and module information
-                <div class="container-fluid">
+                <div class="container">
 
         <div class="row">
 
 
             <div class="col-md-3">
                 <!--menu-->
-                <br />
-                <h4>Alla kurser</h4>
+                
+                <h4 class="page-header">Kurser</h4>
 
-                @{
-            if (Model.AllCourses != null)
-            {
-                if (Model.AllCourses.Count != 0)
+                <ul class="nav nav-pills nav-stacked">
+                @foreach (var course in Model.AllCourses)
                 {
-                            <table class="table">
-                                @foreach (var course in Model.AllCourses)
-        {
-                                <tr>
-                                    <td>
-                                        @{
-                string courseText = "";
-                if (course.Id == Model.Id)
-                {
-                    courseText = "=> " + @course.Name;
+                    if (course.Id == Model.Id)
+                    {
+                        <li class="active">@Html.ActionLink(course.Name, "Manage", new { id = course.Id, getOperation = "Load" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink(course.Name, "Manage", new { id = course.Id, getOperation = "Load" })</li>
+                    }
                 }
-                else
-                {
-                    courseText = "   " + @course.Name;
-                }
-            }
-            @Html.ActionLink(courseText, "Manage", new { id = course.Id, getOperation = "Load" })
-        </td>
+                </ul>
 
-
-    </tr>
-                                            }
-                            </table>
-                                                }
-}
-                }
             </div><!--end menu-->
            
             <div class="form-horizontal col-md-6">
-                <h2>Hantera kursinformation för @Model.Name</h2>
+                @*<h2>Hantera kursinformation för @Model.Name</h2>*@
                 
                 @{
     if (courseId == 0)
     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>*@
+                        <h4 class="page-header">Skapa ny kurs</h4>
                     }
                     else
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera kursen @Model.Name</h4>
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera kursen @Model.Name</h4>*@
+                        <h4 class="page-header">Redigera kursen @Model.Name</h4>
                     }
                 }
           
@@ -192,7 +175,7 @@
                         
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Index", "Courses")"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    @*<a class="btn btn-default" href="@Url.Action("Index", "Courses")"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>*@
                     <br />
                     
                 </div><!-- end icons-->

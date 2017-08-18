@@ -79,6 +79,9 @@ namespace LMS.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 viewModel.CourseModules = courseModuleList.moduleList;
+
+                //viewModel.TestCourseModules1 = db.Courses.Include(c => c.Modules).SingleOrDefault(c => c.Id == id).Modules.ToList();        // TEMP TEST
+                //viewModel.TestCourseModules2 = db.Courses.SingleOrDefault(c => c.Id == id).Modules.ToList();                                 // TEMP TEST
             }
 
             // Load view model with additional display info wrt parent course

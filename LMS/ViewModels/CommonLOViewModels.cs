@@ -7,7 +7,7 @@ namespace LMS.ViewModels
 {
     public class HeadBannerViewModel
     {
-        public string Type { get; set; }
+        public string Origin { get; set; }
 
         public int Id1 { get; set; }
         public int Id2 { get; set; }
