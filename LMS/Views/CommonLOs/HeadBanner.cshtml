@@ -1,0 +1,34 @@
+﻿@model LMS.ViewModels.HeadBannerViewModel
+
+@{
+    ViewBag.Title = "HeadBanner";
+}
+
+<h2>HeadBanner</h2>
+
+@{
+    switch (Model.Type)
+    {
+        case "FromCourseMgmnt":
+            <a href="@Url.Action("Index", "Courses")">@Model.LinkText0</a>
+            break;
+
+        case "FromModuleMgmnt":
+            <a href="@Url.Action("Index", "Courses")">@Model.LinkText0</a>
+            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@Model.LinkText1</a>
+            break;
+
+        case "FromActivityMgmnt":
+            <a href="@Url.Action("Index", "Courses")">@Model.LinkText0</a>
+            <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@Model.LinkText1</a>
+            <a href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "Load" }, null)">@Model.LinkText2</a>
+            break;
+
+        default:
+            break;
+    }
+}
+
+<p>@Model.InfoText</p>
+
+

@@ -12,27 +12,14 @@
     var clearDate = "'2017-01-01'";
 }
 
-@*<p>TEST OF COURSEMODULES LIST 1</p>
-<p>@Model.TestCourseModules1.First().Name</p>
-<p>@Model.TestCourseModules1.First().Description</p>
-
-<p>WITH ACTIVITY SPECIFICS</p>
-<p>@Model.TestCourseModules1.First().Activities.First().Name</p>
-
-<p>TEST OF COURSEMODULES LIST 2</p>
-<p>@Model.TestCourseModules2.First().Name</p>
-<p>@Model.TestCourseModules2.First().Description</p>
-
-<p>WITH ACTIVITY SPECIFICS</p>
-<p>@Model.TestCourseModules2.First().Activities.First().Name</p>*@
-
+@*@Html.Action("HeadBanner", "CommonLOs", new { type = "FromCourseMgmnt", linkText0 = "KURSKATALOG", infoText = "THIS IS A COURSE MGMNT LOCATION" })*@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+                @Html.AntiForgeryToken()
 
-    //First container to include input section and module information
-    <div class="container-fluid">
+                //First container to include input section and module information
+                <div class="container-fluid">
 
         <div class="row">
 
@@ -62,8 +49,8 @@
                 <h2>Hantera kursinformation för @Model.Name</h2>
                 
                 @{
-                    if (courseId == 0)
-                    {
+    if (courseId == 0)
+    {
                         <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>
                     }
                     else
