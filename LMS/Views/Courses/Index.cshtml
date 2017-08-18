@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LMS.Models.Course>
+﻿@model IEnumerable<LMS.ViewModels.CourseViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -8,52 +8,84 @@
 
 <p>
 
-    @if (User.IsInRole("Teacher"))
-    {
+    @if(User.IsInRole("Teacher")) {
         @Html.ActionLink("Registrera ny kurs", "Manage", "Courses", new { id = 0, getOperation = "New" }, null)
     }
 
 </p>
+
+<div class="well">
+
+    @using(Html.BeginForm("Index", "Courses", FormMethod.Get)) {
+        <div>
+            <p style="float:left">Sök kursnamn eller kursbeskrivning </p>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-inline">
+            <input name="SearchString" class="form-control" placeholder="Sökterm" type="text" />
+            <input type="submit" class="btn btn-default" value="Sök" />
+        </div>
+    }
+
+</div>
+<div style="display:inline-block">
+        <p style="float:left; margin-right:5px;"> @Html.ActionLink("Aktuella", "Index", new { courseDate = "coursDate_actuall" })</p>
+        <p style="float:left; margin-right:5px;"> @Html.ActionLink("Gamla", "Index", new { courseDate = "coursDate_old" }) </p>
+        <p style="float:left; margin-right:5px;"> @Html.ActionLink("Framtida", "Index", new { courseDate = "coursDate_future" }) </p>
+</div>
+<div class="info infoTextWarning">
+    <p style="color:@ViewBag.MessageColor">@ViewBag.dateMessage</p>
+</div>
+
+<div class="info infoTextWarning">
+    <p style="color:@ViewBag.MessageColor">@ViewBag.Message</p>
+</div>
+
 <table class="table">
     <tr>
         <th>
+            @*@Html.ActionLink("Kursnamn", "Index", new { sortOrder = "coursName_desc" })*@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
+            @*@Html.ActionLink("Startdatum", "Index", new { sortOrder = "startDate_desc" })*@
             @Html.DisplayNameFor(model => model.StartDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @*@Html.ActionLink("Slutdatum", "Index", new { sortOrder = "endDate_desc" })*@
+           @Html.DisplayNameFor(model => model.EndDate)
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
-    {
+    @foreach(var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td style="width:70%">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @*@Html.DisplayFor(modelItem => item.StartDate)*@
+                @if(item.StartDate != null) {
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                @*@Html.DisplayFor(modelItem => item.EndDate)*@
+                @if(item.EndDate != null) { @Html.DisplayFor(modelItem => item.EndDate)}
             </td>
-            @if (User.IsInRole("Teacher"))
-            {
+            @if(User.IsInRole("Teacher")) {
                 <td>
                     @Html.ActionLink("Hantera", "Manage", "Courses", new { id = item.Id, getOperation = "Load" }, null)
                 </td>
             }
         </tr>
     }
-    </table>
+</table>
 
 
