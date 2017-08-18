@@ -88,3 +88,42 @@ h4 {
 .MyPageTitleWeek{
     font-size:small;
 }
+
+/*Override nav-pills styling*/
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus{
+    background-color:#198521;
+}
+
+.nav-pills > li:hover > a, .nav-pills > li:hover > a:hover, .nav-pills > li:hover > a:focus{
+    background-color:#c4e9c4;
+    color:#198521;
+}
+
+.nav > li > a{
+    color:#198521;
+}
+
+.greyBackground{
+    background-color:#eaeaea;
+}
+
+.greenText{
+    color:#198521;
+}
+
+.redText{
+    color:#cc0000;
+}
+
+.fullBackgroundWidth{
+    margin-left: -500px;
+    margin-right: -500px;
+}
+
+.topSection{
+    margin-top: 0px;
+    padding-top: 30px;
+    padding-bottom:30px;
+    text-align:center;
+    
+}

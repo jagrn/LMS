@@ -12,6 +12,21 @@
     var clearDate = "'2017-01-01'";
 }
 
+@*<p>TEST OF COURSEMODULES LIST 1</p>
+<p>@Model.TestCourseModules1.First().Name</p>
+<p>@Model.TestCourseModules1.First().Description</p>
+
+<p>WITH ACTIVITY SPECIFICS</p>
+<p>@Model.TestCourseModules1.First().Activities.First().Name</p>
+
+<p>TEST OF COURSEMODULES LIST 2</p>
+<p>@Model.TestCourseModules2.First().Name</p>
+<p>@Model.TestCourseModules2.First().Description</p>
+
+<p>WITH ACTIVITY SPECIFICS</p>
+<p>@Model.TestCourseModules2.First().Activities.First().Name</p>*@
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -27,36 +42,20 @@
                 <br />
                 <h4>Alla kurser</h4>
 
-                @{
-                    if (Model.AllCourses != null)
+                <ul class="nav nav-pills nav-stacked">
+                @foreach (var course in Model.AllCourses)
+                {
+                    if (course.Id == Model.Id)
                     {
-                        if (Model.AllCourses.Count != 0)
-                        {
-                            <table class="table">
-                                @foreach (var course in Model.AllCourses)
-                                {
-                                <tr>
-                                    <td>
-                                        @{
-                                            string courseText = "";
-                                            if (course.Id == Model.Id)
-                                            {
-                                                courseText = "=> " + @course.Name;
-                                            }
-                                            else
-                                            {
-                                                courseText = "   " + @course.Name;
-                                            }
-                                        }
-                                        @Html.ActionLink(courseText, "Manage", new { id = course.Id, getOperation = "Load" })
-                                    </td>
-
-                                </tr>
-                                            }
-                            </table>
-                                                }
-                                            }
+                        <li class="active">@Html.ActionLink(course.Name, "Manage", new { id = course.Id, getOperation = "Load" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink(course.Name, "Manage", new { id = course.Id, getOperation = "Load" })</li>
+                    }
                 }
+                </ul>
+
             </div><!--end menu-->
            
             <div class="form-horizontal col-md-6">

@@ -195,17 +195,6 @@ namespace LMS.Repositories
                 return courseModuleList;
             }
 
-            //public Gig GetGigWithAttendees(int gigId)
-            //{
-            //return _context.Gigs
-            //    .Include(g => g.Attendances.Select(a => a.Attendee))
-            //    .SingleOrDefault(g => g.Id == gigId);
-            //}
-
-            //var course1 = db.Courses.Include(c => c.Modules).SingleOrDefault(c => c.Id == courseId);
-            //var course2 = db.Courses.SingleOrDefault(c => c.Id == courseId);
-            //var course3 = db.Courses.Include(c => c.Modules.Select(m => m.Name)).SingleOrDefault(c => c.Id == courseId);
-
             var modules = db.Modules.Where(m => m.CourseId == courseId).ToList();
             courseModuleList.moduleList = new List<ModuleListData>();
             foreach (var mod in modules)

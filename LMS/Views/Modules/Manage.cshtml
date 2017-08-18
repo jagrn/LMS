@@ -25,38 +25,21 @@
             <div class="col-md-3">
                 <!--menu-->
                 <br />
-                <h4>Kursmoduler för @Model.CourseName:</h4>
+                <h4>Moduler för @Model.CourseName:</h4>
 
-                @{
-                    if (Model.CourseModules != null)
+                <ul class="nav nav-pills nav-stacked">
+                @foreach (var module in Model.CourseModules)
                     {
-                        if (Model.CourseModules.Count != 0)
+                    if (module.Id == Model.Id)
+                    {
+                            <li class="active">@Html.ActionLink(module.Name, "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })</li>
+                        }
+                        else
                         {
-                            <table class="table">
-                                @foreach (var module in Model.CourseModules)
-                                {
-                                <tr>
-                                    <td>
-                                        @{
-                                            string moduleText = "";
-                                            if (module.Id == Model.Id)
-                                            {
-                                                moduleText = "=> " + @module.Name;
-                                            }
-                                            else
-                                            {
-                                                moduleText = "   " + @module.Name;
-                                            }
-                                        }
-                                        @Html.ActionLink(moduleText, "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })
-                                    </td>
-
-                                </tr>
-                                            }
-                            </table>
-                                                }
-                                            }
-                }
+                            <li>@Html.ActionLink(module.Name, "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })</li>
+                        }
+                    }
+                </ul>
             </div><!--end menu-->
            
             <div class="form-horizontal col-md-7">

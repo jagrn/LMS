@@ -73,6 +73,9 @@ namespace LMS.ViewModels
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
         public string PostOperation { get; set; }
+
+        //public List<Module> TestCourseModules1 { get; set; }             // TEMP TEST
+        //public List<Module> TestCourseModules2 { get; set; }             // TEMP TEST
     }
 
     public class CourseDeleteViewModel
