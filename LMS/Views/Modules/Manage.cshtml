@@ -4,30 +4,28 @@
     ViewBag.Title = "Manage";
 }
 
-
-<br />
-
 @{
     var moduleId = Model.Id;
     var clearDate = "'2017-01-01'";
+    var headBannerInfo = "Hantera moduler för kursen " + @Model.CourseName;
 }
 
-@*@Html.Action("HeadBanner", "CommonLOs", new { type = "FromModuleMgmnt", id1 = Model.CourseId, linkText0 = "KURSKATALOG", linkText1 = "KURSHANTERING", infoText = "THIS IS A MODULE MGMNT LOCATION" })*@
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "ModuleMgmnt", id1 = Model.CourseId, id2 = Model.Id, infoText = headBannerInfo })
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     //First container to include input section and module information
-    <div class="container-fluid">
+    <div class="container">
 
         <div class="row">
 
 
             <div class="col-md-3">
                 <!--menu-->
-                <br />
-                <h4>Moduler för @Model.CourseName:</h4>
+                @*<h4>Moduler för @Model.CourseName:</h4>*@
+                <h4 class="page-header">Moduler</h4>
 
                 <ul class="nav nav-pills nav-stacked">
                 @foreach (var module in Model.CourseModules)
@@ -45,16 +43,18 @@
             </div><!--end menu-->
            
             <div class="form-horizontal col-md-7">
-                <h2>Hantera moduler för @Model.CourseName</h2>
+                @*<h2>Hantera moduler för @Model.CourseName</h2>*@
                 
                 @{
                     if (moduleId == 0)
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny modul</h4>
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny modul</h4>*@
+                        <h4 class="page-header">Skapa ny modul</h4>
                     }
                     else
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera modulen @Model.Name</h4>
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera modulen @Model.Name</h4>*@
+                        <h4 class="page-header">Redigera modulen @Model.Name</h4>
                     }
                 }
           
@@ -172,7 +172,7 @@
                             <a class="btn btn-default" href="@Url.Action("Delete", "Modules", new { id = moduleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { Id = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    @*<a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { Id = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>*@
                     <br />
                     
                 </div><!-- end icons-->

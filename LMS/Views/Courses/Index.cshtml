@@ -2,8 +2,13 @@
 
 @{
     ViewBag.Title = "Index";
+    var headBannerInfo = "Kurser";
 }
 
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "CourseCatalogue", infoText = headBannerInfo })
+
+<div class="container">
 <h2>Kurser</h2>
 
 <p>
@@ -55,5 +60,5 @@
         </tr>
     }
     </table>
-
+</div>
 

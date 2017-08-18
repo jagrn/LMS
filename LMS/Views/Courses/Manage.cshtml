@@ -4,30 +4,28 @@
     ViewBag.Title = "Manage";
 }
 
-
-<br />
-
 @{
     var courseId = Model.Id;
     var clearDate = "'2017-01-01'";
+    var headBannerInfo = "Hantera kurser";
 }
 
-@Html.Action("HeadBanner", "CommonLOs", new { origin = "CourseMgmnt", infoText = "THIS IS A COURSE MGMNT LOCATION" })
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "CourseMgmnt", id1 = Model.Id, infoText = headBannerInfo })
 
 @using (Html.BeginForm())
 {
                 @Html.AntiForgeryToken()
 
                 //First container to include input section and module information
-                <div class="container-fluid">
+                <div class="container">
 
         <div class="row">
 
 
             <div class="col-md-3">
                 <!--menu-->
-                <br />
-                <h4>Alla kurser</h4>
+                
+                <h4 class="page-header">Kurser</h4>
 
                 <ul class="nav nav-pills nav-stacked">
                 @foreach (var course in Model.AllCourses)
@@ -46,16 +44,18 @@
             </div><!--end menu-->
            
             <div class="form-horizontal col-md-6">
-                <h2>Hantera kursinformation för @Model.Name</h2>
+                @*<h2>Hantera kursinformation för @Model.Name</h2>*@
                 
                 @{
     if (courseId == 0)
     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny kurs</h4>*@
+                        <h4 class="page-header">Skapa ny kurs</h4>
                     }
                     else
                     {
-                        <h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera kursen @Model.Name</h4>
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera kursen @Model.Name</h4>*@
+                        <h4 class="page-header">Redigera kursen @Model.Name</h4>
                     }
                 }
           
@@ -175,7 +175,7 @@
                         
                         }
                     }
-                    <a class="btn btn-default" href="@Url.Action("Index", "Courses")"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
+                    @*<a class="btn btn-default" href="@Url.Action("Index", "Courses")"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>*@
                     <br />
                     
                 </div><!-- end icons-->

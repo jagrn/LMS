@@ -103,6 +103,13 @@ h4 {
     color:#198521;
 }
 
+/*Override link looks*/ 
+.headBannerLink > span > a:hover{
+    color:coral;
+    cursor: auto;
+    text-decoration:none;
+}
+
 .greyBackground{
     background-color:#eaeaea;
 }
@@ -115,15 +122,26 @@ h4 {
     color:#cc0000;
 }
 
-.fullBackgroundWidth{
-    margin-left: -500px;
-    margin-right: -500px;
+
+.topSection1A{
+    margin-top: 0px;
+    padding-top: 15px;
+    padding-bottom:10px;
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
 }
 
-.topSection{
+.topSection1B{
     margin-top: 0px;
-    padding-top: 30px;
-    padding-bottom:30px;
-    text-align:center;
-    
+    padding-top: 15px;
+    padding-bottom:10px;
+    font-size:14px;
+}
+
+.topSection2{
+    margin-top: 0px;
+    padding-top: 20px;
+    padding-bottom:20px;
+    text-align:center; 
 }
