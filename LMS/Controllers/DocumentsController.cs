@@ -94,7 +94,7 @@ namespace LMS.Controllers
 
 
         // GET: Activities/Manage/5
-        public ActionResult Manage(int? id, int? activityId, int? moduleId, int? courseId, string userId, string getOperation, string viewMessage)
+        public ActionResult Manage(int? id, int? activityId, int? moduleId, int? courseId, string userId, string viewMessage)
         {
             DocumentViewModel documentViewModel = DocumentRepo.GetDocumentViewModel(id, courseId, moduleId, activityId, userId, viewMessage);
             return View(documentViewModel);
@@ -105,14 +105,13 @@ namespace LMS.Controllers
         [ValidateAntiForgeryToken]
         //public ActionResult Manage([Bind(Include = "Id,Name,Description,Format,UploadDate,CourseId,ModuleId,ActivityId,UserId,PostMessage,PostNavigation,PostOperation")] ActivityViewModel viewModel)
         public ActionResult Manage(DocumentViewModel documentViewModel)
-
         {
             if (!ModelState.IsValid)
             {
                 return View(documentViewModel);
             }
             // Input validation
-            var validMess = DocumentRepo.IsDocumentNameValid(documentViewModel);
+            var validMess = DocumentRepo.DocumentNameIsUnique(documentViewModel);
             if (validMess != null)
             {
                 documentViewModel.PostMessage = validMess;
@@ -123,21 +122,12 @@ namespace LMS.Controllers
             if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
                 documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat (byt meddelande efter testperiod)";
             else
-                documentViewModel.PostMessage = "Den nya dokumentet " + documentViewModel.Name + " är sparad";
+                documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparad";
 
             // SPARA SKER HÄR
             documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
 
-
-            return RedirectToAction("Manage", new
-            {
-                id = documentViewModel.Id,
-                moduleId = documentViewModel.ModuleId,
-                courseId = documentViewModel.CourseId,
-                userId = documentViewModel.UserId,
-                getOperation = "Load",
-                viewMessage = documentViewModel.PostMessage
-            });
+            return RedirectToAction("Manage", new { id = documentViewModel.Id });
         }
         //
         // end manage

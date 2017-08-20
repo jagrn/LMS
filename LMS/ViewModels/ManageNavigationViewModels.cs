@@ -249,6 +249,8 @@ namespace LMS.ViewModels
         [Required]
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [DisplayName("Dokumenttyp")]
+        public DocumentType DocumentType { get; set; }
         public string Format { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -265,6 +267,8 @@ namespace LMS.ViewModels
         public string ModuleName { get; set; }
         [DisplayName("Aktivitet")]
         public string ActivityName { get; set; }
+        [DisplayName("Kurs/modul/aktivitet")]
+        public string LongCourseName { get; set; }
         [DisplayName("Ägare")]
         public string UserName { get; set; }
         // virtual fields for passing info back n forth

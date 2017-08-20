@@ -297,6 +297,10 @@
     <Compile Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.Designer.cs">
       <DependentUpon>201708170635007_Added ICollection Documents to course, module, activity, person,.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708182207004_document model new prop Dokumenttype.cs" />
+    <Compile Include="Migrations\201708182207004_document model new prop Dokumenttype.Designer.cs">
+      <DependentUpon>201708182207004_document model new prop Dokumenttype.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -310,6 +314,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActivityRepo.cs" />
     <Compile Include="Repositories\CourseRepo.cs" />
+    <Compile Include="Repositories\dbRepo.cs" />
     <Compile Include="Repositories\DocumentRepo.cs" />
     <Compile Include="Repositories\ModuleRepo.cs" />
     <Compile Include="Repositories\NotificationRepo.cs" />
@@ -485,6 +490,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.resx">
       <DependentUpon>201708170635007_Added ICollection Documents to course, module, activity, person,.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708182207004_document model new prop Dokumenttype.resx">
+      <DependentUpon>201708182207004_document model new prop Dokumenttype.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -179,10 +179,10 @@
                                 <span class="glyphicon glyphiconsm glyphicon-tasks" aria-hidden="true"></span><br />Ny aktivitet
                             </button>
 
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
+                                <a class="btn btn-default" href="@Url.Action("Manage", "Documents", new { moduleId = Model.Id })">
+                                    <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
+                                </a>
 
-                                <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
-                            </button>
                             @*GET button to reach delete course view*@
                             <a class="btn btn-default" href="@Url.Action("Delete", "Modules", new { id = moduleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
                         }

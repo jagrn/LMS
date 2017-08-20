@@ -12,25 +12,57 @@ namespace LMS.Repositories
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
 
-        // QUERY whether a certain document (id) exists
-        public static bool IsDocumentPresent(int? id)
+        private static List<DocumentListData> GetDocumentListViewModel(List<Document> documents)
         {
-            return ((id != null) && (db.Documents.Find(id) != null));
+            var documentList = new List<DocumentListData>();
+            foreach (var document in documents)
+            {
+                documentList.Add(new DocumentListData
+                {
+                    Id = document.Id,
+                    Name = document.Name
+                });
+            }
+            return documentList;
         }
 
-        public static string IsDocumentNameValid(DocumentViewModel documentViewModel)
+        public static List<DocumentListData> GetCourseDocumentListViewModel(int courseId)
+        {
+            return GetDocumentListViewModel(db.Documents.Where(d => d.CourseId == courseId).ToList());
+        }
+
+        public static List<DocumentListData> GetModuleDocumentListViewModel(int moduleId)
+        {
+            return GetDocumentListViewModel(db.Documents.Where(d => d.ModuleId == moduleId).ToList());
+        }
+
+        public static List<DocumentListData> GetActivityDocumentListViewModel(int activityId)
+        {
+            return GetDocumentListViewModel(db.Documents.Where(d => d.ActivityId == activityId).ToList());
+        }
+
+        public static List<DocumentListData> GetUserDocumentListViewModel(string userId)
+        {
+            return GetDocumentListViewModel(db.Documents.Where(d => d.UserId == userId).ToList());
+        }
+
+        public static string DocumentNameIsUnique(DocumentViewModel documentViewModel)
         {
             if (documentViewModel.SiblingDocuments == null)
             {
                 return null;
             }
             foreach (var doc in documentViewModel.SiblingDocuments)
-                if (string.Equals(doc.Name, documentViewModel.Name, StringComparison.OrdinalIgnoreCase) && doc.Id != documentViewModel.Id)
+                if (string.Equals(doc.Name, documentViewModel.Name, StringComparison.InvariantCultureIgnoreCase) && doc.Id != documentViewModel.Id)
                     return "Ogiltigt dokumentnamn. Det existerar redan ett dokument med samma namn";
             return null;
         }
 
-
+        /// <summary>
+        /// Create the viewModel to be displayed. If existing document Id is used to fetch db-record. All other params are ignored
+        /// If Id is null or 0 a model for a new document is prepared. In this case one, and only one, of userId
+        /// courseId, moduleId and activityId should be set --> The owner of the document
+        /// </summary>
         public static DocumentViewModel GetDocumentViewModel(int? Id, int? courseId, int? moduleId, int? activityId, string userId, string postMessage)
         {
             var documentViewModel = new DocumentViewModel();
@@ -44,6 +76,7 @@ namespace LMS.Repositories
                 documentViewModel.Id = dbDocument.Id;
                 documentViewModel.Name = dbDocument.Name;
                 documentViewModel.Description = dbDocument.Description;
+                documentViewModel.DocumentType = dbDocument.DokumentType;
                 documentViewModel.Format = dbDocument.Format;
                 documentViewModel.UploadDate = dbDocument.UploadDate;
                 documentViewModel.CourseId = dbDocument.CourseId;
@@ -61,27 +94,40 @@ namespace LMS.Repositories
             }
             documentViewModel.PostMessage = postMessage;
 
-            List<Document> documents = new List<Document>();
-            if (!string.IsNullOrEmpty(userId))
-                documents = db.Documents.Where(d => d.UserId == userId).ToList();
-            if (activityId > 0)
-                documents = db.Documents.Where(d => d.ActivityId == activityId).ToList();
-            else if (moduleId > 0)
-                documents = db.Documents.Where(d => d.ModuleId == moduleId).ToList();
-            else if (courseId > 0)
-                documents = db.Documents.Where(d => d.CourseId == courseId).ToList();
-            //else !!! HANDLE ERROR !!!
-            documentViewModel.SiblingDocuments = new List<DocumentListData>();
-            foreach (var doc in documents)
+            if (!string.IsNullOrEmpty(documentViewModel.UserId))
             {
-                DocumentListData documentListData = new DocumentListData();
-                documentListData.Id = doc.Id;
-                documentListData.Name = doc.Name;
-                documentViewModel.SiblingDocuments.Add(documentListData);
+                documentViewModel.SiblingDocuments = GetUserDocumentListViewModel(documentViewModel.UserId);
+                documentViewModel.UserName = "document.username not handled yet";
             }
+            else if (documentViewModel.ActivityId > 0)
+            {
+                documentViewModel.SiblingDocuments = GetActivityDocumentListViewModel((int)documentViewModel.ActivityId);
+                documentViewModel.CourseName = dbRepo.ActivityId2courseName(documentViewModel.ActivityId);
+                documentViewModel.ModuleName = dbRepo.ActivityId2moduleName(documentViewModel.ActivityId);
+                documentViewModel.ActivityName = dbRepo.ActivityId2activityName(documentViewModel.ActivityId);
+            }
+            else if (documentViewModel.ModuleId > 0)
+            {
+                documentViewModel.SiblingDocuments = GetModuleDocumentListViewModel((int)documentViewModel.ModuleId);
+                documentViewModel.CourseName = dbRepo.ModuleId2courseName(documentViewModel.ModuleId);
+                documentViewModel.ModuleName = dbRepo.ModuleId2moduleName(documentViewModel.ModuleId);
+            }
+            else if (documentViewModel.CourseId > 0)
+            {
+                documentViewModel.SiblingDocuments = GetCourseDocumentListViewModel((int)documentViewModel.CourseId);
+                documentViewModel.CourseName = dbRepo.CourseId2courseName(documentViewModel.CourseId);
+            }
+            //else !!! HANDLE ERROR !!!
+
+            documentViewModel.LongCourseName = string.Join(", ",new string[] { documentViewModel.CourseName, documentViewModel.ModuleName, documentViewModel.ActivityName });
+
             return documentViewModel;
         }
 
+        /// <summary>
+        /// Save the viewModel to the database
+        /// </summary>
+        /// 
         public static int PostDocumentViewModel(DocumentViewModel documentViewModel)
         {
             Document dbDocument;
@@ -97,9 +143,9 @@ namespace LMS.Repositories
             {
                 dbDocument = new Document();
             }
-            //documentViewModel.Id = document.Id;
             dbDocument.Name = documentViewModel.Name;
             dbDocument.Description = documentViewModel.Description;
+            dbDocument.DokumentType = documentViewModel.DocumentType;
             dbDocument.Format = documentViewModel.Format;
             dbDocument.UploadDate = documentViewModel.UploadDate;
             dbDocument.CourseId = documentViewModel.CourseId;
