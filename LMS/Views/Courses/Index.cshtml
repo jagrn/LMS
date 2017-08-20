@@ -54,7 +54,7 @@
             @if (User.IsInRole("Teacher"))
             {
                 <td>
-                    @Html.ActionLink("Hantera", "Manage", "Courses", new { id = item.Id, getOperation = "Load" }, null)
+                    @Html.ActionLink("Hantera", "Manage", "Courses", new { id = item.Id, getOperation = "LoadMini" }, null)
                 </td>
             }
         </tr>

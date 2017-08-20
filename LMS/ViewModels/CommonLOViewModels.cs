@@ -20,4 +20,22 @@ namespace LMS.ViewModels
 
         public string InfoText { get; set; }
     }
+
+    public class UpdateModulesViewModel
+    {
+        public List<ModuleListData> CourseModules { get; set; }
+    }
+
+    public class UpdateActivitiesViewModel
+    {
+        public List<ActivityListData> ModuleActivities { get; set; }
+    }
+
+
+    public class UpdateDocumentsViewModel
+    {
+        //public List<DocumentListData> ObjectDocuments { get; set; }
+    }
+
+
 }

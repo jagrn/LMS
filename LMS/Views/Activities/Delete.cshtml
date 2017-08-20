@@ -2,95 +2,101 @@
 
 @{
     ViewBag.Title = "Delete";
+    var headBannerInfo = "Ta bort aktiviteter för modulen";
 }
 
-@{
-    if (Model.DeleteType == "Single")
-    {
-        <h2>Ta bort aktiviteten @Model.Name</h2>
-        <h3>Är du säker på att du vill ta bort den här aktiviteten permanent?</h3>
-    }
-    if (Model.DeleteType == "All")
-    {
-        <h2>Ta bort alla aktiviteter for aktuell modul</h2>
-        <h3>Är du säker på att du vill ta bort alla listade aktiviteter permanent?</h3>
-    }
-}
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "ActivityMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.Id, infoText = headBannerInfo })
 
-<div>
-@{
-    if (Model.DeleteType == "Single")
-    {
-        <h4>Aktivitetsdetaljer:</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-            @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd>
-            @Html.DisplayFor(model => model.Name)
-            </dd>
-
-            <dt>
-            @Html.DisplayNameFor(model => model.Description)
-            </dt>
-            <dd>
-            @Html.DisplayFor(model => model.Description)
-            </dd>
-
-            <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-            </dt>
-            <dd>
-            @Html.DisplayFor(model => model.StartDate)
-            </dd>
-
-            @*<dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-            </dt>
-            <dd>
-            @Html.DisplayFor(model => model.EndDate)
-            </dd>*@
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Period)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Period)
-            </dd>
-
-            <dt>
-            @Html.DisplayNameFor(model => model.SelectActivityType)
-            </dt>
-            <dd>
-            @Html.DisplayFor(model => model.SelectActivityType)
-            </dd>
-
-            @*<dt>
-            @Html.DisplayNameFor(model => model.Deadline)
-            </dt>
-            <dd>
-            @Html.DisplayFor(model => model.Deadline)
-            </dd>*@
-        </dl>
-    }
-    if (Model.DeleteType == "All")
-    {
-        <h4>Aktivitetslista:</h4>
-        <hr />
-        foreach (var activity in Model.ModuleActivities)
+<div class="container">
+    @{
+        if (Model.DeleteType == "Single")
         {
-            <p>@activity.Name</p>
+            <h2>Ta bort aktiviteten @Model.Name</h2>
+            <h3>Är du säker på att du vill ta bort den här aktiviteten permanent?</h3>
+        }
+        if (Model.DeleteType == "All")
+        {
+            <h2>Ta bort alla aktiviteter for aktuell modul</h2>
+            <h3>Är du säker på att du vill ta bort alla listade aktiviteter permanent?</h3>
         }
     }
-}
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <div class="form-actions no-color">
-        <button type="submit" class="btn btn-default">Bekräfta</button>
-        <button class="btn btn-default">@Html.ActionLink("Avbryt", "Manage", "Activities", new { moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New" }, null)</button>
+    <div>
+        @{
+            if (Model.DeleteType == "Single")
+            {
+                <h4>Aktivitetsdetaljer:</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.StartDate)
+                    </dd>
+
+                    @*<dt>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                        </dt>
+                        <dd>
+                        @Html.DisplayFor(model => model.EndDate)
+                        </dd>*@
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Period)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Period)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.SelectActivityType)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.SelectActivityType)
+                    </dd>
+
+                    @*<dt>
+                        @Html.DisplayNameFor(model => model.Deadline)
+                        </dt>
+                        <dd>
+                        @Html.DisplayFor(model => model.Deadline)
+                        </dd>*@
+                </dl>
+            }
+            if (Model.DeleteType == "All")
+            {
+                <h4>Aktivitetslista:</h4>
+                <hr />
+                foreach (var activity in Model.ModuleActivities)
+                {
+                    <p>@activity.Name</p>
+                }
+            }
+        }
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-actions no-color col-md-offset-2">
+                <br />
+                <button type="submit" class="btn btn-default greenButton">Bekräfta</button>
+                <button class="btn btn-default greenButton">@Html.ActionLink("Avbryt", "Manage", "Activities", new { id = Model.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "LoadMini" }, null)</button>
+            </div>
+        }
     </div>
-}
 </div>

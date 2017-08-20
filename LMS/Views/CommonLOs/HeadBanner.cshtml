@@ -57,7 +57,7 @@
                                 <span>
                                     <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
                                     &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@courseHandling</a>
+                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
                                     &nbsp;/&nbsp;
                                     @moduleHandling
                                 </span>
@@ -69,9 +69,9 @@
                                 <span>
                                     <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
                                     &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@courseHandling</a>
+                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
                                     &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "Load" }, null)">@moduleHandling</a>
+                                    <a class="@textColor" href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "LoadMini" }, null)">@moduleHandling</a>
                                     &nbsp;/&nbsp;
                                     @activityHandling
                                 </span>
@@ -83,11 +83,11 @@
                                 <span>
                                     <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
                                     &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "Load" }, null)">@courseHandling</a>
+                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
                                     &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "Load" }, null)">@moduleHandling</a>
+                                    <a class="@textColor" href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "LoadMini" }, null)">@moduleHandling</a>
                                     &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Activities", new { Id = Model.Id3, courseId = Model.Id1, moduleId = Model.Id2, getOperation = "Load" }, null)">@activityHandling</a>
+                                    <a class="@textColor" href="@Url.Action("Manage", "Activities", new { Id = Model.Id3, courseId = Model.Id1, moduleId = Model.Id2, getOperation = "LoadMini" }, null)">@activityHandling</a>
                                 </span>
                             </div>
                             break;

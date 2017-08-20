@@ -398,6 +398,14 @@
     <Content Include="Views\AdminUsers\EditUser.cshtml" />
     <Content Include="Views\AdminUsers\CreateUser.cshtml" />
     <Content Include="Views\CommonLOs\HeadBanner.cshtml" />
+    <Content Include="Views\Activities\Manage_BACKUP_0819.cshtml" />
+    <Content Include="Views\Courses\Manage_BACKUP_0819.cshtml" />
+    <Content Include="Views\Modules\Manage_BACKUP_0819.cshtml" />
+    <Content Include="Views\Shared\_Modules_BACKUP_0819.cshtml" />
+    <Content Include="Views\Shared\_Activities_BACKUP_0819.cshtml" />
+    <Content Include="Views\Shared\_CourseDocuments.cshtml" />
+    <Content Include="Views\Shared\_ModuleDocuments.cshtml" />
+    <Content Include="Views\Shared\_ActivityDocuments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

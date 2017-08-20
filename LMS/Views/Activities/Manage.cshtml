@@ -4,73 +4,69 @@
     ViewBag.Title = "Manage";
 }
 
-
-@*<br />*@
-
 @{
     var activityId = Model.Id;
-    var clearDate = "'2017-01-01'";
+    var moduleId = Model.ModuleId;
+    var courseId = Model.CourseId;
+
+    var activityName = Model.Name;      // TEST
     var headBannerInfo = "Hantera aktiviteter för modulen " + @Model.ModuleName;
 }
 
+@{ 
+    string showDocuments = "'false'";
+    if (Model.ShowDocuments)
+    {
+        showDocuments = "'true'";
+    }
+}
+
 @Html.Action("HeadBanner", "CommonLOs", new { origin = "ActivityMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.Id, infoText = headBannerInfo })
-
-
-@*<div class="container-fluid greyBackground fullBackgroundWidth">
-    <div class="row">
-        <div class="col-sm-offset-2 col-sm-8 ">
-            <h4 class="topSection redText">Kurser / Moduler</h4>
-            <h2 class="topSection">Hantera aktiviteter för modulen @Model.ModuleName</h2>
-        </div>
-    </div>
-</div>*@
-
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-
-    
-
-    //First container to include input section and module information
             <div class="container">
-
                 <div class="row">
 
                     <div class="col-md-3">
                         <!--menu-->
-                        @*<h4>Aktiviteter för @Model.ModuleName:</h4>*@
+                       
                         <h4 class="page-header">Aktiviteter</h4>
-
-                        <ul class="nav nav-pills nav-stacked">
-                            @foreach (var activity in Model.ModuleActivities)
-                {
-                    if (activity.Id == Model.Id)
-                    {
-                                    <li class="active">@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })</li>
-                                }
-                                else
-                                {
-                                    <li>@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })</li>
-                                }
+                        @{
+                            <a class="btn btn-sm greenButton btnFlip" href="@Url.Action("Manage", "Modules", new { Id = moduleId, courseId = Model.CourseId, getOperation = "LoadMini" })">v</a>
+                            if (activityId != 0)
+                            {
+                                <a class="btn btn-sm greenButton alignActBtnXRight" href="@Url.Action("Manage", "Activities", new { id = 0, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })">+</a>
+                                <a class="btn btn-sm redButton alignActBtnXRight" href="@Url.Action("Delete", "Activities", new { id = activityId, moduleId = Model.ModuleId, courseId = Model.CourseId, deleteType = "Single" })">-</a>
                             }
+                        }
+                        <ul class="nav nav-pills nav-stacked">
+                        @foreach (var activity in Model.ModuleActivities)
+                        {
+                            if (activity.Id == Model.Id)
+                            {                              
+                                    <li class="active">@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })</li>                             
+                            }
+                            else
+                            {
+                                    <li>@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })</li>
+                            }
+                        }
                         </ul>
                     </div><!--end menu-->
 
                     <div class="form-horizontal col-md-6">
-                        @*<h2>Hantera aktiviteter för @Model.ModuleName</h2>*@
 
                         @{
                             if (activityId == 0)
                             {
-                                @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny aktivitet</h4>*@
                                 <h4 class="page-header">Skapa ny aktivitet</h4>
                             }
                             else
                             {
-                                @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera aktiviteten @Model.Name</h4>*@
                                 <h4 class="page-header">Redigera aktiviteten @Model.Name</h4>
                             }
                         }
@@ -88,11 +84,12 @@
                         @Html.HiddenFor(model => model.PostMessage)
                         @Html.HiddenFor(model => model.CourseId)
                         @Html.HiddenFor(model => model.ModuleId)
+                        @Html.HiddenFor(model => model.ShowDocuments)
 
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-9" style="margin-left:20px;">
 
                                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control " } })
                                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
@@ -100,8 +97,8 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3 " })
-                            <div class="col-md-9">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-9" style="margin-left:20px;">
 
                                 @Html.TextAreaFor(model => model.Description, 6, 40, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
@@ -109,96 +106,65 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
+                            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-9" style="margin-left:20px;">
 
                                 @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Period, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
+                            @Html.LabelFor(model => model.Period, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-9" style="margin-left:20px;">
                                 @Html.EnumDropDownListFor(model => model.Period, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.Period, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.SelectActivityType, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
+                            @Html.LabelFor(model => model.SelectActivityType, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-9" style="margin-left:20px;">
                                 @Html.EnumDropDownListFor(model => model.SelectActivityType, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.SelectActivityType, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        @*<div class="form-group">
-                                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-
-                                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-                                </div>
-                            </div>*@
-
-                        <div>
-                            <!--buttons-->
-                            <br />
-                            @*POST buttons for save (new or update) and return to manage course view
-                                @{
-                                    if (moduleId == 0)
-                                    {
-                                        <p class="btn btn-default">SAVE(U)/R</p>
-                                    }
-                                    else
-                                    {
-                                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'Update', @moduleId, 0)">SAVE(U)/R</button>
-                                    }
-                                }
-                                <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'New', @moduleId, 0)">SAVE(N)/R</button>
-                                @*POST buttons for save (new or update) and remain in manage module view*@
-                            @*@{
-                                    if (moduleId == 0)
-                                    {
-                                        <p class="btn btn-default">SAVE(U)</p>
-                                    }
-                                    else
-                                    {
-                                        <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @moduleId, 0)">SAVE(U)</button>
-                                    }
-                                }*@
-                            @*<button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @moduleId, 0)">SAVE(N)</button>
-                                @*Clear form button without saving module data, remain with same module identity in form*@
-                            @*<p class="btn btn-default" onclick="ClearModuleForm(@clearDate, @clearDate)">CLEAR</p>*@
-                        </div> @*end buttons*@
-
-                        <div class="btn-toolbar">
+                        
+                        <div class="btn-toolbar col-md-offset-2">
 
                             <!-- icons-->
                             @{
                                 if (activityId != 0)
                                 {
-                                    <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @activityId, 0)" aria-label="Left Align">
+                                    @*<button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @activityId, 0)" aria-label="Left Align">
                                         <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Updatera
+                                    </button>*@
+
+                                    <button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'Update', @activityId, @showDocuments)" aria-label="Left Align">
+                                        Uppdatera
                                     </button>
                                 }
                                 else
                                 {
-                                    <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @activityId, 0)" aria-label="Left Align">
+                                    @*<button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @activityId, 0)" aria-label="Left Align">
                                         <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Spara
+                                    </button>*@
+
+                                    <button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'New', @activityId, @showDocuments)" aria-label="Left Align">
+                                        Spara
                                     </button>
                                 }
                             }
-                            <a class="btn btn-default" href="@Url.Action("Manage", "Activities", new { id = 0, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny aktivitet</a>
+
+                            
                             @{
                                 if (activityId != 0)
                                 {
 
-                                    <button type="button" class="btn btn-default" aria-label="Left Align">
+                                    @*<button type="button" class="btn btn-default" aria-label="Left Align">
 
                                         <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
-                                    </button>
-                                    @*GET button to reach delete course view*@
-                                    <a class="btn btn-default" href="@Url.Action("Delete", "Activities", new { id = activityId, moduleId=Model.ModuleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
+                                    </button>*@
+                                    
                                 }
                             }
                             @*<a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { Id = Model.ModuleId,courseId = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>*@
@@ -206,25 +172,63 @@
 
                         </div><!-- end icons-->
 
+                        
+
                         <div>
-
-
+                            @Html.Partial("_ActivityDocuments")
                         </div>
 
-
                     </div>
 
-                    <div class="col-md-2">
-                        <br />
-                        <br />
-                        <br />
+                    <div class="col-md-3">
+                        <h4 class="page-header">Lediga aktivitetsblock</h4>
+                        @{
+                            string baseDate = "";
+                            string date = "";
+                            string periodsWithSpace = "";
+                            int noOfPeriods = Model.AvailableTime.Count;
 
+                            if (noOfPeriods > 0)
+                            {
+                                baseDate = Model.AvailableTime.First().Start.ToShortDateString();
+                                date = baseDate;
+                            }
+
+                            int period = 0;
+                            while (period < noOfPeriods)
+                            {
+                                <div class="listElement">
+                                    <p>@baseDate</p>
+                                    @{
+                                        while (date == baseDate)
+                                        {
+
+                                            periodsWithSpace += Model.AvailableTime.ElementAt(period).Period.ToString() + " ";
+                                            period++;
+                                            if (period < noOfPeriods)
+                                            {
+                                                date = Model.AvailableTime.ElementAt(period).Start.ToShortDateString();
+                                            }
+                                            else
+                                            {
+                                                date = "";
+                                            }
+                                        }
+
+                                    }
+                                    <p>@periodsWithSpace</p>
+                                </div>
+                                baseDate = date;
+                                periodsWithSpace = "";
+                            }
+                        }
+                                    
                     </div>
-
-
                 </div>
             </div>
             }
+
+
             @section Scripts {
                 @Scripts.Render("~/bundles/jqueryval")
             }

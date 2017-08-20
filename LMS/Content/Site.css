@@ -110,6 +110,21 @@ h4 {
     text-decoration:none;
 }
 
+/* override margins*/
+.page-header {
+    /*background-color:aquamarine;*/
+    /*height:40px;*/
+}
+
+/*Info panels*/
+.listElement{
+    background-color:whitesmoke;
+    border:1px solid lightgrey;
+    margin: 5px;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+
 .greyBackground{
     background-color:#eaeaea;
 }
@@ -122,6 +137,141 @@ h4 {
     color:#cc0000;
 }
 
+
+.alignCourseBtnXRight{
+    margin-left: 3px;
+}
+
+.alignModBtnXRight{
+    margin-left: 3px;
+}
+
+.alignActBtnXRight{
+    margin-left: 3px;
+}
+
+.btnFlip {
+  transform: rotate(180deg);
+  /*margin-top: 100px*/
+}
+
+.greenButton{
+    font-size: 16px;
+    color:#198521;
+    background-color:#c4e9c4;
+    border-color: #198521;
+    border-width:2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 9px;
+    padding-right: 9px;
+    margin-bottom: 18px;
+    margin-top: -12px;
+}
+
+.greenButtonSmall{
+    font-size: 12px;
+    font-weight:bold;
+    color:#198521;
+    background-color:#c4e9c4;
+    border-color: #198521;
+    border-width:2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.redButton{
+    font-size: 16px;
+    font-weight:bold;
+    color:#cc0000;
+    background-color:darksalmon;
+    border-color: #cc0000;
+    border-width:2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-bottom: 18px;
+    margin-top: -12px;
+}
+
+.saveButton{
+    font-size: 16px;
+    color:#198521;
+    background-color:#c4e9c4;
+    border-color: #198521;
+    border-width:2px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 40px;
+}
+
+/*.greenButton{
+    font-size: 16px;
+    color:whitesmoke;
+    background-color:#198521;
+    border-color: #198521;
+    border-width:2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 9px;
+    padding-right: 9px;
+    margin-bottom: 18px;
+    margin-top: -12px;
+}*/
+
+/*.greenButtonSmall{
+    font-size: 12px;
+    font-weight:bold;
+    color:whitesmoke;
+    background-color:#198521;
+    border-color: #198521;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+}*/
+
+/*.redButton{
+    font-size: 16px;
+    color:whitesmoke;
+    background-color:#cc0000;
+    border-color: #cc0000;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-bottom: 18px;
+    margin-top: -12px;
+}*/
+
+/*.saveButton{
+    font-size: 16px;
+    color:whitesmoke;
+    background-color:#198521;
+    border-color: #198521;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 40px;
+}*/
+
+.orangeButton{
+    font-size: 20px;
+    font-weight:bold;
+    color:#cc0000;
+    background-color:#eaeaea;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    
+}
 
 .topSection1A{
     margin-top: 0px;

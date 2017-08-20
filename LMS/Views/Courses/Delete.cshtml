@@ -2,73 +2,79 @@
 
 @{
     ViewBag.Title = "Delete";
+    var headBannerInfo = "Ta bort kurser";
 }
 
-@{
-    if (Model.DeleteType == "Single")
-    {
-        <h2>Ta bort kursen @Model.Name</h2>
-        <h3>Är du säker på att du vill ta bort den här kursen permanent?</h3>
-    }
-    if (Model.DeleteType == "All")
-    {
-        <h2>Ta bort alla kurser</h2>
-        <h3>Är du säker på att du vill ta bort alla kurser permanent?</h3>
-    }
-}
-<div>
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "CourseMgmnt", id1 = Model.Id, infoText = headBannerInfo })
+
+<div class="container">
     @{
         if (Model.DeleteType == "Single")
         {
-            <h4>Kursdetaljer:</h4>
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Name)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Description)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Description)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.StartDate)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.StartDate)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.EndDate)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.EndDate)
-                </dd>
-            </dl>
+            <h2>Ta bort kursen @Model.Name</h2>
+            <h3>Är du säker på att du vill ta bort den här kursen permanent?</h3>
         }
         if (Model.DeleteType == "All")
         {
-            <h4>Kurslista:</h4>
-            <hr />
-            foreach (var course in Model.AllCourses)
-            {
-                <p>@course.Name</p>
-            }
+            <h2>Ta bort alla kurser</h2>
+            <h3>Är du säker på att du vill ta bort alla kurser permanent?</h3>
         }
     }
+    <div>
+        @{
+            if (Model.DeleteType == "Single")
+            {
+                <h4>Kursdetaljer:</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        <div class="form-actions no-color">
-            <button type="submit" class="btn btn-default">Bekräfta</button>
-            <button class="btn btn-default">@Html.ActionLink("Avbryt", "Manage", "Courses", new { getOperation = "New" }, null)</button>
-        </div>
-    }
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.StartDate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.EndDate)
+                    </dd>
+                </dl>
+            }
+            if (Model.DeleteType == "All")
+            {
+                <h4>Kurslista:</h4>
+                <hr />
+                foreach (var course in Model.AllCourses)
+                {
+                    <p>@course.Name</p>
+                }
+            }
+        }
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-actions no-color col-md-offset-2">
+                <br />
+                <button type="submit" class="btn btn-default greenButton">Bekräfta</button>
+                <button class="btn btn-default greenButton">@Html.ActionLink("Avbryt", "Manage", "Courses", new { id = Model.Id, getOperation = "LoadMini" }, null)</button>
+            </div>
+        }
+    </div>
 </div>

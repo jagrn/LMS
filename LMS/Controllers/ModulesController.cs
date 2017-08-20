@@ -61,7 +61,7 @@ namespace LMS.Controllers
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
                 viewModel.EndDate = DateTime.Parse("2017-01-01");
             }
-            else // getOperation == "Load"
+            else // getOperation == "Load"/"LoadMini"/"LoadAct"/"LoadDoc"
             {
                 // Load existing, reached from course views only
                 var singleModule = ModuleRepo.RetrieveModule(courseId, id);
@@ -82,8 +82,21 @@ namespace LMS.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
-                viewModel.ModuleActivities = moduleActivityList.activityList;
+                viewModel.NoOfActivities = moduleActivityList.activityList.Count;
+
+                if ((getOperation == "Load") || (getOperation == "LoadAct"))
+                {
+                    viewModel.ModuleActivities = moduleActivityList.activityList;
+                    viewModel.ShowActivities = true;
+                }
+                else // getOperation == "LoadMini"
+                {
+                    viewModel.ModuleActivities = null;
+                    viewModel.ShowActivities = false;
+                }
             }
+
+            viewModel.ShowDocuments = false;
 
             // Load view model with additional display info wrt parent course
             var courseModuleList = ModuleRepo.RetrieveCourseModuleList(courseId);
@@ -94,6 +107,8 @@ namespace LMS.Controllers
             viewModel.CourseModules = courseModuleList.moduleList;
             viewModel.CourseName = CourseRepo.RetrieveCourseName(courseId);
 
+            viewModel.AvailableTime = ModuleRepo.RetrieveModuleFreePeriods(courseId);
+
             return View(viewModel);
         }
 
@@ -102,7 +117,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId,ActivityId,PostNavigation,PostOperation,PostMessage")] ModuleViewModel viewModel)
+        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId,ActivityId,ShowActivities,ShowDocuments,PostNavigation,PostOperation,PostMessage")] ModuleViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -194,7 +209,7 @@ namespace LMS.Controllers
                     viewModel.CourseModules = courseModuleList.moduleList;
                     viewModel.CourseName = CourseRepo.RetrieveCourseName(viewModel.CourseId);
 
-                    if (viewModel.PostOperation == "Update")
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowActivities))
                     {
                         // Load view model with additional display info wrt module activities
                         var moduleActivityList = ActivityRepo.RetrieveModuleActivityList(viewModel.Id);
@@ -204,6 +219,9 @@ namespace LMS.Controllers
                         }
                         viewModel.ModuleActivities = moduleActivityList.activityList;
                     }
+
+                    viewModel.NoOfActivities = ModuleRepo.RetrieveNoOfActivities(viewModel.Id);
+                    viewModel.AvailableTime = ModuleRepo.RetrieveModuleFreePeriods(viewModel.CourseId);
                 }
 
                 // Adjust the course span according to posted module
@@ -211,7 +229,7 @@ namespace LMS.Controllers
                 if (adjustResult == CourseRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                }
+                }          
 
                 switch (viewModel.PostNavigation)
                 {
