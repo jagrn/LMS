@@ -175,5 +175,34 @@ namespace LMS.Repositories
             return dbDocument.Id;
         }
 
+
+        // RETREIVE a list of documents (id + name + etc) for a course / module / activity
+        public static List<DocumentListData> RetrieveCourseDocumentList(int? courseId, int? moduleId, int? activityId)
+        {
+            var documents = db.Documents.Where(d => d.CourseId == courseId).Where(d => d.ModuleId == moduleId).Where(d => d.ActivityId == activityId).ToList();
+            var documentList = new List<DocumentListData>();
+            foreach (var doc in documents)
+            {
+                DocumentListData courseDocument = new DocumentListData();
+                courseDocument.Id = doc.Id;
+                courseDocument.Name = doc.Name;
+                courseDocument.Description = doc.Description;
+                courseDocument.DocumentType = doc.DokumentType;
+                courseDocument.UploadDate = doc.UploadDate;
+                documentList.Add(courseDocument);
+            }           
+            return documentList;
+        }
+
+        // RETREIVE number of documents for a course / module / activity
+        public static int RetrieveNoODocuments(int? courseId, int? moduleId, int? activityId)
+        {
+            var documents = db.Documents.Where(d => d.CourseId == courseId).Where(d => d.ModuleId == moduleId).Where(d => d.ActivityId == activityId).ToList();
+            if (documents == null)
+                return 0;
+            return documents.Count;
+        }
+
+
     }
 }

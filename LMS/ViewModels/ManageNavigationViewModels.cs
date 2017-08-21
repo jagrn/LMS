@@ -49,6 +49,9 @@ namespace LMS.ViewModels
     {
         public int Id;
         public string Name;
+        public string Description;
+        public DocumentType DocumentType;
+        public DateTime UploadDate;
     }
 
 
@@ -94,6 +97,8 @@ namespace LMS.ViewModels
         public int NoOfModules { get; set; }
         public bool ShowModules { get; set; }
 
+        public List<DocumentListData> CourseDocuments { get; set; }
+        public int NoOfDocuments { get; set; }
         public bool ShowDocuments { get; set; }
 
         public string PostMessage { get; set; }
@@ -145,6 +150,8 @@ namespace LMS.ViewModels
         public int NoOfActivities { get; set; }
         public bool ShowActivities { get; set; }
 
+        public List<DocumentListData> ModuleDocuments { get; set; }
+        public int NoOfDocuments { get; set; }
         public bool ShowDocuments { get; set; }
 
         public List<AvailableModuleTime> AvailableTime { get; set; }
@@ -198,6 +205,8 @@ namespace LMS.ViewModels
         public string ModuleName { get; set; }
         public List<ActivityListData> ModuleActivities { get; set; }
 
+        public List<DocumentListData> ActivitiesDocuments { get; set; }
+        public int NoOfDocuments { get; set; }
         public bool ShowDocuments { get; set; }
 
         public List<AvailableActivityTime> AvailableTime { get; set; }
