@@ -1,4 +1,5 @@
-﻿using LMS.Models;
+﻿using System;
+using LMS.Models;
 
 namespace LMS.Repositories
 {    
@@ -38,8 +39,19 @@ namespace LMS.Repositories
             return db.Courses.Find(courseId).Name;
         }
 
+        internal static int? ActivityId2courseId(int? activityId)
+        {
+            return db.Courses.Find(db.Modules.Find(db.Activities.Find(activityId).ModuleId).CourseId).Id;
+        }
 
+        internal static int? ActivityId2moduleId(int? activityId)
+        {
+            return db.Modules.Find(db.Activities.Find(activityId).ModuleId).Id;
+        }
 
-
+        internal static int? ModuleId2courseId(int? moduleId)
+        {
+            return db.Courses.Find(db.Modules.Find(moduleId).CourseId).Id;
+        }
     }
 }

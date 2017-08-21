@@ -307,6 +307,11 @@ namespace LMS.ViewModels
         public string LongCourseName { get; set; }
         [DisplayName("Ägare")]
         public string UserName { get; set; }
+        // the following four used only to satisfy requirement from course-manage module-manage,  activity-manage which requires these as parameters
+        public int? _CourseId { get; set; }
+        public int? _ModuleId { get; set; }
+        public int? _ActivityId { get; set; }
+        public string _UserId { get; set; }
         // virtual fields for passing info back n forth
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }

@@ -63,7 +63,7 @@ namespace LMS.Repositories
         /// If Id is null or 0 a model for a new document is prepared. In this case one, and only one, of userId
         /// courseId, moduleId and activityId should be set --> The owner of the document
         /// </summary>
-        public static DocumentViewModel GetDocumentViewModel(int? Id, int? courseId, int? moduleId, int? activityId, string userId, string postMessage)
+        public static DocumentViewModel GetDocumentViewModel(int? Id, int? courseId, int? moduleId, int? activityId, string userId,string postMessage)
         {
             var documentViewModel = new DocumentViewModel();
             if (Id > 0)
@@ -105,17 +105,24 @@ namespace LMS.Repositories
                 documentViewModel.CourseName = dbRepo.ActivityId2courseName(documentViewModel.ActivityId);
                 documentViewModel.ModuleName = dbRepo.ActivityId2moduleName(documentViewModel.ActivityId);
                 documentViewModel.ActivityName = dbRepo.ActivityId2activityName(documentViewModel.ActivityId);
+                documentViewModel._CourseId = dbRepo.ActivityId2courseId(documentViewModel.ActivityId);
+                documentViewModel._ModuleId = dbRepo.ActivityId2moduleId(documentViewModel.ActivityId);
+                documentViewModel._ActivityId = documentViewModel.ActivityId;
             }
             else if (documentViewModel.ModuleId > 0)
             {
                 documentViewModel.SiblingDocuments = GetModuleDocumentListViewModel((int)documentViewModel.ModuleId);
                 documentViewModel.CourseName = dbRepo.ModuleId2courseName(documentViewModel.ModuleId);
                 documentViewModel.ModuleName = dbRepo.ModuleId2moduleName(documentViewModel.ModuleId);
+                documentViewModel._CourseId = dbRepo.ModuleId2courseId(documentViewModel.ModuleId);
+                documentViewModel._ModuleId = documentViewModel.ActivityId;
+
             }
             else if (documentViewModel.CourseId > 0)
             {
                 documentViewModel.SiblingDocuments = GetCourseDocumentListViewModel((int)documentViewModel.CourseId);
                 documentViewModel.CourseName = dbRepo.CourseId2courseName(documentViewModel.CourseId);
+                documentViewModel._CourseId = documentViewModel.CourseId;
             }
             //else !!! HANDLE ERROR !!!
 

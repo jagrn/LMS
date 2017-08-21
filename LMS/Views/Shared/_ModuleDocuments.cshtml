@@ -11,7 +11,7 @@
         <span>
                 
             @{
-                <a class="btn btn-sm greenButton" href="@Url.Action("Manage", "Activities", new { id = 0, courseId = Model.Id, getOperation = "New", viewMessage = "" })">+</a>
+                <a class="btn btn-sm greenButton" href="@Url.Action("Manage", "Documents", new { moduleId = Model.Id})">+</a>
             }
         </span>
        
@@ -22,7 +22,7 @@
                         {
                             <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                                 <p>
-                                    @module.StartDate &nbsp; <a href="@Url.Action("Manage", "Modules", new { id = module.Id, courseId = courseId, getOperation = "Load", viewMessage = "" })">@module.Name</a>
+                                    @module.StartDate &nbsp; <a href="@Url.Action("Manage", "Documents", new { id = module.Id, courseId = courseId, getOperation = "Load", viewMessage = "" })">@module.Name</a>
                                 </p>
                                 <p>@module.Description</p>
 

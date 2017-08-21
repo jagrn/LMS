@@ -134,24 +134,18 @@
                         }
                     }
                     @{
-                        int _id = 0;
-                        string _action ="";
                         if (Model.ActivityId > 0)
                         {
-                            _id = (int)Model.ActivityId;
-                            _action = "Activities";
+                            <a class="btn btn-default" href="@Url.Action("Manage", "Activities", new { id = Model.ActivityId, moduleId = Model._ModuleId, courseId = Model._CourseId, getOperation = "Load"})"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                         }
                         else if (Model.ModuleId > 0)
                         {
-                            _id = (int)Model.ModuleId;
-                            _action = "Modules";
+                            <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { id = Model.ModuleId, courseId = Model._CourseId, getOperation = "Load"})"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                         }
                         else if (Model.CourseId > 0)
                         {
-                            _id = (int)Model.CourseId;
-                            _action = "Courses";
+                            <a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { id = Model.CourseId, getOperation = "Load"})"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                         }
-                        <a class="btn btn-default" href="@Url.Action("Manage", _action, new { id = _id, getOperation = "Load"})"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>
                     }
                     <br />
 
