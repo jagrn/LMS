@@ -276,8 +276,8 @@ namespace LMS.Repositories
 
         // RETREIVE a list of non-planned periods within a given course time frame and including outside the course
         public static List<AvailableModuleTime> RetrieveModuleFreePeriods(int? courseId)
-        {
-            var course = db.Courses.Where(c => c.Id == courseId).ToList();
+        {           
+            var course = db.Courses.AsNoTracking().Where(c => c.Id == courseId).ToList();
             string validStart = " 08:30:00";
             string validEnd = " 16:30:00";
 

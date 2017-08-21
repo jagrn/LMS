@@ -220,8 +220,7 @@ namespace LMS.Controllers
                         viewModel.ModuleActivities = moduleActivityList.activityList;
                     }
 
-                    viewModel.NoOfActivities = ModuleRepo.RetrieveNoOfActivities(viewModel.Id);
-                    viewModel.AvailableTime = ModuleRepo.RetrieveModuleFreePeriods(viewModel.CourseId);
+                    viewModel.NoOfActivities = ModuleRepo.RetrieveNoOfActivities(viewModel.Id);                  
                 }
 
                 // Adjust the course span according to posted module
@@ -229,9 +228,14 @@ namespace LMS.Controllers
                 if (adjustResult == CourseRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                }          
+                }
 
-                switch (viewModel.PostNavigation)
+                if (viewModel.PostNavigation == "Save")
+                {
+                    viewModel.AvailableTime = ModuleRepo.RetrieveModuleFreePeriods(viewModel.CourseId);
+                }
+
+                    switch (viewModel.PostNavigation)
                 {
                     case "Save":
                         return View(viewModel);
