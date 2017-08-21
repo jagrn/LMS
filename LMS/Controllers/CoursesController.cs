@@ -42,7 +42,7 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult Manage(int? id, string getOperation, string viewMessage)
         {
-            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation == "Load")))
+            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New")))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -81,7 +81,7 @@ namespace LMS.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 viewModel.NoOfModules = courseModuleList.moduleList.Count;
-                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoODocuments(id, null, null);
+                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(id, null, null);
 
                 if ((getOperation == "Load") || (getOperation == "LoadMod"))
                 {
@@ -219,6 +219,14 @@ namespace LMS.Controllers
                     }
 
                     viewModel.NoOfModules = CourseRepo.RetrieveNoOfModules(viewModel.Id);
+
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
+                    {
+                        // Load view model with additional display info wrt course documents
+                        viewModel.CourseDocuments = DocumentRepo.RetrieveCourseDocumentList(viewModel.Id, null, null);
+                    }
+
+                    viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(viewModel.Id, null, null);
                 }
 
                 switch (viewModel.PostNavigation)

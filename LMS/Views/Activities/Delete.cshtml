@@ -49,13 +49,6 @@
                         @Html.DisplayFor(model => model.StartDate)
                     </dd>
 
-                    @*<dt>
-                        @Html.DisplayNameFor(model => model.EndDate)
-                        </dt>
-                        <dd>
-                        @Html.DisplayFor(model => model.EndDate)
-                        </dd>*@
-
                     <dt>
                         @Html.DisplayNameFor(model => model.Period)
                     </dt>
@@ -70,12 +63,6 @@
                         @Html.DisplayFor(model => model.SelectActivityType)
                     </dd>
 
-                    @*<dt>
-                        @Html.DisplayNameFor(model => model.Deadline)
-                        </dt>
-                        <dd>
-                        @Html.DisplayFor(model => model.Deadline)
-                        </dd>*@
                 </dl>
             }
             if (Model.DeleteType == "All")
@@ -100,3 +87,5 @@
         }
     </div>
 </div>
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "ActivityMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.Id, infoText = "" })

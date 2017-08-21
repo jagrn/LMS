@@ -205,7 +205,7 @@ namespace LMS.ViewModels
         public string ModuleName { get; set; }
         public List<ActivityListData> ModuleActivities { get; set; }
 
-        public List<DocumentListData> ActivitiesDocuments { get; set; }
+        public List<DocumentListData> ActivityDocuments { get; set; }
         public int NoOfDocuments { get; set; }
         public bool ShowDocuments { get; set; }
 
@@ -329,6 +329,15 @@ namespace LMS.ViewModels
         public List<DocumentListData> SiblingDocuments { get; set; }
     }
 
-
-
+    public class DocumentDeleteViewModel
+    {
+        public int Id { get; set; }
+        [DisplayName("Namn")]
+        public string Name { get; set; }
+        [DisplayName("Dokumenttyp")]
+        public DocumentType DocumentType { get; set; }
+        public int? CourseId { get; set; }
+        public int? ModuleId { get; set; }
+        public int? ActivityId { get; set; }
+    }
 }

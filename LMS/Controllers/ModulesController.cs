@@ -44,7 +44,7 @@ namespace LMS.Controllers
         // GET: Modules/Manage/5
         public ActionResult Manage(int? id, int? courseId, string getOperation, string viewMessage)
         {
-            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation == "Load"))
+            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New"))
                 || (courseId == 0) || (courseId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -85,7 +85,7 @@ namespace LMS.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 viewModel.NoOfActivities = moduleActivityList.activityList.Count;
-                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoODocuments(null, id, null);
+                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(courseId, id, null);
 
                 if ((getOperation == "Load") || (getOperation == "LoadAct"))
                 {
@@ -100,7 +100,7 @@ namespace LMS.Controllers
 
                 if ((getOperation == "Load") || (getOperation == "LoadDoc"))
                 {
-                    viewModel.ModuleDocuments = DocumentRepo.RetrieveCourseDocumentList(null, id, null);
+                    viewModel.ModuleDocuments = DocumentRepo.RetrieveCourseDocumentList(courseId, id, null);
                     viewModel.ShowDocuments = true;
                 }
                 else // getOperation == "LoadMini"/"LoadMod"
@@ -233,7 +233,15 @@ namespace LMS.Controllers
                         viewModel.ModuleActivities = moduleActivityList.activityList;
                     }
 
-                    viewModel.NoOfActivities = ModuleRepo.RetrieveNoOfActivities(viewModel.Id);                  
+                    viewModel.NoOfActivities = ModuleRepo.RetrieveNoOfActivities(viewModel.Id);
+
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
+                    {
+                        // Load view model with additional display info wrt module documents
+                        viewModel.ModuleDocuments = DocumentRepo.RetrieveCourseDocumentList(viewModel.CourseId, viewModel.Id, null);
+                    }
+
+                    viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(viewModel.CourseId, viewModel.Id, null);
                 }
 
                 // Adjust the course span according to posted module
