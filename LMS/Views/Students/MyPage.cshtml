@@ -6,14 +6,18 @@
     // Föreläsning / Datorbaserad / Inlämningsuppgift / Övningstillfälle / reserv
 }
 
-<br />
 
 @{
     var courseId = Model.CourseId;
     var moduleId = Model.ModuleId;
     var activityId = Model.ActivityId;
     var studentId = Model.StudentId;
+
+    var headBannerInfo = "Välkommen till din sida " + Model.StudentName;
 }
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "StudentMyPage", infoText = headBannerInfo })
+
 
 @{    
     <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Notiser (@Model.NoOfNotifications)</h4>
@@ -32,13 +36,13 @@
 }
 
 @*<h2>Week: @Model.SchemeWeek</h2>*@
-<h1>Välkommen till din sida @Model.StudentName</h1>
+@*<h1>Välkommen till din sida @Model.StudentName</h1>*@
 @Html.Action("Scheme", "Students", new { courseId = courseId, year = Model.SchemeYear, week = Model.SchemeWeek, moveWeek = Model.SchemeMoveWeek, myPageModuleId = Model.ModuleId, myPageActivityId = Model.ActivityId, myPageStudentId = Model.StudentId })
  
 <br />
 <br />
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col-md-offset-2 col-sm-offset-2">
             <h2>Detaljer om din kurs @Model.CourseName</h2>

@@ -2,8 +2,13 @@
 
 @{
     ViewBag.Title = "Index";
+    var headBannerInfo = "Kurser";
 }
 
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "CourseCatalogue", infoText = headBannerInfo })
+
+<div class="container">
 <h2>Kurser</h2>
 
 <p>
@@ -49,11 +54,11 @@
             @if (User.IsInRole("Teacher"))
             {
                 <td>
-                    @Html.ActionLink("Hantera", "Manage", "Courses", new { id = item.Id, getOperation = "Load" }, null)
+                    @Html.ActionLink("Hantera", "Manage", "Courses", new { id = item.Id, getOperation = "LoadMini" }, null)
                 </td>
             }
         </tr>
     }
     </table>
-
+</div>
 

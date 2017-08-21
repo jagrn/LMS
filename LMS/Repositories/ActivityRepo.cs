@@ -180,6 +180,81 @@ namespace LMS.Repositories
             return moduleActivityList;
         }
 
+        // RETREIVE a list of non-planned periods within a given module time frame
+        public static List<AvailableActivityTime> RetrieveActivityFreePeriods(int? moduleId)
+        {
+            var module = db.Modules.Where(m => m.Id == moduleId).ToList();
+            var modStart = module.First().StartDate;
+            var modEnd = module.First().EndDate;
+            
+            var block1start = DateTime.Parse(modStart.ToShortDateString() + " 08:30:00");
+            var block1end = DateTime.Parse(modStart.ToShortDateString() + " 12:00:00");
+            var block2start = DateTime.Parse(modStart.ToShortDateString() + " 13:00:00");
+            var block2end = DateTime.Parse(modStart.ToShortDateString() + " 16:30:00");
+
+            List<AvailableActivityTime> availabilityList = new List<AvailableActivityTime>();
+
+            while (block1start < modEnd)
+            {
+                bool freeAm = false;
+                bool freePm = false;
+                ActivityPeriod period;
+
+                if ((block1start >= modStart) && (block1end <= modEnd))
+                {
+                    freeAm = true;
+                    var result = IsActivitySpanValid(moduleId, 0, block1start, block1end);
+                    if (result == null)
+                    {
+                        AvailableActivityTime block = new AvailableActivityTime();
+                        block.Start = block1start;
+                        block.End = block1end;
+                        period = ActivityPeriod.AM;
+                        block.Period = (SelectActivityPeriod)period;
+                        availabilityList.Add(block);
+                    }
+                    else
+                    {
+                        freeAm = false;
+                    }
+                }
+                if ((block2start >= modStart) && (block2end <= modEnd))
+                {
+                    freePm = true;
+                    var result = IsActivitySpanValid(moduleId, 0, block2start, block2end);
+                    if (result == null)
+                    {
+                        AvailableActivityTime block = new AvailableActivityTime();
+                        block.Start = block2start;
+                        block.End = block2end;
+                        period = ActivityPeriod.FM;
+                        block.Period = (SelectActivityPeriod)period;
+                        availabilityList.Add(block);
+                    }
+                    else
+                    {
+                        freePm = false;
+                    }
+                }
+                if (freeAm && freePm)
+                {
+                    AvailableActivityTime block = new AvailableActivityTime();
+                    block.Start = block1start;
+                    block.End = block2end;
+                    period = ActivityPeriod.FullDay;
+                    block.Period = (SelectActivityPeriod)period;
+                    availabilityList.Add(block);
+                }
+
+                block1start = block1start.AddDays(1);
+                block1end = block1end.AddDays(1);
+                block2start = block2start.AddDays(1);
+                block2end = block2end.AddDays(1);
+
+            }
+            return availabilityList;
+        }
+
         // RETREIVE a list of activities (name + start + type) within a course and for a defined time period
         public static PeriodActivityList RetrievePeriodActivities(int? courseId, DateTime start, DateTime  end)
         {

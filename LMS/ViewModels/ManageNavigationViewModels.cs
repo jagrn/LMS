@@ -61,6 +61,21 @@ namespace LMS.ViewModels
         public ActivityPeriod ActivityPeriod;
     }
 
+    public struct AvailableActivityTime
+    {
+        public DateTime Start;
+        public DateTime End;
+        public SelectActivityPeriod Period;
+    }
+
+    public struct AvailableModuleTime
+    {
+        public DateTime Start;
+        public DateTime End;
+        public bool FixedStart;
+        public bool FixedEnd;
+    }
+
     public class CourseViewModel
     {
         public int Id { get; set; }
@@ -76,10 +91,17 @@ namespace LMS.ViewModels
         public List<CourseListData> AllCourses { get; set; }
         public int ModuleId { get; set; }
         public List<ModuleListData> CourseModules { get; set; }
+        public int NoOfModules { get; set; }
+        public bool ShowModules { get; set; }
+
+        public bool ShowDocuments { get; set; }
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
         public string PostOperation { get; set; }
+
+        //public List<Module> TestCourseModules1 { get; set; }             // TEMP TEST
+        //public List<Module> TestCourseModules2 { get; set; }             // TEMP TEST
     }
 
     public class CourseDeleteViewModel
@@ -107,8 +129,12 @@ namespace LMS.ViewModels
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         [DisplayName("Startdatum")]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [DisplayName("Slutdatum")]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
         public int CourseId { get; set; }
@@ -116,6 +142,12 @@ namespace LMS.ViewModels
         public List<ModuleListData> CourseModules { get; set; }
         public int ActivityId { get; set; }
         public List<ActivityListData> ModuleActivities { get; set; }
+        public int NoOfActivities { get; set; }
+        public bool ShowActivities { get; set; }
+
+        public bool ShowDocuments { get; set; }
+
+        public List<AvailableModuleTime> AvailableTime { get; set; }
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
@@ -165,6 +197,10 @@ namespace LMS.ViewModels
         public int ModuleId { get; set; }
         public string ModuleName { get; set; }
         public List<ActivityListData> ModuleActivities { get; set; }
+
+        public bool ShowDocuments { get; set; }
+
+        public List<AvailableActivityTime> AvailableTime { get; set; }
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
