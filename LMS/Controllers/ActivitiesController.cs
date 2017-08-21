@@ -55,6 +55,7 @@ namespace LMS.Controllers
             viewModel.PostMessage = viewMessage;
 
             // Load view model with activity specific info
+            viewModel.ShowDocuments = false;
             if (getOperation == "New")
             {
                 // Create new, reached from module views only              
@@ -82,13 +83,24 @@ namespace LMS.Controllers
                 viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
                 viewModel.Deadline = singleActivity.activity.Deadline;
 
-                if ((getOperation == "Load") || (getOperation == "LoadAct"))
+                //if ((getOperation == "Load") || (getOperation == "LoadAct"))
+                //{
+                //    viewModel.ShowDocuments = false;
+                //}
+                //else // getOperation == "LoadMini"/"LoadDoc"
+                //{
+                //    viewModel.ShowDocuments = true;
+                //}
+
+                if ((getOperation == "Load") || (getOperation == "LoadDoc"))
                 {
-                    viewModel.ShowDocuments = false;
-                }
-                else // getOperation == "LoadMini"/"LoadDoc"
-                {
+                    viewModel.ActivitiesDocuments = DocumentRepo.RetrieveCourseDocumentList(null, null, id);
                     viewModel.ShowDocuments = true;
+                }
+                else // getOperation == "LoadMini"/"LoadMod"
+                {
+                    viewModel.ActivitiesDocuments = null;
+                    viewModel.ShowDocuments = false;
                 }
             }
             

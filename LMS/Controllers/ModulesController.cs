@@ -55,6 +55,8 @@ namespace LMS.Controllers
             viewModel.PostMessage = viewMessage;
 
             // Load view model with module specific info
+            viewModel.ShowActivities = false;
+            viewModel.ShowDocuments = false;
             if (getOperation == "New")
             {
                 // Create new, reached from course views only              
@@ -83,6 +85,7 @@ namespace LMS.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 viewModel.NoOfActivities = moduleActivityList.activityList.Count;
+                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoODocuments(null, id, null);
 
                 if ((getOperation == "Load") || (getOperation == "LoadAct"))
                 {
@@ -94,9 +97,19 @@ namespace LMS.Controllers
                     viewModel.ModuleActivities = null;
                     viewModel.ShowActivities = false;
                 }
-            }
 
-            viewModel.ShowDocuments = false;
+                if ((getOperation == "Load") || (getOperation == "LoadDoc"))
+                {
+                    viewModel.ModuleDocuments = DocumentRepo.RetrieveCourseDocumentList(null, id, null);
+                    viewModel.ShowDocuments = true;
+                }
+                else // getOperation == "LoadMini"/"LoadMod"
+                {
+                    viewModel.ModuleDocuments = null;
+                    viewModel.ShowDocuments = false;
+                }
+
+            }
 
             // Load view model with additional display info wrt parent course
             var courseModuleList = ModuleRepo.RetrieveCourseModuleList(courseId);

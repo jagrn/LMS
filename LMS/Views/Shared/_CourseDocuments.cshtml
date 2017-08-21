@@ -7,32 +7,64 @@
 @{
     if (courseId != 0)
     {
-        <h4 class="page-header">Dokument (0)</h4> @*(@Model.CourseModules.Count)*@
+        <h4 class="page-header">Dokument (@Model.NoOfDocuments)</h4>
         <span>
                 
             @{
                 <a class="btn btn-sm greenButton" href="@Url.Action("Manage", "Documents", new { id = 0, courseId = Model.Id, viewMessage = "" })">+</a>
             }
-        </span>
-        
 
-                    @*if (courseId != 0 && Model.CourseModules != null)
+            @{
+                if (Model.NoOfDocuments > 0)
+                {
+                    string loadOperation = "";
+                    if (Model.ShowModules)
                     {
-                        foreach (var module in Model.CourseModules)
+                        if (Model.ShowDocuments)
                         {
-                            <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
-                                <p>
-                                    @module.StartDate &nbsp; <a href="@Url.Action("Manage", "Modules", new { id = module.Id, courseId = courseId, getOperation = "Load", viewMessage = "" })">@module.Name</a>
-                                </p>
-                                <p>@module.Description</p>
-
-                            </div>
-                            }
-
-
-
-                        }*@
-
+                            loadOperation = "LoadMini";
+                        }
+                        else
+                        {
+                            loadOperation = "LoadDoc";
+                        }
+                        <a class="btn btn-sm greenButton alignCourseBtnXRight btnFlip" href="@Url.Action("Manage", "Courses", new { id = courseId, getOperation = loadOperation, viewMessage = "" })">v</a>
                     }
+                    else
+                    {
+                        if (Model.ShowDocuments)
+                        {
+                            loadOperation = "LoadMod";
+                        }
+                        else
+                        {
+                            loadOperation = "Load";
+                        }
+                        <a class="btn btn-sm greenButton alignCourseBtnXRight" href="@Url.Action("Manage", "Courses", new { id = courseId, getOperation = loadOperation, viewMessage = "" })">v</a>
+                    }
+                }
+            }
+
+        </span>
+
+
+
+
+                if (Model.CourseDocuments != null)
+                {
+                    foreach (var module in Model.CourseDocuments)
+                    {
+                        <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+                            <p>
+                                @*@module.StartDate &nbsp; <a href="@Url.Action("Manage", "Modules", new { id = module.Id, courseId = courseId, getOperation = "LoadMini", viewMessage = "" })">@module.Name</a>*@
+                                <a class="btn btn-sm greenButtonSmall alignCourseBtnXRight" href="@Url.Action("Manage", "Documents", new { id = courseId, viewMessage = "" })">></a>&nbsp;&nbsp;&nbsp;@module.UploadDate.ToShortDateString()&nbsp;@module.UploadDate.TimeOfDay&nbsp;&nbsp;@module.Name
+                            </p>
+                            <p>&nbsp;&nbsp;@module.Description</p>
+                        </div>
+                    }
+                }
+
+
+        }
 
 }
