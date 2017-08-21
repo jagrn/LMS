@@ -56,6 +56,8 @@ namespace LMS.Controllers
                 // Create new, reached from course views only              
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
                 viewModel.EndDate = DateTime.Parse("2017-01-01");
+                viewModel.ShowModules = false;
+                viewModel.ShowDocuments = false;
             }           
             else // getOperation == "Load"/"LoadMini"/"LoadMod"/"LoadDoc"
             {
