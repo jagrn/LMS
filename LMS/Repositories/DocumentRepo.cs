@@ -75,6 +75,7 @@ namespace LMS.Repositories
                 }
                 documentViewModel.Id = dbDocument.Id;
                 documentViewModel.Name = dbDocument.Name;
+                documentViewModel.FileName = dbDocument.FileName;
                 documentViewModel.Description = dbDocument.Description;
                 documentViewModel.DocumentType = dbDocument.DokumentType;
                 documentViewModel.Format = dbDocument.Format;
@@ -151,6 +152,7 @@ namespace LMS.Repositories
                 dbDocument = new Document();
             }
             dbDocument.Name = documentViewModel.Name;
+            dbDocument.FileName = documentViewModel.FileName;
             dbDocument.Description = documentViewModel.Description;
             dbDocument.DokumentType = documentViewModel.DocumentType;
             dbDocument.Format = documentViewModel.Format;

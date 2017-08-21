@@ -282,6 +282,7 @@ namespace LMS.ViewModels
         [Required]
         [DisplayName("Namn")]
         public string Name { get; set; }
+        public string FileName { get; set; }
         [Required]
         [DisplayName("Beskrivning")]
         public string Description { get; set; }

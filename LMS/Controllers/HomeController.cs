@@ -1,8 +1,14 @@
-﻿using System;
+﻿using LMS.Models;
+using LMS.Repositories;
+using LMS.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
+
 
 namespace LMS.Controllers
 {
@@ -14,10 +20,29 @@ namespace LMS.Controllers
             //return View();
         }
 
-        public ActionResult About()
+        public ActionResult Upload()
         {
-            ViewBag.Message = "Your application description page.";
+            DocumentViewModel doc;
 
+            foreach (string upload in Request.Files)
+            {
+                if (Request.Files[upload].FileName != "") 
+               {
+                    string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
+                    string filename = Path.GetFileName(Request.Files[upload].FileName);
+                    Request.Files[upload].SaveAs(Path.Combine(path, filename));
+                    doc = DocumentRepo.GetDocumentViewModel(null, null, null, 1, null, null);
+                    doc.Name = filename;
+                    doc.FileName = filename;
+                    doc.Format = Path.GetExtension(filename);
+
+                    DocumentRepo.PostDocumentViewModel(doc);
+                    var s = Path.Combine(path, filename);
+                    System.Diagnostics.Process.Start(s);
+                    //System.Diagnostics.Process.Start("@" + Path.Combine(path, filename));
+
+                }
+            }
             return View();
         }
 

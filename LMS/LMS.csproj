@@ -302,6 +302,10 @@
     <Compile Include="Migrations\201708182207004_document model new prop Dokumenttype.Designer.cs">
       <DependentUpon>201708182207004_document model new prop Dokumenttype.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708211343135_new column document.filename.cs" />
+    <Compile Include="Migrations\201708211343135_new column document.filename.Designer.cs">
+      <DependentUpon>201708211343135_new column document.filename.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -340,6 +344,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -441,9 +447,11 @@
     <Content Include="Views\Shared\_CourseDocuments.cshtml" />
     <Content Include="Views\Shared\_ModuleDocuments.cshtml" />
     <Content Include="Views\Shared\_ActivityDocuments.cshtml" />
+    <Content Include="Views\Home\Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -504,6 +512,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708182207004_document model new prop Dokumenttype.resx">
       <DependentUpon>201708182207004_document model new prop Dokumenttype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211343135_new column document.filename.resx">
+      <DependentUpon>201708211343135_new column document.filename.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
