@@ -179,19 +179,35 @@ namespace LMS.Repositories
         // RETREIVE a list of documents (id + name + etc) for a course / module / activity
         public static List<DocumentListData> RetrieveCourseDocumentList(int? courseId, int? moduleId, int? activityId)
         {
-            var documents = db.Documents.Where(d => d.CourseId == courseId).Where(d => d.ModuleId == moduleId).Where(d => d.ActivityId == activityId).ToList();
-            var documentList = new List<DocumentListData>();
-            foreach (var doc in documents)
+            if (activityId > 0)
             {
-                DocumentListData courseDocument = new DocumentListData();
-                courseDocument.Id = doc.Id;
-                courseDocument.Name = doc.Name;
-                courseDocument.Description = doc.Description;
-                courseDocument.DocumentType = doc.DokumentType;
-                courseDocument.UploadDate = doc.UploadDate;
-                documentList.Add(courseDocument);
-            }           
-            return documentList;
+                return GetActivityDocumentListViewModel((int)activityId);
+            }
+            else if (moduleId > 0)
+            {
+                return GetModuleDocumentListViewModel((int)moduleId);
+            }
+            else if (courseId > 0)
+            {
+                return GetCourseDocumentListViewModel((int)courseId);
+            }
+            else
+                return null; //else !!! HANDLE ERROR !!!
+
+
+            //var documents = db.Documents.Where(d => d.CourseId == courseId).Where(d => d.ModuleId == moduleId).Where(d => d.ActivityId == activityId).ToList();
+            //var documentList = new List<DocumentListData>();
+            //foreach (var doc in documents)
+            //{
+            //    DocumentListData courseDocument = new DocumentListData();
+            //    courseDocument.Id = doc.Id;
+            //    courseDocument.Name = doc.Name;
+            //    courseDocument.Description = doc.Description;
+            //    courseDocument.DocumentType = doc.DokumentType;
+            //    courseDocument.UploadDate = doc.UploadDate;
+            //    documentList.Add(courseDocument);
+            //}           
+            //return documentList;
         }
 
         // RETREIVE number of documents for a course / module / activity

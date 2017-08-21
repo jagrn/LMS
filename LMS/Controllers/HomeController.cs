@@ -28,8 +28,12 @@ namespace LMS.Controllers
             {
                 if (Request.Files[upload].FileName != "") 
                {
+
+
+                    Guid g = Guid.NewGuid();
                     string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
-                    string filename = Path.GetFileName(Request.Files[upload].FileName);
+                    //string filename = Path.GetFileName(Request.Files[upload].FileName);
+                    string filename = Guid.NewGuid().ToString();
                     Request.Files[upload].SaveAs(Path.Combine(path, filename));
                     doc = DocumentRepo.GetDocumentViewModel(null, null, null, 1, null, null);
                     doc.Name = filename;
