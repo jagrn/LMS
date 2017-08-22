@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace LMS.ViewModels
 {
@@ -292,6 +293,7 @@ namespace LMS.ViewModels
         [DisplayName("Namn")]
         public string Name { get; set; }
         public string FileName { get; set; }
+        public string UploadedFileName { get; set; }
         [Required]
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
@@ -326,6 +328,7 @@ namespace LMS.ViewModels
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
         public string PostOperation { get; set; }
+        public HttpPostedFileBase UploadedFile { get; set; }
         // list of the other documents having the same owner (course or module etc...)
         public List<DocumentListData> SiblingDocuments { get; set; }
     }

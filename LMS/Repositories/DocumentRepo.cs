@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.IO;
 
 namespace LMS.Repositories
 {
@@ -63,7 +64,7 @@ namespace LMS.Repositories
         /// If Id is null or 0 a model for a new document is prepared. In this case one, and only one, of userId
         /// courseId, moduleId and activityId should be set --> The owner of the document
         /// </summary>
-        public static DocumentViewModel GetDocumentViewModel(int? Id, int? courseId, int? moduleId, int? activityId, string userId,string postMessage)
+        public static DocumentViewModel GetDocumentViewModel(int? Id, int? courseId, int? moduleId, int? activityId, string userId, string postMessage)
         {
             var documentViewModel = new DocumentViewModel();
             if (Id > 0)
@@ -127,7 +128,7 @@ namespace LMS.Repositories
             }
             //else !!! HANDLE ERROR !!!
 
-            documentViewModel.LongCourseName = string.Join(", ",new string[] { documentViewModel.CourseName, documentViewModel.ModuleName, documentViewModel.ActivityName });
+            documentViewModel.LongCourseName = string.Join(", ", new string[] { documentViewModel.CourseName, documentViewModel.ModuleName, documentViewModel.ActivityName });
 
             return documentViewModel;
         }
@@ -150,17 +151,25 @@ namespace LMS.Repositories
             else
             {
                 dbDocument = new Document();
+                dbDocument.CourseId = documentViewModel.CourseId;
+                dbDocument.ModuleId = documentViewModel.ModuleId;
+                dbDocument.ActivityId = documentViewModel.ActivityId;
+                dbDocument.UserId = documentViewModel.UserId;
             }
             dbDocument.Name = documentViewModel.Name;
-            dbDocument.FileName = documentViewModel.FileName;
             dbDocument.Description = documentViewModel.Description;
             dbDocument.DokumentType = documentViewModel.DocumentType;
-            dbDocument.Format = documentViewModel.Format;
             dbDocument.UploadDate = documentViewModel.UploadDate;
-            dbDocument.CourseId = documentViewModel.CourseId;
-            dbDocument.ModuleId = documentViewModel.ModuleId;
-            dbDocument.ActivityId = documentViewModel.ActivityId;
-            dbDocument.UserId = documentViewModel.UserId;
+
+
+            if (documentViewModel.UploadedFile != null)
+            {
+                string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
+                dbDocument.FileName = documentViewModel.UploadedFile.FileName;
+                dbDocument.UploadedFileName = Guid.NewGuid() + Path.GetExtension(dbDocument.FileName);
+                dbDocument.UploadedFileName = Path.Combine(path, dbDocument.UploadedFileName);
+                documentViewModel.UploadedFile.SaveAs(dbDocument.UploadedFileName);
+            }
 
             if (documentViewModel.Id > 0)
             {

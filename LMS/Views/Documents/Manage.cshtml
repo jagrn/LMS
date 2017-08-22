@@ -1,5 +1,35 @@
 ﻿@model LMS.ViewModels.DocumentViewModel
 
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#btnUploadFile').on('click', function () {
+            var data = new FormData();
+            var files = $("#fileUpload").get(0).files;
+            alert("EEE");
+            // Add the uploaded image content to the form data collection
+            if (files.length > 0) {
+                alert("FFFTTTTTTTTTTTTTTTTT");
+                data.append("UploadedImage", files[0]);
+            }
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: "/Documents/Manage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            //ajaxRequest.done(function (xhr, textStatus) {
+            //    // Do other operation
+            //});
+        });
+    });
+</script>
+
+
 
 @{
     var documentId = Model.Id;
@@ -102,6 +132,9 @@
                     }
                 }
 
+                <input type="file" name="Ladda upp dokument" id="fileUpload" />
+
+
                 @{
                     if (Model.PostMessage != "")
                     {
@@ -165,10 +198,10 @@
 
                     <!-- icons-->
                     @{
-                        if (documentId != 0)
+                        if (true) //documentId != 0)
                         {
-                            <button type="submit" class="btn btn-default saveButton" aria-label="Left Align">Uppdatera</button>
-
+                            @*<button type="submit" class="btn btn-default saveButton" id="btnUploadFile" aria-label="Left Align">Uppsdatera</button>*@
+                            <input type="button" class="btn btn-default saveButton" id="btnUploadFile" aria-label="Left Align" value="Uppsaadatera" />
                             @*<button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'Update', @activityId, @showDocuments)" aria-label="Left Align">
                                 Uppdatera
                             </button>*@

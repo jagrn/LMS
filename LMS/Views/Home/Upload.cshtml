@@ -13,7 +13,7 @@
             if (files.length > 0) {
                 data.append("UploadedImage", files[0]);
             }
-            // Make Ajax request with the contentType = false, and procesDate = false
+             //Make Ajax request with the contentType = false, and procesDate = false
             var ajaxRequest = $.ajax({
                 type: "POST",
                 url: "/Home/Upload",
@@ -27,7 +27,10 @@
         });
     });
 </script>
-<input type="file" name="Ladda upp dokument" id="fileUpload" /><br />
+
+<input type="file" name="Ladda upp dokument" id="fileUpload" />
+<br />
+@*<input id="btnUploadFile" type="submit" value="Xpload File" />*@
 <input id="btnUploadFile" type="button" value="Upload File" />
 
 @Html.ActionLink("Documents", "Downloads")

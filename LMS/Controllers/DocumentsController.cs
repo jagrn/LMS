@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using LMS.Models;
 using LMS.ViewModels;
 using LMS.Repositories;
+using System.IO;
 
 namespace LMS.Controllers
 {
@@ -101,7 +102,12 @@ namespace LMS.Controllers
             documentViewModel.SiblingDocuments = DocumentRepo.RetrieveCourseDocumentList(courseId, moduleId, activityId);
             return View(documentViewModel);
         }
-
+        //public ActionResult Manage([Bind(Include = "Id,Name,Description,Format,UploadDate,CourseId,ModuleId,ActivityId,UserId,PostMessage,PostNavigation,PostOperation")] ActivityViewModel viewModel)
+[HttpPost]
+        public ActionResult Manage()
+        {
+            return View();
+        }
         // POST: Activities/Manage/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -126,7 +132,43 @@ namespace LMS.Controllers
             else
                 documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
 
+            if (Request.Files.Count>0)
+            {
+                documentViewModel.UploadedFile = Request.Files[0];
+            }
+            foreach (string upload in Request.Files)
+
+            {
+                if (Request.Files[upload].FileName != "")
+                {
+                    
+                    Guid g = Guid.NewGuid();
+                    string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
+                    string fileName = Path.GetFileName(Request.Files[upload].FileName);
+                    string fileExt = Path.GetExtension(fileName);
+
+                    var doc = DocumentRepo.GetDocumentViewModel(null, null, null, 1, null, null);
+                    doc.Name = fileName;
+                    doc.FileName = fileName;
+                    doc.Format = Path.GetExtension(fileName);
+                    fileName = Guid.NewGuid().ToString() + doc.Format;
+                    Request.Files[upload].SaveAs(Path.Combine(path, fileName));
+
+                    DocumentRepo.PostDocumentViewModel(doc);
+                    var s = Path.Combine(path, fileName);
+                    System.Diagnostics.Process.Start(s);
+                    //System.Diagnostics.Process.Start("@" + Path.Combine(path, filename));
+                }
+            }
+
+
+
             // SPARA SKER HÄR
+
+
+
+
+
             documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
 
             return RedirectToAction("Manage", new { id = documentViewModel.Id });
