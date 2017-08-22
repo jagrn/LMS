@@ -20,7 +20,7 @@
 
         else
         {
-            thisLoadOrder = "LoadMod";
+            thisLoadOrder = "LoadAct";
         }
     }
     else
@@ -242,7 +242,10 @@
     </div>
 
 }
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-        }
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "ModuleMgmnt", id1 = Model.CourseId, id2 = Model.Id, infoText = "" })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 

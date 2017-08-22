@@ -97,6 +97,8 @@ namespace LMS.Controllers
         public ActionResult Manage(int? id, int? activityId, int? moduleId, int? courseId, string userId, string viewMessage)
         {
             DocumentViewModel documentViewModel = DocumentRepo.GetDocumentViewModel(id, courseId, moduleId, activityId, userId, viewMessage);
+
+            documentViewModel.SiblingDocuments = DocumentRepo.RetrieveCourseDocumentList(courseId, moduleId, activityId);
             return View(documentViewModel);
         }
 
@@ -120,9 +122,9 @@ namespace LMS.Controllers
             // End of input validation
 
             if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
-                documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat (byt meddelande efter testperiod)";
+                documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
             else
-                documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparad";
+                documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
 
             // SPARA SKER HÄR
             documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
@@ -134,7 +136,7 @@ namespace LMS.Controllers
         //
 
         // GET: Documents/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, int? activityId, int? moduleId, int? courseId)
         {
             if (id == null)
             {
@@ -145,18 +147,29 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
-            return View(document);
+
+            DocumentDeleteViewModel viewModel = new DocumentDeleteViewModel();
+            viewModel.Id = document.Id;
+            viewModel.Name = document.Name;
+            viewModel.DocumentType = document.DokumentType;
+            viewModel.CourseId = courseId;
+            viewModel.ModuleId = moduleId;
+            viewModel.ActivityId = activityId;         
+            return View(viewModel);
         }
 
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, int? courseId, int? moduleId, int? activityId )
         {
             Document document = db.Documents.Find(id);
             db.Documents.Remove(document);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            string message = "Dokumentet " + document.Name + " är borttaget";
+
+            return RedirectToAction("Manage", "Documents", new { courseId = courseId, moduleId = moduleId, activityId = activityId, viewMessage = message });
         }
 
         protected override void Dispose(bool disposing)

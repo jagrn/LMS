@@ -43,7 +43,7 @@ namespace LMS.Controllers
         // GET: Activities/Manage/5
         public ActionResult Manage(int? id, int? moduleId, int? courseId, string getOperation, string viewMessage)
         {
-            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation == "Load"))
+            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New"))
                 || (moduleId == 0) || (moduleId == null) || (courseId == 0) || (courseId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -55,6 +55,7 @@ namespace LMS.Controllers
             viewModel.PostMessage = viewMessage;
 
             // Load view model with activity specific info
+            viewModel.ShowDocuments = false;
             if (getOperation == "New")
             {
                 // Create new, reached from module views only              
@@ -82,13 +83,17 @@ namespace LMS.Controllers
                 viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
                 viewModel.Deadline = singleActivity.activity.Deadline;
 
-                if ((getOperation == "Load") || (getOperation == "LoadAct"))
+                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(courseId, moduleId, id);
+
+                if ((getOperation == "Load") || (getOperation == "LoadDoc"))
                 {
-                    viewModel.ShowDocuments = false;
-                }
-                else // getOperation == "LoadMini"/"LoadDoc"
-                {
+                    viewModel.ActivityDocuments = DocumentRepo.RetrieveCourseDocumentList(courseId, moduleId, id);
                     viewModel.ShowDocuments = true;
+                }
+                else // getOperation == "LoadMini"/"LoadMod"
+                {
+                    viewModel.ActivityDocuments = null;
+                    viewModel.ShowDocuments = false;
                 }
             }
             
@@ -231,6 +236,14 @@ namespace LMS.Controllers
                     viewModel.ModuleName = ModuleRepo.RetrieveModuleName(viewModel.ModuleId);
 
                     viewModel.AvailableTime = ActivityRepo.RetrieveActivityFreePeriods(viewModel.ModuleId);
+
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
+                    {
+                        // Load view model with additional display info wrt activity documents
+                        viewModel.ActivityDocuments = DocumentRepo.RetrieveCourseDocumentList(viewModel.CourseId, viewModel.ModuleId, viewModel.Id);
+                    }
+
+                    viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(viewModel.CourseId, viewModel.ModuleId, viewModel.Id);
                 }
 
                 switch (viewModel.PostNavigation)

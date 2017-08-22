@@ -52,7 +52,8 @@
                 <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                     <p>
                         @*@activity.StartDate &nbsp; <a href="@Url.Action("Manage", "Activities", new { id = activity.Id, moduleId = Model.Id, courseId = Model.CourseId, getOperation = "Load", viewMessage = "" })">@activity.Name</a>*@
-                        <a class="btn btn-sm greenButtonSmall alignCourseBtnXRight" href="@Url.Action("Manage", "Activities", new { id = activity.Id, moduleId = Model.Id, courseId = Model.CourseId, getOperation = "LoadMini", viewMessage = "" })">></a>&nbsp;&nbsp;&nbsp;@activity.StartDate.ToShortDateString()&nbsp;@activity.StartDate.TimeOfDay&nbsp;&nbsp;@activity.Name
+                        <a class="btn btn-sm greenButtonSmall alignCourseBtnXRight" href="@Url.Action("Manage", "Activities", new { id = activity.Id, moduleId = Model.Id, courseId = Model.CourseId, getOperation = "LoadMini", viewMessage = "" })">></a>
+                        &nbsp;&nbsp;&nbsp;@activity.StartDate.ToShortDateString()&nbsp;@activity.StartDate.TimeOfDay&nbsp;&nbsp;@activity.Name
                     </p>
                     <p>&nbsp;&nbsp;@activity.Description</p>
 

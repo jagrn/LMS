@@ -15,9 +15,11 @@
 
 @{ 
     string showDocuments = "'false'";
+    string thisLoadOrder = "LoadMini";
     if (Model.ShowDocuments)
     {
         showDocuments = "'true'";
+        thisLoadOrder = "LoadDoc";
     }
 }
 
@@ -48,11 +50,11 @@
                         {
                             if (activity.Id == Model.Id)
                             {                              
-                                    <li class="active">@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })</li>                             
+                                    <li class="active">@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = thisLoadOrder })</li>                             
                             }
                             else
                             {
-                                    <li>@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "Load" })</li>
+                                    <li>@Html.ActionLink(activity.Name, "Manage", new { id = activity.Id, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "LoadMini" })</li>
                             }
                         }
                         </ul>
@@ -216,7 +218,9 @@
             }
 
 
-            @section Scripts {
-                @Scripts.Render("~/bundles/jqueryval")
-            }
+@Html.Action("FootBanner", "CommonLOs", new { origin = "ActivityMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.Id, infoText = "" })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 

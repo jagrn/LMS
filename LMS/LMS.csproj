@@ -448,6 +448,8 @@
     <Content Include="Views\Shared\_ModuleDocuments.cshtml" />
     <Content Include="Views\Shared\_ActivityDocuments.cshtml" />
     <Content Include="Views\Home\Upload.cshtml" />
+    <Content Include="Views\CommonLOs\FootBannerOld .cshtml" />
+    <Content Include="Views\CommonLOs\FootBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

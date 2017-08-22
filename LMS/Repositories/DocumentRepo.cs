@@ -211,7 +211,7 @@ namespace LMS.Repositories
         }
 
         // RETREIVE number of documents for a course / module / activity
-        public static int RetrieveNoODocuments(int? courseId, int? moduleId, int? activityId)
+        public static int RetrieveNoOfDocuments(int? courseId, int? moduleId, int? activityId)
         {
             var documents = db.Documents.Where(d => d.CourseId == courseId).Where(d => d.ModuleId == moduleId).Where(d => d.ActivityId == activityId).ToList();
             if (documents == null)
