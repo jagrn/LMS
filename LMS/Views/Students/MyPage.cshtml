@@ -18,6 +18,7 @@
 
 @Html.Action("HeadBanner", "CommonLOs", new { origin = "StudentMyPage", infoText = headBannerInfo })
 
+
 <div class="container">
 <button type="button" class="btn btn-secondary page-header notesModalButton" data-toggle="modal" data-target="#exampleModalLong">
     Notiser (@Model.NoOfNotifications)
@@ -45,18 +46,23 @@
                             {
                                 <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
                                     <p>
-                                        @notification.ChangeText &nbsp; <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activityId })">Ok</a>
+                                        @notification.ChangeText &nbsp;
+                                        <a href="@Url.Action("ReadNote", "Students", new { moduleId = moduleId, activityId = activityId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, schemeMoveWeek = Model.SchemeMoveWeek, noteId = notification.Id })">Ok</a>
                                     </p>
                                 </div>
                             }
+                        }
+                        if (Model.NoOfNotifications == 0)
+                        {
+                            <p>Du har inga aktuella notiser för närvarande</p>
                         }
                     }
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary notesModalButton" data-dismiss="modal">Stäng</button>
-                <button type="button" class="btn btn-secondary notesModalButton">Ok alla</button>
-                @*<button type="button" class="btn btn-primary notesModelButton">Bekräfta</button>*@
+                <button type="button" class="btn btn-secondary notesModalButton">
+                @Html.ActionLink("Ok alla", "ReadAllNotes", "Students", new { moduleId = moduleId, activityId = activityId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, schemeMoveWeek = Model.SchemeMoveWeek }, null)</button>
             </div>
         </div>
     </div>

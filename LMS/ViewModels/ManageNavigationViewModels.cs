@@ -250,6 +250,7 @@ namespace LMS.ViewModels
         public int ActivityId { get; set; }
         public string StudentId { get; set; }
         public string CourseName { get; set; }
+        public string CourseDescription { get; set; }
         public string StudentName { get; set; }
         public Module Module { get; set; }
         public Activity Activity { get; set; }
