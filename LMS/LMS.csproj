@@ -229,6 +229,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -395,6 +396,13 @@
     <Content Include="Views\AdminUsers\Index.cshtml" />
     <Content Include="Views\AdminUsers\EditUser.cshtml" />
     <Content Include="Views\AdminUsers\CreateUser.cshtml" />
+    <Content Include="Views\AdminUsers\ListTeachers.cshtml" />
+    <Content Include="Views\AdminUsers\ListStudents.cshtml" />
+    <Content Include="Views\Students\ListStudents.cshtml" />
+    <Content Include="Views\Students\Test.cshtml" />
+    <Content Include="Views\AdminUsers\CreateNewUser.cshtml" />
+    <Content Include="Views\Shared\_ListEnrolledStudents.cshtml" />
+    <Content Include="Views\Test\_ListEnrolledStudents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

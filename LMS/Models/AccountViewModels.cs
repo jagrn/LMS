@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using LMS.Repositories;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
 
 namespace LMS.Models
 {
@@ -114,18 +114,29 @@ namespace LMS.Models
         [Display(Name = "Kurs")]
         public int? CourseId { get; set; }
 
-        [Display(Name = "Roll")]
-        public string UserRole { get; set; }
 
-        [Display(Name = "Kurser")]
-        public IEnumerable<System.Web.Mvc.SelectListItem> Courses
+        [Display(Name = "Kursnamn")]
+        public string CourseName
         {
             get
             {
-                ApplicationDbContext db = new ApplicationDbContext();
-                return new System.Web.Mvc.SelectList(db.Courses, "Id", "Name");
+                if (this.CourseId != null)
+                {
+                    return CourseRepo.RetrieveCourseName(this.CourseId);
+                }
+                else
+                {
+                    return "";
+
+                }
+                
             }
-        }
+         }
+
+
+        [Display(Name = "Roll")]
+        public string UserRole { get; set; }
+     
     }
 
 
@@ -148,5 +159,23 @@ namespace LMS.Models
 
     public class EditUserViewModel : UserBaseView 
     {
+     
+    }
+
+    public class StudentListViewModel
+    {
+      
+        [Display(Name = "Förnamn")]
+        public string FirstName { get; set; }
+
+ 
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
+
+
+        [EmailAddress]
+        [Display(Name = "Användarnamn/mailadress")]
+        public string Email { get; set; }
+
     }
 }

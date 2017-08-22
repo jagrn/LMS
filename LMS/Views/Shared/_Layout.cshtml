@@ -37,8 +37,28 @@
                     <ul class="nav navbar-nav">
                         @if (User.IsInRole("Teacher"))
                         {
-                        <li>@Html.ActionLink("Kurser", "Index", "Courses")</li>
-                        <li>@Html.ActionLink("Användare", "CreateUser", "AdminUsers")</li>
+                            <li>@Html.ActionLink("Kurser", "Index", "Courses")</li>
+                            <li>@Html.ActionLink("Användare", "CreateUser", "AdminUsers")</li>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li>@Html.ActionLink("Min sida", "MyPage", "Students")</li>
+                            <li>@Html.ActionLink("Kursdeltagare", "ListStudents", "Students")</li>
+                        }
+                        @if (User.IsInRole("Teacher"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Användare<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                             
+                                        <li>@Html.ActionLink("Lägg till ny elev", "CreateNewUser", "AdminUsers")</li>
+                                        <li>@Html.ActionLink("Lista och sök elever", "ListStudents", "AdminUsers")</li>
+                                        <li>@Html.ActionLink("Lägg till ny lärare", "CreateNewUser", "AdminUsers", new { userType = "Teacher" }, null)</li>
+                                        <li>@Html.ActionLink("Lista och sök lärare", "ListTeachers", "AdminUsers")</li>
+                                
+                        
+                                </ul>
+                            </li>
                         }
 
                     </ul>
@@ -47,15 +67,15 @@
             </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
-        @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - An example LMS Application</p>
-        </footer>*@
-    </div>
+            @RenderBody()
+            @*<hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - An example LMS Application</p>
+                </footer>*@
+     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
 </body>
 </html>
