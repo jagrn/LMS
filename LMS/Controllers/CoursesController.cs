@@ -15,6 +15,7 @@ namespace LMS.Controllers {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Courses
+        [Authorize(Roles = "Teacher")]
         public ActionResult Index(string searchString, string sortOrder, string courseDate, int? page) {
             IQueryable<CourseViewModel> query;
             List<CourseViewModel> resultList;

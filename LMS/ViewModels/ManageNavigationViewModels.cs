@@ -57,15 +57,17 @@ namespace LMS.ViewModels
     public class CourseViewModel
     {
         public int Id { get; set; }
-        [DisplayName("Namn")]
+        [DisplayName("Kursnamn")]
         public string Name { get; set; }
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         [DisplayName("Startdatum")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", 
+            ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [DisplayName("Slutdatum")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", 
+            ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
         public List<CourseListData> AllCourses { get; set; }
