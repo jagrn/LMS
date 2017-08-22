@@ -121,15 +121,19 @@ namespace LMS.Controllers
             }
             // End of input validation
 
-            if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
-                documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
+            string postMessage = "";
+            if (documentViewModel.Id > 0)
+                //documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
+                postMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
             else
-                documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
+                //documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
+                postMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
 
-            // SPARA SKER HÄR
+            // Save changes
             documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
 
-            return RedirectToAction("Manage", new { id = documentViewModel.Id });
+            var document = db.Documents.Find(documentViewModel.Id);
+            return RedirectToAction("Manage", new { id = documentViewModel.Id, courseId = document.CourseId, moduleId = document.ModuleId, activityId = document.ActivityId, viewMessage = postMessage });
         }
         //
         // end manage
