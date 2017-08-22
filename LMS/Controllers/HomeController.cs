@@ -28,23 +28,20 @@ namespace LMS.Controllers
             {
                 if (Request.Files[upload].FileName != "") 
                {
-
-
                     Guid g = Guid.NewGuid();
                     string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
-                    //string filename = Path.GetFileName(Request.Files[upload].FileName);
-                    string filename = Guid.NewGuid().ToString();
-                    Request.Files[upload].SaveAs(Path.Combine(path, filename));
+                    string filename = Path.GetFileName(Request.Files[upload].FileName);
                     doc = DocumentRepo.GetDocumentViewModel(null, null, null, 1, null, null);
                     doc.Name = filename;
                     doc.FileName = filename;
                     doc.Format = Path.GetExtension(filename);
+                    filename = Guid.NewGuid().ToString() + doc.Format;
+                    Request.Files[upload].SaveAs(Path.Combine(path, filename));
 
                     DocumentRepo.PostDocumentViewModel(doc);
                     var s = Path.Combine(path, filename);
                     System.Diagnostics.Process.Start(s);
                     //System.Diagnostics.Process.Start("@" + Path.Combine(path, filename));
-
                 }
             }
             return View();
