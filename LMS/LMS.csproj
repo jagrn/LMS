@@ -224,11 +224,14 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\AdminUsersController.cs" />
+    <Compile Include="Controllers\CommonLOsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -276,10 +279,35 @@
     <Compile Include="Migrations\201708141802322_Rename to StudentNotification.Designer.cs">
       <DependentUpon>201708141802322_Rename to StudentNotification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708161411040_Documents.cs" />
+    <Compile Include="Migrations\201708161411040_Documents.Designer.cs">
+      <DependentUpon>201708161411040_Documents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708161423135_Document fields allow nulls.cs" />
+    <Compile Include="Migrations\201708161423135_Document fields allow nulls.Designer.cs">
+      <DependentUpon>201708161423135_Document fields allow nulls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708161427007_Document.Doc added.cs" />
+    <Compile Include="Migrations\201708161427007_Document.Doc added.Designer.cs">
+      <DependentUpon>201708161427007_Document.Doc added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708170603457_Document model modify.cs" />
+    <Compile Include="Migrations\201708170603457_Document model modify.Designer.cs">
+      <DependentUpon>201708170603457_Document model modify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.cs" />
+    <Compile Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.Designer.cs">
+      <DependentUpon>201708170635007_Added ICollection Documents to course, module, activity, person,.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708182207004_document model new prop Dokumenttype.cs" />
+    <Compile Include="Migrations\201708182207004_document model new prop Dokumenttype.Designer.cs">
+      <DependentUpon>201708182207004_document model new prop Dokumenttype.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Module.cs" />
@@ -288,10 +316,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActivityRepo.cs" />
     <Compile Include="Repositories\CourseRepo.cs" />
+    <Compile Include="Repositories\dbRepo.cs" />
+    <Compile Include="Repositories\DocumentRepo.cs" />
     <Compile Include="Repositories\ModuleRepo.cs" />
     <Compile Include="Repositories\NotificationRepo.cs" />
     <Compile Include="Repositories\StudentRepo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CommonLOViewModels.cs" />
     <Compile Include="ViewModels\ManageNavigationViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +345,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\lmsScript.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\postNavigation.js" />
     <Content Include="Scripts\respond.js" />
@@ -395,6 +427,30 @@
     <Content Include="Views\AdminUsers\Index.cshtml" />
     <Content Include="Views\AdminUsers\EditUser.cshtml" />
     <Content Include="Views\AdminUsers\CreateUser.cshtml" />
+    <Content Include="Views\Documents\Create.cshtml" />
+    <Content Include="Views\Documents\Delete.cshtml" />
+    <Content Include="Views\Documents\Details.cshtml" />
+    <Content Include="Views\Documents\Edit.cshtml" />
+    <Content Include="Views\Documents\Index.cshtml" />
+    <Content Include="Views\Documents\Manage.cshtml" />
+    <Content Include="Views\CommonLOs\HeadBanner.cshtml" />
+    <Content Include="Views\Activities\Manage_BACKUP_0819.cshtml" />
+    <Content Include="Views\Courses\Manage_BACKUP_0819.cshtml" />
+    <Content Include="Views\Modules\Manage_BACKUP_0819.cshtml" />
+    <Content Include="Views\Shared\_Modules_BACKUP_0819.cshtml" />
+    <Content Include="Views\Shared\_Activities_BACKUP_0819.cshtml" />
+    <Content Include="Views\Shared\_CourseDocuments.cshtml" />
+    <Content Include="Views\Shared\_ModuleDocuments.cshtml" />
+    <Content Include="Views\Shared\_ActivityDocuments.cshtml" />
+    <Content Include="Views\CommonLOs\FootBannerOld .cshtml" />
+    <Content Include="Views\CommonLOs\FootBanner.cshtml" />
+    <Content Include="Views\AdminUsers\ListTeachers.cshtml" />
+    <Content Include="Views\AdminUsers\ListStudents.cshtml" />
+    <Content Include="Views\Students\ListStudents.cshtml" />
+    <Content Include="Views\Students\Test.cshtml" />
+    <Content Include="Views\AdminUsers\CreateNewUser.cshtml" />
+    <Content Include="Views\Shared\_ListEnrolledStudents.cshtml" />
+    <Content Include="Views\Test\_ListEnrolledStudents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -440,6 +496,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708141802322_Rename to StudentNotification.resx">
       <DependentUpon>201708141802322_Rename to StudentNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708161411040_Documents.resx">
+      <DependentUpon>201708161411040_Documents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708161423135_Document fields allow nulls.resx">
+      <DependentUpon>201708161423135_Document fields allow nulls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708161427007_Document.Doc added.resx">
+      <DependentUpon>201708161427007_Document.Doc added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708170603457_Document model modify.resx">
+      <DependentUpon>201708170603457_Document model modify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708170635007_Added ICollection Documents to course, module, activity, person,.resx">
+      <DependentUpon>201708170635007_Added ICollection Documents to course, module, activity, person,.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708182207004_document model new prop Dokumenttype.resx">
+      <DependentUpon>201708182207004_document model new prop Dokumenttype.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

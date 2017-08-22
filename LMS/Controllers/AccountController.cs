@@ -87,6 +87,7 @@ namespace LMS.Controllers
                         //StudentRepo.FakeStudentFullName(studentId);
 
                         int courseId = StudentRepo.GetStudentCourse(studentId);
+                
                         return RedirectToAction("MyPage", "Students", new { courseId = courseId, studentId = studentId, schemeMoveWeek = 0, fromMyPage = false });
                     }
                     else

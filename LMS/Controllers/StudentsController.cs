@@ -1,14 +1,17 @@
-﻿using LMS.Repositories;
+﻿using LMS.Models;
+using LMS.Repositories;
 using LMS.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LMS.Controllers
 {
+
+
     public struct PeriodData
     {
         public int Year;
@@ -19,9 +22,17 @@ namespace LMS.Controllers
 
     public class StudentsController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: Students/MyPage
         public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek, bool fromMyPage)
         {
+            //Get currentUser in order to get courseId
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            courseId = currentUser.CourseId;
+            studentId = currentUser.UserName;
+
             if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -135,6 +146,80 @@ namespace LMS.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Student")]
+        public ActionResult ListStudents(string sortOrder)
+        {
+
+            IQueryable<StudentListViewModel> query;
+            List<StudentListViewModel> resultList;
+
+            //Get currentUser in order to get courseId
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            
+            if (currentUser.CourseId != null)
+            {
+                query = from u in db.Users
+                        where u.CourseId == currentUser.CourseId
+                        select new StudentListViewModel()
+                        {
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email
+
+                        };
+
+                //Toggle sortorder
+                ViewBag.SortLastName = sortOrder == "LastName_desc" ?  "LastName" : "LastName_desc";
+                ViewBag.SortFirstName = sortOrder == "FirstName" ? "FirstName_desc" : "FirstName";
+                ViewBag.SortEmail = sortOrder == "Email" ? "Email_desc" : "Email";
+
+                switch (sortOrder)
+                {
+                    case "LastName":
+                        query = query.OrderBy(s => s.LastName);
+                        break;
+                    case "LastName_desc":
+                        query = query.OrderByDescending(s => s.LastName);
+                        break;
+                    case "FirstName":
+                        query = query.OrderBy(s => s.FirstName);
+                        break;
+                    case "FirstName_desc":
+                        query = query.OrderByDescending(s => s.FirstName);
+                        break;
+                    case "Email":
+                        query = query.OrderBy(s => s.Email);
+                        break;
+                    case "Email_desc":
+                        query = query.OrderByDescending(s => s.Email);
+                        break;
+                     default:
+                        query = query.OrderBy(s => s.LastName);
+                        break;
+                }
+
+   
+                
+                resultList = query.ToList();
+                ViewBag.Count = resultList.Count();
+                return View(resultList.ToList());
+
+            }
+            else
+            {
+                ViewBag.Count = 0;
+                return View(new List<StudentListViewModel>().DefaultIfEmpty());
+            }
+          
+            
+
+        }
+
+        public ActionResult Test()
+        {
+            return View();
+        }
         private DateTime GetMonday(int year, int week)
         {
             /// Converts a week number to corresponding monday date.

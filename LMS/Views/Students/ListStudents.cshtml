@@ -1,0 +1,60 @@
+﻿@model IEnumerable<LMS.Models.StudentListViewModel>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <h2>Kursdeltagare</h2>
+            <br />
+            <p>Antal deltagare @ViewBag.Count</p>
+
+        </div>
+        </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <table class="table">
+                <tr>
+                    <th>
+                        <a href="@Url.Action("ListStudents",new { sortOrder = ViewBag.SortLastName })">@Html.DisplayNameFor(model => model.LastName)</a>
+
+
+                    </th>
+                    <th>
+                        <a href="@Url.Action("ListStudents", new { sortOrder = ViewBag.SortFirstName })">@Html.DisplayNameFor(model => model.FirstName)</a>
+
+                    </th>
+                    <th>
+                        <a href="@Url.Action("ListStudents", new { sortOrder = ViewBag.SortEmail })">@Html.DisplayNameFor(model => model.Email)</a>
+
+                    </th>
+
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+
+</div>

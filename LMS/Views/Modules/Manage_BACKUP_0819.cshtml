@@ -1,0 +1,203 @@
+﻿@model LMS.ViewModels.ModuleViewModel
+
+@{
+    ViewBag.Title = "Manage";
+}
+
+@{
+    var moduleId = Model.Id;
+    var clearDate = "'2017-01-01'";
+    var headBannerInfo = "Hantera moduler för kursen " + @Model.CourseName;
+}
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "ModuleMgmnt", id1 = Model.CourseId, id2 = Model.Id, infoText = headBannerInfo })
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    //First container to include input section and module information
+    <div class="container">
+
+        <div class="row">
+
+
+            <div class="col-md-3">
+                <!--menu-->
+                @*<h4>Moduler för @Model.CourseName:</h4>*@
+                <h4 class="page-header">Moduler</h4>
+
+                <ul class="nav nav-pills nav-stacked">
+                @foreach (var module in Model.CourseModules)
+                    {
+                    if (module.Id == Model.Id)
+                    {
+                            <li class="active">@Html.ActionLink(module.Name, "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink(module.Name, "Manage", new { id = module.Id, courseId = Model.CourseId, getOperation = "Load" })</li>
+                        }
+                    }
+                </ul>
+            </div><!--end menu-->
+           
+            <div class="form-horizontal col-md-7">
+                @*<h2>Hantera moduler för @Model.CourseName</h2>*@
+                
+                @{
+                    if (moduleId == 0)
+                    {
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Skapa ny modul</h4>*@
+                        <h4 class="page-header">Skapa ny modul</h4>
+                    }
+                    else
+                    {
+                        @*<h4 class="page-header"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Redigera modulen @Model.Name</h4>*@
+                        <h4 class="page-header">Redigera modulen @Model.Name</h4>
+                    }
+                }
+          
+                @{
+                    if (Model.PostMessage != "")
+                    {
+                        <h5 class="text-danger">@Model.PostMessage</h5>
+                    }
+                }
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.PostNavigation)
+                @Html.HiddenFor(model => model.PostOperation)
+                @Html.HiddenFor(model => model.PostMessage)
+                @Html.HiddenFor(model => model.CourseId)
+                @Html.HiddenFor(model => model.ActivityId)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control " } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 " })
+                    <div class="col-md-10">
+
+                        @Html.TextAreaFor(model => model.Description, 6, 40, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div>
+                    <!--buttons-->
+                    <br />
+                    @*POST buttons for save (new or update) and return to manage course view
+                @{
+                    if (moduleId == 0)
+                    {
+                        <p class="btn btn-default">SAVE(U)/R</p>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'Update', @moduleId, 0)">SAVE(U)/R</button>
+                    }
+                }
+                <button type="submit" class="btn btn-default" onclick="PostConfig('SaveRet', 'New', @moduleId, 0)">SAVE(N)/R</button>
+                @*POST buttons for save (new or update) and remain in manage module view*@
+                    @*@{
+                    if (moduleId == 0)
+                    {
+                        <p class="btn btn-default">SAVE(U)</p>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @moduleId, 0)">SAVE(U)</button>
+                    }
+                }*@
+                    @*<button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @moduleId, 0)">SAVE(N)</button>
+                @*Clear form button without saving module data, remain with same module identity in form*@
+                    @*<p class="btn btn-default" onclick="ClearModuleForm(@clearDate, @clearDate)">CLEAR</p>*@
+                </div> @*end buttons*@
+
+                <div class="btn-toolbar">
+
+                    <!-- icons-->
+                    @{
+                        if (moduleId != 0)
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'Update', @moduleId, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Updatera
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('Save', 'New', @moduleId, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-save" aria-hidden="true"></span><br />Spara
+                            </button>
+                        }
+                    }
+                    <a class="btn btn-default" href="@Url.Action("Manage", "Modules", new { id = 0, courseId = Model.CourseId, getOperation = "New", viewMessage = "" })"> <span class="glyphicon glyphiconsm glyphicon-plus-sign" aria-hidden="true"></span><br />Ny modul</a>
+                    @{
+                        if (moduleId != 0)
+                        {
+                            <button type="submit" class="btn btn-default" onclick="PostConfig('SaveAct', 'New', @moduleId, 0)" aria-label="Left Align">
+                                <span class="glyphicon glyphiconsm glyphicon-tasks" aria-hidden="true"></span><br />Ny aktivitet
+                            </button>
+
+                            <button type="button" class="btn btn-default" aria-label="Left Align">
+
+                                <span class="glyphicon glyphiconsm glyphicon-file" aria-hidden="true"></span><br />Nytt dokument
+                            </button>
+                            @*GET button to reach delete course view*@
+                            <a class="btn btn-default" href="@Url.Action("Delete", "Modules", new { id = moduleId, courseId=Model.CourseId, deleteType = "Single" })"> <span class="glyphicon glyphiconsm glyphicon-trash" aria-hidden="true"></span><br />Ta bort</a>
+                        }
+                    }
+                    @*<a class="btn btn-default" href="@Url.Action("Manage", "Courses", new { Id = Model.CourseId, getOperation = "Load" }, null)"> <span class="glyphicon glyphiconsm glyphicon-circle-arrow-left" aria-hidden="true"></span><br />Tillbaka</a>*@
+                    <br />
+                    
+                </div><!-- end icons-->
+
+                <div>
+                    @Html.Partial("_Activities")
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-2">
+                <br />
+                <br />
+                <br />
+              <!--  @Html.Partial("_Documents")-->
+            </div>
+
+
+        </div>
+    </div>
+
+}
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+

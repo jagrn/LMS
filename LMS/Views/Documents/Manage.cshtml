@@ -1,0 +1,208 @@
+﻿@model LMS.ViewModels.DocumentViewModel
+
+
+@{
+    var documentId = Model.Id;
+    var headBannerInfo = "";
+    if (Model.CourseId != null)
+    {
+        if (Model.ModuleId != null)
+        {
+            if (Model.ActivityId != null)
+            {
+                headBannerInfo = "Hantera dokument för aktiviteten";
+            }
+            else
+            {
+                headBannerInfo = "Hantera dokument för modulen";
+            }
+        }
+        else
+        {
+            headBannerInfo = "Hantera dokument för kursen";
+        }
+    }
+}
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = headBannerInfo })
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <h4 class="page-header">Dokument</h4>
+                @{
+                    if (Model.ModuleId != null)
+                    {
+                        if (Model.ActivityId != null)
+                        {
+                            <a class="btn btn-sm greenButton btnFlip" href="@Url.Action("Manage", "Activities", new { Id = Model.ActivityId, moduleId = Model.ModuleId, courseId = Model.CourseId, getOperation = "LoadMini" })">v</a>
+                            if (documentId != 0)
+                            {
+                                <a class="btn btn-sm greenButton alignCourseBtnXRight" href="@Url.Action("Manage", "Documents", new { id = 0, courseId = Model.CourseId, moduleId = Model.ModuleId, activityId = Model.ActivityId, viewMessage = "" })">+</a>
+                                <a class="btn btn-sm redButton alignCourseBtnXRight" href="@Url.Action("Delete", "Documents", new { id = documentId, courseId = Model.CourseId, moduleId = Model.ModuleId, activityId = Model.ActivityId, deleteType = "Single" })">-</a>
+                            }
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm greenButton btnFlip" href="@Url.Action("Manage", "Modules", new { Id = Model.ModuleId, courseId = Model.CourseId, getOperation = "LoadMini" })">v</a>
+                            if (documentId != 0)
+                            {
+                                <a class="btn btn-sm greenButton alignCourseBtnXRight" href="@Url.Action("Manage", "Documents", new { id = 0, courseId = Model.CourseId, moduleId = Model.ModuleId, viewMessage = "" })">+</a>
+                                <a class="btn btn-sm redButton alignCourseBtnXRight" href="@Url.Action("Delete", "Documents", new { id = documentId, courseId = Model.CourseId, moduleId = Model.ModuleId, deleteType = "Single" })">-</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm greenButton btnFlip" href="@Url.Action("Manage", "Courses", new { Id = Model.CourseId, getOperation = "LoadMini" })">v</a>
+                        if (documentId != 0)
+                        {
+                            <a class="btn btn-sm greenButton alignCourseBtnXRight" href="@Url.Action("Manage", "Documents", new { id = 0, courseId = Model.CourseId, viewMessage = "" })">+</a>
+                            <a class="btn btn-sm redButton alignCourseBtnXRight" href="@Url.Action("Delete", "Documents", new { id = documentId, courseId = Model.CourseId, deleteType = "Single" })">-</a>
+                        }
+                    }
+                }
+
+                @{
+                    if ((Model.SiblingDocuments != null) && (Model.SiblingDocuments.Count != 0))
+                    {
+                        <ul class="nav nav-pills nav-stacked">
+                            @foreach (var doc in Model.SiblingDocuments)
+                            {
+                                if (doc.Id == Model.Id)
+                                {
+                                    <li class="active">@Html.ActionLink(doc.Name, "Manage", new { id = doc.Id, getOperation = "Load" })</li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink(doc.Name, "Manage", new { id = doc.Id, courseId = Model.CourseId, moduleId = Model.ModuleId, activityId = Model.ActivityId, getOperation = "Load" })</li>
+                                }
+                            }
+                        </ul>
+                    }
+                }
+
+            </div>
+
+            <div class="form-horizontal col-md-7">
+                @{
+                    if (!(Model.Id > 0))
+                    {
+                        <h4 class="page-header">Skapa nytt dokument</h4>
+                    }
+                    else
+                    {
+                        <h4 class="page-header">Redigera dokumentet @Model.Name</h4>
+                    }
+                }
+
+                @{
+                    if (Model.PostMessage != "")
+                    {
+                        <h5 class="text-danger">@Model.PostMessage</h5>
+                    }
+                }
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.PostNavigation)
+                @Html.HiddenFor(model => model.PostOperation)
+                @Html.HiddenFor(model => model.PostMessage)
+                @Html.HiddenFor(model => model.CourseId)
+                @Html.HiddenFor(model => model.ModuleId)
+                @Html.HiddenFor(model => model.ActivityId)
+                @Html.HiddenFor(model => model.UserId)
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-9" style="margin-left:20px;">
+
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control " } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 " })
+                    <div class="col-md-9" style="margin-left:20px;">
+
+                        @Html.TextAreaFor(model => model.Description, 6, 40, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DocumentType, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-9" style="margin-left:20px;">
+                        @Html.EnumDropDownListFor(model => model.DocumentType, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DocumentType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UploadDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-9" style="margin-left:20px;">
+
+                        @Html.EditorFor(model => model.UploadDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UploadDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-9" style="margin-left:20px;">
+                        @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="btn-toolbar col-md-offset-2">
+
+                    <!-- icons-->
+                    @{
+                        if (documentId != 0)
+                        {
+                            <button type="submit" class="btn btn-default saveButton" aria-label="Left Align">Uppdatera</button>
+
+                            @*<button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'Update', @activityId, @showDocuments)" aria-label="Left Align">
+                                Uppdatera
+                            </button>*@
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default saveButton" aria-label="Left Align">Spara</button>
+
+                            @*<button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'New', @activityId, @showDocuments)" aria-label="Left Align">
+                                Spara
+                            </button>*@
+                        }
+                    }
+
+                    <br />
+
+                </div><!-- end icons-->
+
+                <div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+}
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = "" })
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

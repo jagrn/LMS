@@ -1,0 +1,86 @@
+﻿@model LMS.ViewModels.DocumentDeleteViewModel
+
+@{
+    ViewBag.Title = "Delete";
+    var headBannerInfo = "Ta bort dokument";
+}
+
+@{
+    if (Model.ModuleId != 0)
+    {
+        if (Model.ActivityId != 0)
+        {
+            @Html.Action("HeadBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = headBannerInfo })
+
+        }
+        else
+        {
+            @Html.Action("HeadBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = 0, infoText = headBannerInfo })
+
+        }
+    }
+    else
+    {
+        @Html.Action("HeadBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = 0, id3 = 0, infoText = headBannerInfo })
+
+    }
+}
+
+<div class="container">   
+    <h2>Ta bort dokumentet @Model.Name</h2>
+    <h3>Är du säker på att du vill ta bort det här dokumentet permanent?</h3>
+    <div>           
+        <h4>Dokumentdetaljer:</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DocumentType)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DocumentType)
+            </dd>
+        </dl>
+      
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-actions no-color col-md-offset-2">
+                <br />
+
+                <button type="submit" class="btn btn-default greenButton">Bekräfta</button>
+                <button class="btn btn-default greenButton">@Html.ActionLink("Avbryt", "Manage", "Documents", new { id = Model.Id, courseId = Model.CourseId, moduleId = Model.ModuleId, activityId = Model.ActivityId }, null)</button>
+            </div>
+        }
+    </div>
+</div>
+
+@{
+    if (Model.ModuleId != 0)
+    {
+        if (Model.ActivityId != 0)
+        {
+            @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = "" })
+
+        }
+        else
+        {
+            @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = 0, infoText = "" })
+
+        }
+    }
+    else
+    {
+        @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = 0, id3 = 0, infoText = "" })
+
+    }
+}
