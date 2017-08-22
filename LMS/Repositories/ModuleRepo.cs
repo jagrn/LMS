@@ -211,6 +211,113 @@ namespace LMS.Repositories
             return courseModuleList;
         }
 
+        // RETREIVE number of activities in module
+        public static int RetrieveNoOfActivities(int moduleId)
+        {
+            var module = db.Modules.Where(m => m.Id == moduleId).ToList();
+            if (module.First().Activities == null)
+                return 0;
+            return module.First().Activities.Count();
+        }
+
+        // Helper to RetrieveModuleFreePeriods()
+        private static DateTime AdjustStart(DateTime end, string validStart, string validEnd)
+        {
+            var start = end;
+            var refEnd = DateTime.Parse(end.ToShortDateString() + validEnd);
+            bool movedDay = false;
+
+            if (start >= refEnd)                         // Skip outside working day
+            {
+                start = start.AddDays(1);
+                movedDay = true;
+            }
+
+            var dayOffset = ((int)(start.DayOfWeek + 6)) % 7;
+            while (dayOffset > 4)                       // Skip weekend
+            {
+                start = start.AddDays(1);
+                movedDay = true;
+                dayOffset--;
+            }
+            if (movedDay)
+            {
+                start = DateTime.Parse(start.ToShortDateString() + validStart);
+            }
+            return start;
+        }
+
+        // Helper to RetrieveModuleFreePeriods()
+        private static DateTime AdjustEnd(DateTime start, string validStart, string validEnd)
+        {
+            var end = start;
+            var refStart = DateTime.Parse(start.ToShortDateString() + validStart);
+            bool movedDay = false;
+
+            if (end <= refStart)                       // Skip outside working day
+            {
+                end = end.AddDays(-1);
+                movedDay = true;
+            }
+
+            var dayOffset = ((int)(end.DayOfWeek + 6)) % 7;
+            while (dayOffset > 4)                       // Skip weekend
+            {
+                end = end.AddDays(-1);
+                movedDay = true;
+                dayOffset--;
+            }
+            if (movedDay)
+            {
+                end = DateTime.Parse(end.ToShortDateString() + validEnd);
+            }
+            return end;
+        }
+
+        // RETREIVE a list of non-planned periods within a given course time frame and including outside the course
+        public static List<AvailableModuleTime> RetrieveModuleFreePeriods(int? courseId)
+        {           
+            var course = db.Courses.AsNoTracking().Where(c => c.Id == courseId).ToList();
+            string validStart = " 08:30:00";
+            string validEnd = " 16:30:00";
+
+            List<AvailableModuleTime> availabilityList = new List<AvailableModuleTime>();
+            AvailableModuleTime period = new AvailableModuleTime();
+
+            if (course.First().Modules.Count == 0)         // No modules defined for course
+            {
+                period.FixedStart = false;
+                period.FixedEnd = false;
+                availabilityList.Add(period);
+                return availabilityList;
+            }
+   
+            period.FixedStart = false;
+            period.FixedEnd = true;
+            period.End = AdjustEnd(course.First().StartDate, validStart, validEnd);
+            availabilityList.Add(period);
+
+            var modules = db.Modules.Where(m => m.CourseId == courseId).ToList();
+            var noOfModules = modules.Count();
+            
+            for (var i = 0; i < noOfModules-1; i++)
+            {
+                period.FixedStart = true;
+                period.FixedEnd = true;
+                period.Start = AdjustStart(modules.ElementAt(i).EndDate, validStart, validEnd);
+                period.End = AdjustEnd(modules.ElementAt(i+1).StartDate, validStart, validEnd);
+                availabilityList.Add(period);
+            }
+
+            period.FixedStart = true;
+            period.FixedEnd = false;
+            period.Start = AdjustStart(course.First().EndDate, validStart, validEnd);
+            availabilityList.Add(period);
+
+            return availabilityList;
+        }
+
+
         // ADD a single module to a course
         public static int AddModule(Module module)
         {

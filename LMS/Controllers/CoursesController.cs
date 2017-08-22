@@ -42,7 +42,7 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult Manage(int? id, string getOperation, string viewMessage)
         {
-            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation == "Load")))
+            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New")))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -51,13 +51,15 @@ namespace LMS.Controllers
             viewModel.PostMessage = viewMessage;
 
             // Load view model with module specific info
+            viewModel.ShowModules = false;
+            viewModel.ShowDocuments = false;
             if (getOperation == "New")
             {
                 // Create new, reached from course views only              
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
                 viewModel.EndDate = DateTime.Parse("2017-01-01");
-            }
-            else // getOperation == "Load"
+            }           
+            else // getOperation == "Load"/"LoadMini"/"LoadMod"/"LoadDoc"
             {
                 // Load existing, reached from course views only
                 var singleCourse = CourseRepo.RetrieveCourse(id);
@@ -71,14 +73,37 @@ namespace LMS.Controllers
                 viewModel.Description = singleCourse.course.Description;
                 viewModel.StartDate = singleCourse.course.StartDate;
                 viewModel.EndDate = singleCourse.course.EndDate;
-
+                
                 // Load view model with additional display info wrt module activities
                 var courseModuleList = ModuleRepo.RetrieveCourseModuleList(id);
                 if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
-                viewModel.CourseModules = courseModuleList.moduleList;
+                viewModel.NoOfModules = courseModuleList.moduleList.Count;
+                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(id, null, null);
+
+                if ((getOperation == "Load") || (getOperation == "LoadMod"))
+                {
+                    viewModel.CourseModules = courseModuleList.moduleList;
+                    viewModel.ShowModules = true;
+                }
+                else // getOperation == "LoadMini"/"LoadDoc"
+                {
+                    viewModel.CourseModules = null;
+                    viewModel.ShowModules = false;
+                }
+                if ((getOperation == "Load") || (getOperation == "LoadDoc"))
+                {
+                    viewModel.CourseDocuments = DocumentRepo.RetrieveCourseDocumentList(id, null, null);                   
+                    viewModel.ShowDocuments = true;
+                }
+                else // getOperation == "LoadMini"/"LoadMod"
+                {
+                    viewModel.CourseDocuments = null;
+                    viewModel.ShowDocuments = false;
+                }
+
             }
 
             // Load view model with additional display info wrt parent course
@@ -98,7 +123,7 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,ModuleId,PostNavigation,PostOperation,PostMessage")] CourseViewModel viewModel)
+        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,ModuleId,ShowModules,ShowDocuments,PostNavigation,PostOperation,PostMessage")] CourseViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -182,9 +207,9 @@ namespace LMS.Controllers
                     }
                     viewModel.AllCourses = allCoursesList.courseList;
 
-                    if (viewModel.PostOperation == "Update")
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowModules))
                     {
-                        // Load view model with additional display info wrt module activities
+                        // Load view model with additional display info wrt course modules
                         var courseModuleList = ModuleRepo.RetrieveCourseModuleList(viewModel.Id);
                         if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
                         {
@@ -192,6 +217,16 @@ namespace LMS.Controllers
                         }
                         viewModel.CourseModules = courseModuleList.moduleList;
                     }
+
+                    viewModel.NoOfModules = CourseRepo.RetrieveNoOfModules(viewModel.Id);
+
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
+                    {
+                        // Load view model with additional display info wrt course documents
+                        viewModel.CourseDocuments = DocumentRepo.RetrieveCourseDocumentList(viewModel.Id, null, null);
+                    }
+
+                    viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(viewModel.Id, null, null);
                 }
 
                 switch (viewModel.PostNavigation)

@@ -1,0 +1,51 @@
+﻿@model LMS.ViewModels.ActivityViewModel
+@{
+    var activityId = Model.Id;
+}
+
+
+@{
+    if (activityId != 0)
+    {
+        <h4 class="page-header">Dokument (@Model.NoOfDocuments)</h4>
+        <span>
+                
+            @{
+                <a class="btn btn-sm greenButton" href="@Url.Action("Manage", "Documents", new { id = 0, courseId = Model.CourseId, moduleId = Model.ModuleId, activityId = Model.Id, viewMessage = "" })">+</a>
+            }
+
+            @{
+                if (Model.NoOfDocuments > 0)
+                {
+                    string loadOperation = "";
+                    if (Model.ShowDocuments)
+                    {
+                        loadOperation = "LoadMini";
+                        <a class="btn btn-sm greenButton alignCourseBtnXRight btnFlip" href="@Url.Action("Manage", "Activities", new { id = activityId, courseId = Model.CourseId, moduleId = Model.ModuleId, getOperation = loadOperation, viewMessage = "" })">v</a>
+                    }
+                    else
+                    {                      
+                        loadOperation = "LoadDoc"; 
+                        <a class="btn btn-sm greenButton alignCourseBtnXRight" href="@Url.Action("Manage", "Activities", new { id = activityId, courseId = Model.CourseId, moduleId = Model.ModuleId, getOperation = loadOperation, viewMessage = "" })">v</a>
+                    }
+                }
+            }
+
+        </span>
+
+        if (Model.ActivityDocuments != null)
+        {
+            foreach (var document in Model.ActivityDocuments)
+            {
+                <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+                    <p>
+                        <a class="btn btn-sm greenButtonSmall alignCourseBtnXRight" href="@Url.Action("Manage", "Documents", new { id = document.Id, courseId = Model.CourseId, moduleId = Model.Id, activityId = Model.Id, viewMessage = "" })">></a>
+                        &nbsp;&nbsp;&nbsp;@document.Name&nbsp;&nbsp;(@document.DocumentType)&nbsp;&nbsp;&nbsp;&nbsp;Rev: @document.UploadDate.ToShortDateString()
+                    </p>
+                    <p>&nbsp;&nbsp;@document.Description</p>
+                </div>
+            }
+        }
+    }
+
+}

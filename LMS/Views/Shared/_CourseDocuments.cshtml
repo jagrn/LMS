@@ -1,0 +1,65 @@
+﻿@model LMS.ViewModels.CourseViewModel
+@{
+    var courseId = Model.Id;
+}
+
+@{
+    if (courseId != 0)
+    {
+        <h4 class="page-header">Dokument (@Model.NoOfDocuments)</h4>
+        <span>
+                
+            @{
+                <a class="btn btn-sm greenButton" href="@Url.Action("Manage", "Documents", new { id = 0, courseId = Model.Id, viewMessage = "" })">+</a>
+            }
+
+            @{
+                if (Model.NoOfDocuments > 0)
+                {
+                    string loadOperation = "";
+                    if (Model.ShowDocuments)
+                    {
+                        if (Model.ShowModules)
+                        {
+                            loadOperation = "LoadMod";
+                        }
+                        else
+                        {
+                            loadOperation = "LoadMini";
+                        }
+                        <a class="btn btn-sm greenButton alignCourseBtnXRight btnFlip" href="@Url.Action("Manage", "Courses", new { id = courseId, getOperation = loadOperation, viewMessage = "" })">v</a>
+                    }
+                    else
+                    {
+                        if (Model.ShowModules)
+                        {
+                            loadOperation = "Load";
+                        }
+                        else
+                        {
+                            loadOperation = "LoadDoc";
+                        }
+                        <a class="btn btn-sm greenButton alignCourseBtnXRight" href="@Url.Action("Manage", "Courses", new { id = courseId, getOperation = loadOperation, viewMessage = "" })">v</a>
+                    }
+                }
+            }
+
+        </span>
+
+        if (Model.CourseDocuments != null)
+        {
+            foreach (var document in Model.CourseDocuments)
+            {
+                <div class="col-md-12 col-sm-12" style="background-color:whitesmoke; border:1px solid lightgrey; margin: 5px; padding-top: 5px;">
+                    <p>
+                        <a class="btn btn-sm greenButtonSmall alignCourseBtnXRight" href="@Url.Action("Manage", "Documents", new { id = document.Id, courseId = Model.Id, viewMessage = "" })">></a>
+                        &nbsp;&nbsp;&nbsp;@document.Name&nbsp;&nbsp;(@document.DocumentType)&nbsp;&nbsp;&nbsp;&nbsp;Rev: @document.UploadDate.ToShortDateString()
+                    </p>
+                    <p>&nbsp;&nbsp;@document.Description</p>
+                </div>
+            }
+        }
+
+    }
+
+}

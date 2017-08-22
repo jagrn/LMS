@@ -45,6 +45,16 @@ namespace LMS.ViewModels
         public DateTime EndDate;
     }
 
+    public struct DocumentListData
+    {
+        public int Id;
+        public string Name;
+        public string Description;
+        public DocumentType DocumentType;
+        public DateTime UploadDate;
+    }
+
+
     public struct PeriodActivityListData
     {
         public string Name;
@@ -52,6 +62,21 @@ namespace LMS.ViewModels
         public DateTime StartDate;
         public SelectActivityType ActivityType;
         public ActivityPeriod ActivityPeriod;
+    }
+
+    public struct AvailableActivityTime
+    {
+        public DateTime Start;
+        public DateTime End;
+        public SelectActivityPeriod Period;
+    }
+
+    public struct AvailableModuleTime
+    {
+        public DateTime Start;
+        public DateTime End;
+        public bool FixedStart;
+        public bool FixedEnd;
     }
 
     public class CourseViewModel
@@ -69,10 +94,19 @@ namespace LMS.ViewModels
         public List<CourseListData> AllCourses { get; set; }
         public int ModuleId { get; set; }
         public List<ModuleListData> CourseModules { get; set; }
+        public int NoOfModules { get; set; }
+        public bool ShowModules { get; set; }
+
+        public List<DocumentListData> CourseDocuments { get; set; }
+        public int NoOfDocuments { get; set; }
+        public bool ShowDocuments { get; set; }
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
         public string PostOperation { get; set; }
+
+        //public List<Module> TestCourseModules1 { get; set; }             // TEMP TEST
+        //public List<Module> TestCourseModules2 { get; set; }             // TEMP TEST
     }
 
     public class CourseDeleteViewModel
@@ -100,8 +134,12 @@ namespace LMS.ViewModels
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         [DisplayName("Startdatum")]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [DisplayName("Slutdatum")]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
         public int CourseId { get; set; }
@@ -109,6 +147,14 @@ namespace LMS.ViewModels
         public List<ModuleListData> CourseModules { get; set; }
         public int ActivityId { get; set; }
         public List<ActivityListData> ModuleActivities { get; set; }
+        public int NoOfActivities { get; set; }
+        public bool ShowActivities { get; set; }
+
+        public List<DocumentListData> ModuleDocuments { get; set; }
+        public int NoOfDocuments { get; set; }
+        public bool ShowDocuments { get; set; }
+
+        public List<AvailableModuleTime> AvailableTime { get; set; }
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
@@ -158,6 +204,12 @@ namespace LMS.ViewModels
         public int ModuleId { get; set; }
         public string ModuleName { get; set; }
         public List<ActivityListData> ModuleActivities { get; set; }
+
+        public List<DocumentListData> ActivityDocuments { get; set; }
+        public int NoOfDocuments { get; set; }
+        public bool ShowDocuments { get; set; }
+
+        public List<AvailableActivityTime> AvailableTime { get; set; }
 
         public string PostMessage { get; set; }
         public string PostNavigation { get; set; }
@@ -233,5 +285,59 @@ namespace LMS.ViewModels
         public List<Notification> Notifications { get; set; }
     }
 
+    public class DocumentViewModel
+    {
+        public int Id { get; set; }
+        [Required]
+        [DisplayName("Namn")]
+        public string Name { get; set; }
+        [Required]
+        [DisplayName("Beskrivning")]
+        public string Description { get; set; }
+        [DisplayName("Dokumenttyp")]
+        public DocumentType DocumentType { get; set; }
+        public string Format { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayName("Skapat datum")]
+        public DateTime UploadDate { get; set; }
+        public int? CourseId { get; set; }
+        public int? ModuleId { get; set; }
+        public int? ActivityId { get; set; }
+        public string UserId { get; set; }
+        // virtual fields fetched from other tables
+        [DisplayName("Kurs")]
+        public string CourseName { get; set; }
+        [DisplayName("Modul")]
+        public string ModuleName { get; set; }
+        [DisplayName("Aktivitet")]
+        public string ActivityName { get; set; }
+        [DisplayName("Kurs/modul/aktivitet")]
+        public string LongCourseName { get; set; }
+        [DisplayName("Ägare")]
+        public string UserName { get; set; }
+        // the following four used only to satisfy requirement from course-manage module-manage,  activity-manage which requires these as parameters
+        public int? _CourseId { get; set; }
+        public int? _ModuleId { get; set; }
+        public int? _ActivityId { get; set; }
+        public string _UserId { get; set; }
+        // virtual fields for passing info back n forth
+        public string PostMessage { get; set; }
+        public string PostNavigation { get; set; }
+        public string PostOperation { get; set; }
+        // list of the other documents having the same owner (course or module etc...)
+        public List<DocumentListData> SiblingDocuments { get; set; }
+    }
 
+    public class DocumentDeleteViewModel
+    {
+        public int Id { get; set; }
+        [DisplayName("Namn")]
+        public string Name { get; set; }
+        [DisplayName("Dokumenttyp")]
+        public DocumentType DocumentType { get; set; }
+        public int? CourseId { get; set; }
+        public int? ModuleId { get; set; }
+        public int? ActivityId { get; set; }
+    }
 }

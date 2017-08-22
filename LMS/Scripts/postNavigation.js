@@ -1,7 +1,8 @@
-﻿function ActivityPostConfig(postNav, postFormObj, id) {
+﻿function ActivityPostConfig(postNav, postFormObj, id, showDocuments) {   
     document.forms[1]["PostNavigation"].value = postNav;
     document.forms[1]["PostOperation"].value = postFormObj;
     document.forms[1]["Id"].value = id;
+    document.forms[1]["ShowDocuments"].value = showDocuments;
     // Debug support
     //alert("ActivityPostConfig");
     //alert(document.forms[1]["PostNavigation"].value);
@@ -9,24 +10,28 @@
     //alert(document.forms[1]["Id"].value);
 }
 
-function PostConfig(postNav, postFormObj, id, activityId) {
+function PostConfig(postNav, postFormObj, id, activityId, showActivities, showDocuments) {    
     document.forms[1]["PostNavigation"].value = postNav;
     document.forms[1]["PostOperation"].value = postFormObj;
     document.forms[1]["Id"].value = id;
     document.forms[1]["ActivityId"].value = activityId;
+    document.forms[1]["ShowActivities"].value = showActivities;
+    document.forms[1]["ShowDocuments"].value = showDocuments;
     // Debug support
-    //alert("PostConfig");
+    //alert("ModulePostConfig");
     //alert(document.forms[1]["PostNavigation"].value);
     //alert(document.forms[1]["PostOperation"].value);
     //alert(document.forms[1]["Id"].value);
     //alert(document.forms[1]["ActivityId"].value);
 }
 
-function CoursePostConfig(postNav, postFormObj, id, moduleId) {
+function CoursePostConfig(postNav, postFormObj, id, moduleId, showModules, showDocuments) {  
     document.forms[1]["PostNavigation"].value = postNav;
     document.forms[1]["PostOperation"].value = postFormObj;
     document.forms[1]["Id"].value = id;
     document.forms[1]["ModuleId"].value = moduleId;
+    document.forms[1]["ShowModules"].value = showModules;
+    document.forms[1]["ShowDocuments"].value = showDocuments;
     // Debug support
     //alert("CoursePostConfig");
     //alert(document.forms[1]["PostNavigation"].value);

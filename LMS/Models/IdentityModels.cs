@@ -16,6 +16,7 @@ namespace LMS.Models
         public string FullName { get { return FirstName + " " + LastName; }  }
         public int? CourseId { get; set; }
         public virtual ICollection<StudentNotification> StudentNotifications { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -34,6 +35,7 @@ namespace LMS.Models
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<StudentNotification> StudentNotifications { get; set; }
+        public DbSet<Document> Documents { get; set; }
 
 
         public ApplicationDbContext()

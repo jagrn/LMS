@@ -43,7 +43,7 @@ namespace LMS.Controllers
         // GET: Activities/Manage/5
         public ActionResult Manage(int? id, int? moduleId, int? courseId, string getOperation, string viewMessage)
         {
-            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation == "Load"))
+            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New"))
                 || (moduleId == 0) || (moduleId == null) || (courseId == 0) || (courseId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -55,6 +55,7 @@ namespace LMS.Controllers
             viewModel.PostMessage = viewMessage;
 
             // Load view model with activity specific info
+            viewModel.ShowDocuments = false;
             if (getOperation == "New")
             {
                 // Create new, reached from module views only              
@@ -64,7 +65,7 @@ namespace LMS.Controllers
                 viewModel.Period = SelectActivityPeriod.Heldag;                     // Deafult selection
                 viewModel.SelectActivityType = SelectActivityType.Föreläsning;      // Default selection
             }
-            if (getOperation == "Load")
+            else // getOperation == "Load"/"LoadMini"/"LoadAct"/"LoadDoc"
             {
                 // Load existing, reached from module views only
                 var singleActivity = ActivityRepo.RetrieveActivity(moduleId, id);
@@ -81,8 +82,21 @@ namespace LMS.Controllers
                 viewModel.Period = (SelectActivityPeriod) singleActivity.activity.ActivityPeriod;
                 viewModel.SelectActivityType = (SelectActivityType) singleActivity.activity.ActivityType;
                 viewModel.Deadline = singleActivity.activity.Deadline;
-            }
 
+                viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(courseId, moduleId, id);
+
+                if ((getOperation == "Load") || (getOperation == "LoadDoc"))
+                {
+                    viewModel.ActivityDocuments = DocumentRepo.RetrieveCourseDocumentList(courseId, moduleId, id);
+                    viewModel.ShowDocuments = true;
+                }
+                else // getOperation == "LoadMini"/"LoadMod"
+                {
+                    viewModel.ActivityDocuments = null;
+                    viewModel.ShowDocuments = false;
+                }
+            }
+            
             // Load view model with additional display info wrt parent module
             var moduleActivityList = ActivityRepo.RetrieveModuleActivityList(moduleId);
             if (moduleActivityList.repoResult == ActivityRepoResult.NotFound)
@@ -92,6 +106,8 @@ namespace LMS.Controllers
             viewModel.ModuleActivities = moduleActivityList.activityList;
             viewModel.ModuleName = ModuleRepo.RetrieveModuleName(moduleId);
 
+            viewModel.AvailableTime = ActivityRepo.RetrieveActivityFreePeriods(moduleId);
+
             return View(viewModel);
         }
 
@@ -100,7 +116,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,Period,Deadline,ActivityType,SelectActivityType,ModuleId,CourseId,PostNavigation,PostOperation,PostMessage")] ActivityViewModel viewModel)
+        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,Period,Deadline,ActivityType,SelectActivityType,ModuleId,CourseId,ShowDocuments,PostNavigation,PostOperation,PostMessage")] ActivityViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -218,6 +234,16 @@ namespace LMS.Controllers
                     }
                     viewModel.ModuleActivities = moduleActivityList.activityList;
                     viewModel.ModuleName = ModuleRepo.RetrieveModuleName(viewModel.ModuleId);
+
+                    viewModel.AvailableTime = ActivityRepo.RetrieveActivityFreePeriods(viewModel.ModuleId);
+
+                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
+                    {
+                        // Load view model with additional display info wrt activity documents
+                        viewModel.ActivityDocuments = DocumentRepo.RetrieveCourseDocumentList(viewModel.CourseId, viewModel.ModuleId, viewModel.Id);
+                    }
+
+                    viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(viewModel.CourseId, viewModel.ModuleId, viewModel.Id);
                 }
 
                 switch (viewModel.PostNavigation)

@@ -117,6 +117,15 @@ namespace LMS.Repositories
             return allCoursesList;
         }
 
+        // RETREIVE number of modules in course
+        public static int RetrieveNoOfModules(int courseId)
+        {
+            var course = db.Courses.Where(c => c.Id == courseId).ToList();
+            if (course.First().Modules == null)
+                return 0;
+            return course.First().Modules.Count();
+        }
+
         // ADD a single course
         public static int AddCourse(Course course)
         {
