@@ -31,7 +31,7 @@ namespace LMS.Controllers
             ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
 
             courseId = currentUser.CourseId;
-            studentId = currentUser.UserName;
+            studentId = currentUser.Id;
 
             if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
