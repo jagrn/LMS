@@ -113,6 +113,7 @@ namespace LMS.Controllers
                 return View(documentViewModel);
             }
             // Input validation
+            documentViewModel.SiblingDocuments = DocumentRepo.RetrieveCourseDocumentList(documentViewModel.CourseId, documentViewModel.ModuleId, documentViewModel.ActivityId);
             var validMess = DocumentRepo.DocumentNameIsUnique(documentViewModel);
             if (validMess != null)
             {
