@@ -4,94 +4,102 @@
     ViewBag.Title = "Ta bort";
 }
 
-<h2>Användarhantering</h2>
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "DeleteUser", infoText = "Användarhantering" })
 
-@{
-    if (ViewBag.ErrorDescription != "")
-    {
-        <p class="text-danger">@ViewBag.ErrorDescription</p>
+
+@*<h2>Användarhantering</h2>*@
+<br />
+<br />
+
+<div class="container">
+    @{
+        if (ViewBag.ErrorDescription != "")
+        {
+            <p class="text-danger">@ViewBag.ErrorDescription</p>
+
+        }
+
+
+        if (ViewBag.ErrorDescription == "")
+        {
+            <h3>Vill du ta bort användaren @Html.DisplayFor(model => model.Email)?</h3>
+            <div>
+
+                <hr />
+                <dl class="dl-horizontal">
+
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+
+                    @{
+                        if (Model.CourseId != null && Model.CourseId > 0)
+                        {
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CourseName)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.CourseName)
+                            </dd>
+                        }
+
+
+                    }
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
+
+                </dl>
+            </div>
+
+
+                        }
+                        <div>
+                            @using (Html.BeginForm())
+            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-actions no-color">
+                                    @{
+                                        if (ViewBag.ErrorDescription == "")
+                                        {
+                                            <input type="submit" value="Ta bort" class="btn btn-default" /> <span>|</span>
+                                        }
+
+
+
+                                        if (Model.CourseId > 0)
+                                        {
+                                            @Html.ActionLink("Tillbaka till elevlista", "ListStudents", "AdminUsers")
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("Tillbaka till lärarlista", "ListTeachers", "AdminUsers")
+                                        }
+                                    }
+                                </div>
+                                        }
+                        </div>
 
     }
+</div>
 
-
-    if (ViewBag.ErrorDescription == "")
-    {
-        <h3>Vill du ta bort användaren @Html.DisplayFor(model => model.Email)?</h3>
-        <div>
-
-            <hr />
-            <dl class="dl-horizontal">
-
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-
-                @{
-                    if (Model.CourseId != null && Model.CourseId > 0)
-                    {
-                <dt>
-                    @Html.DisplayNameFor(model => model.CourseName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.CourseName)
-                </dd>
-                    }
-
-
-                }
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.LastName)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.FirstName)
-                </dd>
-
-            </dl>
-        </div>
-
-
-                    }
-                    <div>
-                        @using (Html.BeginForm())
-            {
-                            @Html.AntiForgeryToken()
-
-                            <div class="form-actions no-color">
-                                @{
-                                    if (ViewBag.ErrorDescription == "")
-                                    {
-                                        <input type="submit" value="Ta bort" class="btn btn-default" /> <span>|</span>
-                                    }
-
-
-
-                                    if (Model.CourseId > 0)
-                                    {
-                                        @Html.ActionLink("Tillbaka till elevlista", "ListStudents", "AdminUsers")
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Tillbaka till lärarlista", "ListTeachers", "AdminUsers")
-                                            }
-                                }
-                            </div>
-                                    }
-                    </div>
-
-}
-
+@Html.Action("FootBanner", "CommonLOs", new { origin = "ListUser", infoText = "" })

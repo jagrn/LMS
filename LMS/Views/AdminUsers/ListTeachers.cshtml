@@ -1,6 +1,11 @@
 ﻿@model IEnumerable<LMS.Models.EditUserViewModel>
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "ListTeacher", infoText = "Lista lärare" })
+
 <div class="container">
-    <h2>Lista lärare</h2>
+    @*<h2>Lista lärare</h2>*@
+    <br />
+    <br />
     <div class="well">
 
         @using (Html.BeginForm("ListTeachers", "AdminUsers", FormMethod.Get))
@@ -57,3 +62,5 @@
 
     </table>
 </div>
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "ListUser", infoText = "" })
