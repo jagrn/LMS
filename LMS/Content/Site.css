@@ -1,6 +1,8 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    /*overflow-y:scroll;*/    
+  height: 100vh;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -295,3 +297,23 @@ h4 {
     padding-bottom:20px;
     text-align:center; 
 }
+
+
+.fl-page {
+  position: relative;
+  min-height: 100vh;
+      width: 100%;
+  padding-bottom: 140px; /* Should be equal to the height of your footer */
+     
+}
+.fl-page-footer-wrap {
+
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+    background-color:#eaeaea;
+}
+
+
+
+
