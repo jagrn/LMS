@@ -40,11 +40,7 @@
                             <li>@Html.ActionLink("Kurser", "Index", "Courses")</li>
                             <li>@Html.ActionLink("Användare", "CreateUser", "AdminUsers")</li>
                         }
-                        @if (User.IsInRole("Student"))
-                        {
-                            <li>@Html.ActionLink("Min sida", "MyPage", "Students")</li>
-                            <li>@Html.ActionLink("Kursdeltagare", "ListStudents", "Students")</li>
-                        }
+                    
                         @if (User.IsInRole("Teacher"))
                         {
                             <li class="dropdown">
