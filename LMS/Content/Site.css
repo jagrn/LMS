@@ -295,3 +295,10 @@ h4 {
     padding-bottom:20px;
     text-align:center; 
 }
+
+.notesModalButton{
+    color:#198521;
+    background-color:#c4e9c4;
+    border-color: #198521;
+    border-width:2px;
+}
