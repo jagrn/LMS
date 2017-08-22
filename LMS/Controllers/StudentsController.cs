@@ -31,7 +31,7 @@ namespace LMS.Controllers
             ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
 
             courseId = currentUser.CourseId;
-            studentId = currentUser.UserName;
+            studentId = currentUser.Id;
 
             if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
@@ -132,6 +132,7 @@ namespace LMS.Controllers
                 if (showModuleDetails)
                 {
                     var start = viewModel.Module.StartDate;
+                    viewModel.SchemeYear = start.Year;
                     viewModel.SchemeWeek = GetWeekFromDate(start);
                     viewModel.SchemeMoveWeek = null;
                 }
@@ -139,6 +140,7 @@ namespace LMS.Controllers
                 if (showActivityDetails)
                 {
                     var start = viewModel.Activity.StartDate;
+                    viewModel.SchemeYear = start.Year;
                     viewModel.SchemeWeek = GetWeekFromDate(start);
                     viewModel.SchemeMoveWeek = null;
                 }

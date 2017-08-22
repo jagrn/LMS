@@ -4,7 +4,8 @@
     ViewBag.Title = "Lägg till ny användare";
 }
 
-<h2>Lägg till ny användare</h2>
+
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "RegUser", infoText = "Lägg till ny användare" })
 
 <div class="container">
     <div class="row">
@@ -108,3 +109,5 @@
 
     </div>
 </div>
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "RegUser", infoText = "" })

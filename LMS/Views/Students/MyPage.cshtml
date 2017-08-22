@@ -18,7 +18,7 @@
 
 @Html.Action("HeadBanner", "CommonLOs", new { origin = "StudentMyPage", infoText = headBannerInfo })
 
-
+<div class="container">
 @{    
     <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Notiser (@Model.NoOfNotifications)</h4>
 
@@ -34,6 +34,7 @@
         }
     }
 }
+</div>
 
 @*<h2>Week: @Model.SchemeWeek</h2>*@
 @*<h1>Välkommen till din sida @Model.StudentName</h1>*@
@@ -123,6 +124,8 @@
         </div>
     </div>
 </div>
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "StudentMyPage", infoText = "" })
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
