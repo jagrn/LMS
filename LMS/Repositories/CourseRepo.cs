@@ -76,6 +76,20 @@ namespace LMS.Repositories
             return courses.First().Name;
         }
 
+        // RETREIVE a course description, non-protected method without RepoResult
+        public static string RetrieveCourseDescription(int? courseId)
+        {
+            if ((courseId == null) || (courseId == 0))
+                return "No description retrieved: Undefined course ID";
+
+            var courses = db.Courses.Where(c => c.Id == courseId).ToList();
+            if (courses.Count != 1)
+            {
+                return "No description retrieved: Course ID not found";
+            }
+            return courses.First().Description;
+        }
+
         // RETREIVE a single course
         public static SingleCourse RetrieveCourse(int? courseId)
         {

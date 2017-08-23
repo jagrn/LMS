@@ -169,6 +169,7 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(int id, int? courseId, int? moduleId, int? activityId )
         {
             Document document = db.Documents.Find(id);
+            NotificationRepo.AddRemovedDocumentNote(document);
             db.Documents.Remove(document);
             db.SaveChanges();
 

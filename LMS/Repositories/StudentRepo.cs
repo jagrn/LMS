@@ -125,7 +125,7 @@ namespace LMS.Repositories
         }
 
         // UPDATE a student notification for a student as read
-        public static void UppdateNoteForStudent(string studentId, int notificationId)
+        public static void UpdateNoteForStudent(string studentId, int notificationId)
         {
             if ((studentId == null) || (notificationId == 0))
                 return;
@@ -134,6 +134,26 @@ namespace LMS.Repositories
                                     .Where(sn => sn.MyNoteRef == notificationId).ToList();
 
             studentNote.First().NoteRead = true;
+
+            db.Entry(studentNote.First()).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        // UPDATE a all student notifications for a student as read
+        public static void UpdateAllNotesForStudent(string studentId)
+        {
+            if (studentId == null)
+                return;
+
+            var studentNotes = db.StudentNotifications.Where(sn => sn.ApplicationUserId == studentId)
+                                    .Where(sn => sn.NoteRead == false).ToList();
+
+            foreach (var note in studentNotes)
+            {
+                note.NoteRead = true;
+                db.Entry(note).State = EntityState.Modified;
+            }
+            db.SaveChanges();
         }
 
     }
