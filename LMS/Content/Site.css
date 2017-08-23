@@ -29,7 +29,7 @@ textarea {
 
 }
 span.glyphicon {
-    color: #0465e5;
+    color:#198521;
 
 }
 
@@ -104,7 +104,10 @@ h4 {
 .nav > li > a{
     color:#198521;
 }
+a {
+color:#198521;
 
+}
 /*Override link looks*/ 
 .headBannerLink > span > a:hover{
     color:coral;
