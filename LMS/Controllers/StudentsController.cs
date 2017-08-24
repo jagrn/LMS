@@ -119,10 +119,10 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
             viewModel.ModuleActivities = moduleActivityList.activityList;
-            var docs = db.Documents.Where(d => d.CourseId == courseId && d.ModuleId == moduleId && d.ActivityId == activityId);
-            docs = docs.OrderBy(d => d.Name);
+            //var docs = db.Documents.Where(d => d.CourseId == courseId && d.ModuleId == moduleId && d.ActivityId == activityId);
+            //docs = docs.OrderBy(d => d.Name);
 
-            viewModel.Activity.Documents = docs.ToList();
+            //viewModel.Activity.Documents = docs.ToList();
 
 
             viewModel.Notifications = StudentRepo.RetreiveNotesForStudent(viewModel.StudentId);
