@@ -85,6 +85,15 @@ namespace LMS.Repositories
             return students.First().FullName;
         }
 
+        public static bool IsCourseWithStudents(int courseId)
+        {
+            var students = db.Users.Where(u => u.CourseId == courseId).ToList();
+            if (students.Count() == 0)
+                return false;
+            else
+                return true;
+        }
+
         // ADD a student notification to all students attending the concerned course
         public static void AddNoteToStudents(int courseId, int notificationId)
         {
@@ -115,10 +124,10 @@ namespace LMS.Repositories
             List<Notification> notifications = new List<Notification>();
             foreach (var note in studentNotes)
             {
-                var notification = db.Notifications.Where(n => n.Id == note.MyNoteRef).ToList();
-                if (notification.First().EndOfRelevance >= DateTime.Now)
+                var notification = NotificationRepo.RetrieveRelevantNote(note.MyNoteRef);
+                if (notification != null)
                 {
-                    notifications.Add(notification.First());
+                    notifications.Add(notification);
                 }
             }
             return notifications;

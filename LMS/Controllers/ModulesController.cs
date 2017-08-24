@@ -151,6 +151,15 @@ namespace LMS.Controllers
                     viewModel.Id = 0;
                 }
 
+                // Prepare start and end data for module
+                var start = viewModel.StartDate.ToShortDateString();
+                var end = viewModel.EndDate.ToShortDateString();
+                start = start + " 08:30:00";
+                end = end + " 16:30:00";
+                viewModel.StartDate = DateTime.Parse(start);
+                viewModel.EndDate = DateTime.Parse(end);
+
+
                 // Input validation
                 var validMess = ModuleRepo.IsModuleNameValid(viewModel.CourseId, viewModel.Id, viewModel.Name);
                 if (validMess == null)
@@ -181,6 +190,7 @@ namespace LMS.Controllers
                     }
                     viewModel.ModuleActivities = moduleActivityList.activityList;
 
+                    viewModel.AvailableTime = ModuleRepo.RetrieveModuleFreePeriods(viewModel.CourseId);
                     viewModel.PostMessage = validMess;
                     return View(viewModel);
                 }

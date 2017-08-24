@@ -71,6 +71,12 @@ namespace LMS.Repositories
         // QUERY whether a certain module span is valid within a course, i.e. not overlapping other modules
         public static string IsModuleSpanValid(int? courseId, int? moduleId, DateTime start, DateTime end)
         {
+            if (((int)start.DayOfWeek == 0) || ((int)start.DayOfWeek == 6))
+                return "Modulen får inte börja på en helg";
+
+            if (((int)end.DayOfWeek == 0) || ((int)end.DayOfWeek == 6))
+                return "Modulen får inte sluta på en helg";
+
             var modules = db.Modules.Where(m => m.CourseId == courseId).ToList();
             if (modules.Count == 0)
                 return null;
@@ -234,11 +240,14 @@ namespace LMS.Repositories
             }
 
             var dayOffset = ((int)(start.DayOfWeek + 6)) % 7;
-            while (dayOffset > 4)                       // Skip weekend
+            if (dayOffset > 4)
             {
-                start = start.AddDays(1);
-                movedDay = true;
-                dayOffset--;
+                while (dayOffset < 7)                       // Skip weekend
+                {
+                    start = start.AddDays(1);
+                    movedDay = true;
+                    dayOffset++;
+                }
             }
             if (movedDay)
             {
@@ -306,7 +315,10 @@ namespace LMS.Repositories
                 period.FixedEnd = true;
                 period.Start = AdjustStart(modules.ElementAt(i).EndDate, validStart, validEnd);
                 period.End = AdjustEnd(modules.ElementAt(i+1).StartDate, validStart, validEnd);
-                availabilityList.Add(period);
+                if (period.Start < period.End)
+                {
+                    availabilityList.Add(period);
+                }
             }
 
             period.FixedStart = true;
