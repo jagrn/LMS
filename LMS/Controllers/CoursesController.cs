@@ -18,9 +18,112 @@ namespace LMS.Controllers
 
         // GET: Courses
         [Authorize(Roles = "Teacher")]
-        public ActionResult Index()
-        {
-            return View(db.Courses.ToList());
+        public ActionResult Index(string searchString, string sortOrder, string courseDate, int? page) {
+            IQueryable<CourseViewModel> query;
+            List<CourseViewModel> resultList;
+
+
+            if(courseDate != null && courseDate != "") {
+                switch(courseDate) {
+                    case "coursDate_old":
+                        query = from u in db.Courses
+                                where u.EndDate < DateTime.Now
+                                select new CourseViewModel() {
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    Description = u.Description,
+                                    StartDate = u.StartDate,
+                                    EndDate = u.EndDate
+                                };
+                        break;
+                    case "coursDate_future":
+                        query = from u in db.Courses
+                                where u.StartDate > DateTime.Now
+                                select new CourseViewModel() {
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    Description = u.Description,
+                                    StartDate = u.StartDate,
+                                    EndDate = u.EndDate
+                                };
+                        break;
+                    case "couseDateAll":
+                        query = from u in db.Courses
+                                select new CourseViewModel() {
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    Description = u.Description,
+                                    StartDate = u.StartDate,
+                                    EndDate = u.EndDate
+                                };
+                        break;
+                    default:
+                        query = from u in db.Courses
+                                where u.EndDate > DateTime.Now
+                                       && u.StartDate < DateTime.Now
+                                select new CourseViewModel() {
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    Description = u.Description,
+                                    StartDate = u.StartDate,
+                                    EndDate = u.EndDate
+                                };
+
+                        break;
+                }
+            } else if(searchString != null && searchString != "") {
+                query = from u in db.Courses
+                        where u.Name.Contains(searchString)
+                                || u.Description.Contains(searchString)
+                        select new CourseViewModel() {
+                            Id = u.Id,
+                            Name = u.Name,
+                            Description = u.Description,
+                            StartDate = u.StartDate,
+                            EndDate = u.EndDate
+                        };
+
+            } else {
+                query = from u in db.Courses
+                        where u.EndDate > DateTime.Now
+                               && u.StartDate < DateTime.Now
+                        select new CourseViewModel() {
+                            Id = u.Id,
+                            Name = u.Name,
+                            Description = u.Description,
+                            StartDate = u.StartDate,
+                            EndDate = u.EndDate
+                        };
+            }
+            query = query.OrderBy(s => s.Name);
+
+            //switch(sortOrder) {
+            //    case "coursName_desc":
+            //        query = query.OrderBy(s => s.Name);
+            //        break;
+            //    case "startDate_desc":
+            //        query = query.OrderByDescending(s => s.StartDate);
+            //        break;
+            //    case "endDate_desc":
+            //        query = query.OrderByDescending(s => s.EndDate);
+            //        break;
+            //    default:
+            //        query = query.OrderBy(s => s.Name);
+            //        break;
+            //}
+
+            resultList = query.ToList();
+
+            if(resultList.Count < 1) {
+                ViewBag.Message = "Ingen kurs hittad";
+                ViewBag.MessageColor = "red";
+            }
+
+            // int pageSize = 2;
+            // int pageNumber = (page ?? 1);
+            //return View(resultList.ToPagedList(pageNumber, pageSize));
+
+            return View(resultList.ToList());
         }
 
         // GET: Courses/Details/5
@@ -261,8 +364,7 @@ namespace LMS.Controllers
             CourseDeleteViewModel viewModel = new CourseDeleteViewModel();
             viewModel.DeleteType = deleteType;
 
-            if (deleteType == "Single")
-            {
+            if(deleteType == "Single") {
                 // Init specifically required fields
                 var singleCourse = CourseRepo.RetrieveCourse(id);
                 if (singleCourse.repoResult == CourseRepoResult.NotFound)

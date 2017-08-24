@@ -18,12 +18,350 @@ namespace LMS.Controllers
         private ApplicationUserManager _userManager;
 
         private ApplicationDbContext db = new ApplicationDbContext();
+        //private AllCoursesList allCourses = CourseRepo.RetrieveCourseList();
+
+        private List<SelectListItem> GetCoursesList()
+        {
+            IQueryable<SelectListItem> allCourses;
+            allCourses = db.Courses
+                  .Select(s => new SelectListItem
+                  {
+                      Value = s.Id.ToString(),
+                      Text = s.Name
+                  });
+
+
+            return allCourses.ToList();
+        }
 
         // GET: AdminUsers
-        public ActionResult Index()
+        public ActionResult Index(string strCourseId, string userType, string sortOrder, string searchString)
         {
-            return View(db.Users.ToList());
+
+            //IQueryable<SelectListItem> allCourses;
+            //allCourses = db.Courses
+            //      .Select(s => new SelectListItem
+            //      {
+            //          Value = s.Id.ToString(),
+            //          Text = s.Name
+            //      });
+
+            //SelectList coursesList = new SelectList(allCourses);
+
+
+            AllCoursesList allCoursesList = CourseRepo.RetrieveCourseList();
+
+
+            IQueryable<EditUserViewModel> query;
+            List<EditUserViewModel> resultList;
+            int thisCourseId = 0;
+
+            //{
+            //    get
+            ////{
+            //ApplicationDbContext db = new ApplicationDbContext();
+            //Course c = db.Courses.Find(this.CourseId);
+            //return c.Name;
+            //    }
+            //}
+
+
+
+            if (userType != null && userType.Equals("Teacher"))
+            {
+                //Lista lärare
+                ViewBag.Title = "Lista lärare";
+                query = from u in db.Users
+                        where u.CourseId == null
+                        select new EditUserViewModel()
+                        {
+                            Id = u.Id,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email,
+                            CourseId = u.CourseId,
+                            //CourseName = "",
+                            UserRole = "Lärare"
+
+                                };
+
+            }
+            else if (userType != null && userType.Equals("Student"))
+            {
+                //Lista elever
+                ViewBag.Title = "Lista elever";
+                //string cName = CourseRepo.RetrieveCourseName(int.Parse(strCourseId));
+                if (int.TryParse(strCourseId, out thisCourseId))
+                {
+                    query = from u in db.Users
+                            where u.CourseId.Equals(thisCourseId)
+                            select new EditUserViewModel()
+                            {
+                                Id = u.Id,
+                                FirstName = u.FirstName,
+                                LastName = u.LastName,
+                                Email = u.Email,
+                                CourseId = u.CourseId,
+                                //CourseName = cName, CourseRepo.RetrieveCourseName(u.CourseId), // (u.CourseId != null ? CourseRepo.RetrieveCourseName(u.CourseId) : ""),
+                                UserRole = "Elev"
+
+                            };
+
+                }
+                else
+                {
+                    query = from u in db.Users
+                            where u.CourseId != null
+                            select new EditUserViewModel()
+                            {
+                                Id = u.Id,
+                                FirstName = u.FirstName,
+                                LastName = u.LastName,
+                                Email = u.Email,
+                                CourseId = u.CourseId,
+                                //CourseName = // (u.CourseId != null ? CourseRepo.RetrieveCourseName(u.CourseId) : ""),
+                                UserRole = "Elev"
+
+                            };
+
+                }
+
+            }
+            else
+            {
+                ViewBag.Title = "Inget resultat att lista";
+                query = Enumerable.Empty<EditUserViewModel>().AsQueryable();
+            }
+
+            switch (sortOrder)
+            {
+                case "firstname_desc":
+                    query = query.OrderByDescending(s => s.FirstName);
+                    break;
+                case "lastname_desc":
+                    query = query.OrderByDescending(s => s.LastName);
+                    break;
+                case "email_desc":
+                    query = query.OrderByDescending(s => s.Email);
+                    break;
+                default:
+                    query = query.OrderBy(s => s.Email);
+                    break;
+            }
+
+
+
+            if (searchString != null && searchString != "")
+            {
+                query = query.Where(u => u.FirstName.Contains(searchString) || u.LastName.Contains(searchString) || u.Email.Contains(searchString));
+            }
+
+           
+            resultList = query.ToList();
+            return View(resultList.ToList());
+
+            
         }
+
+        // GET: ListStudents
+        public ActionResult ListStudents(string sortOrder, string searchString, int? SelectedCourseId)
+        {
+
+            IQueryable<EditUserViewModel> query;
+            List<EditUserViewModel> resultList;
+            //int thisCourseId = 0;
+
+            ViewBag.AllCourses = GetCoursesList();
+
+            //if (!User.IsInRole("Teacher"))
+            //{
+            //    ApplicationUser user = db.Users.Find()
+            //}
+            //Lista elever
+
+
+            //string cName = CourseRepo.RetrieveCourseName(int.Parse(strCourseId));
+            //if (int.TryParse(strCourseId, out thisCourseId))
+            if (SelectedCourseId > 0)
+            {
+                query = from u in db.Users
+                        where u.CourseId == SelectedCourseId
+                        select new EditUserViewModel()
+                        {
+                            Id = u.Id,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email,
+                            CourseId = u.CourseId,
+                            //CourseName = sätts i EditUserViewModel
+                            UserRole = "Elev"
+
+                        };
+
+            }
+            else
+            {
+                query = from u in db.Users
+                        where u.CourseId != null
+                        select new EditUserViewModel()
+                        {
+                            Id = u.Id,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email,
+                            CourseId = u.CourseId,
+                            //CourseName =  sätts i EditUserViewModel
+                            UserRole = "Elev"
+
+                        };
+
+            }
+
+
+            //Toggle sortorder
+            ViewBag.SortLastName = sortOrder == "LastName_desc" ? "LastName" : "LastName_desc";
+            ViewBag.SortFirstName = sortOrder == "FirstName" ? "FirstName_desc" : "FirstName";
+            ViewBag.SortEmail = sortOrder == "Email" ? "Email_desc" : "Email";
+            ViewBag.SortCourse= sortOrder == "CourseName" ? "CourseName_desc" : "CourseName";
+
+            switch (sortOrder)
+            {
+                case "LastName":
+                    query = query.OrderBy(s => s.LastName);
+                    break;
+                case "LastName_desc":
+                    query = query.OrderByDescending(s => s.LastName);
+                    break;
+                case "FirstName":
+                    query = query.OrderBy(s => s.FirstName);
+                    break;
+                case "FirstName_desc":
+                    query = query.OrderByDescending(s => s.FirstName);
+                    break;
+                case "Email":
+                    query = query.OrderBy(s => s.Email);
+                    break;
+                case "Email_desc":
+                    query = query.OrderByDescending(s => s.Email);
+                    break;
+                //case "CourseName":
+                //    query = query.OrderBy(s => s.CourseName);
+                //    break;
+                //case "CourseName_desc":
+                //    query = query.OrderByDescending(s => s.CourseName);
+                //    break;
+                default:
+                    query = query.OrderBy(s => s.LastName);
+                    break;
+            }
+
+
+
+            if (searchString != null && searchString != "")
+            {
+                query = query.Where(u => u.FirstName.Contains(searchString) || u.LastName.Contains(searchString) || u.Email.Contains(searchString));
+                //query = query.Where(u => u.FirstName.Contains(searchString) || u.LastName.Contains(searchString) || u.Email.Contains(searchString) || u.CourseName.Contains(searchString));
+            }
+
+            
+            resultList = query.ToList();
+            if (resultList.Count > 0)
+            {
+                ViewBag.SearchResult = string.Format("Antal sökträffar {0}", query.Count());
+            }
+            else
+            {
+                ViewBag.SearchResult = "Inga sökträffar";
+            }
+               
+            return View(resultList.ToList());
+
+
+        }
+
+        // GET: ListTeachers
+        public ActionResult ListTeachers(string sortOrder, string searchString)
+        {
+
+            IQueryable<EditUserViewModel> query;
+            List<EditUserViewModel> resultList;
+
+                //Lista lärare
+
+                query = from u in db.Users
+                        where u.CourseId == null
+                        select new EditUserViewModel()
+                        {
+                            Id = u.Id,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email,
+                            CourseId = u.CourseId,
+                            UserRole = "Lärare"
+
+                        };
+
+
+            //Toggle sortorder
+            ViewBag.SortLastName = sortOrder == "LastName_desc" ? "LastName" : "LastName_desc";
+            ViewBag.SortFirstName = sortOrder == "FirstName" ? "FirstName_desc" : "FirstName";
+            ViewBag.SortEmail = sortOrder == "Email" ? "Email_desc" : "Email";
+            ViewBag.SortCourse = sortOrder == "CourseName" ? "CourseName_desc" : "CourseName";
+
+            switch (sortOrder)
+            {
+                case "LastName":
+                    query = query.OrderBy(s => s.LastName);
+                    break;
+                case "LastName_desc":
+                    query = query.OrderByDescending(s => s.LastName);
+                    break;
+                case "FirstName":
+                    query = query.OrderBy(s => s.FirstName);
+                    break;
+                case "FirstName_desc":
+                    query = query.OrderByDescending(s => s.FirstName);
+                    break;
+                case "Email":
+                    query = query.OrderBy(s => s.Email);
+                    break;
+                case "Email_desc":
+                    query = query.OrderByDescending(s => s.Email);
+                    break;
+                //case "CourseName":
+                //    query = query.OrderBy(s => s.CourseName);
+                //    break;
+                //case "CourseName_desc":
+                //    query = query.OrderByDescending(s => s.CourseName);
+                //    break;
+                default:
+                    query = query.OrderBy(s => s.LastName);
+                    break;
+            }
+
+
+
+            if (searchString != null && searchString != "")
+            {
+                query = query.Where(u => u.FirstName.Contains(searchString) || u.LastName.Contains(searchString) || u.Email.Contains(searchString));
+            }
+
+
+
+            resultList = query.ToList();
+            if (resultList.Count > 0)
+            {
+                ViewBag.SearchResult = string.Format("Antal sökträffar {0}", query.Count());
+            }
+            else
+            {
+                ViewBag.SearchResult = "Inga sökträffar";
+            }
+            return View(resultList.ToList());
+
+
+        }
+
 
         // GET: AdminUsers/Details/5
         public ActionResult Details(string id)
@@ -94,20 +432,53 @@ namespace LMS.Controllers
             return View(applicationUser);
         }
 
-        // GET: AdminUsers/Delete/5
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
+            ViewBag.ErrorDescription = "";
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApplicationUser applicationUser = db.Users.Find(id);
-            if (applicationUser == null)
+
+            ViewBag.AllCourses = GetCoursesList();
+
+            ApplicationUser u = db.Users.Find(id);
+            if (u == null)
             {
                 return HttpNotFound();
             }
-            return View(applicationUser);
+
+            var roles = await UserManager.GetRolesAsync(id);
+            var role = roles.FirstOrDefault();
+
+            var model = new EditUserViewModel()
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                CourseId = u.CourseId,
+                UserRole = role
+            };
+
+
+            return View(model);
+
         }
+        // GET: AdminUsers/Delete/5
+        //public ActionResult Delete(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    ApplicationUser applicationUser = db.Users.Find(id);
+        //    if (applicationUser == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(applicationUser);
+        //}
 
         // POST: AdminUsers/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -115,12 +486,107 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             ApplicationUser applicationUser = db.Users.Find(id);
-            db.Users.Remove(applicationUser);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            try
+            {
+
+                db.Users.Remove(applicationUser);
+                db.SaveChanges();
+                if (applicationUser.CourseId != null && applicationUser.CourseId > 0)
+                {
+                    return RedirectToAction("ListStudents");
+                }
+                else
+                {
+                    return RedirectToAction("ListTeachers");
+                }
+
+            }
+            catch
+            {
+                var model = new EditUserViewModel();
+                model.Email = applicationUser.Email;
+                model.CourseId = applicationUser.CourseId;
+                ViewBag.ErrorDescription = string.Format("Det gick inte att ta bort användaren {0}.", applicationUser.Email);
+                return View(model);
+            }
+
+        }
+
+        // GET: AdminUsers/Create
+        public ActionResult CreateNewUser(int? courseId, string userType)
+        {
+            var model = new RegisterViewModel();
+
+            model.CourseId = courseId;
+
+            userType = userType == null ? "" : userType;
+
+            if (courseId == null && userType == "")
+            {
+                model.UserRole = "Student";
+            }
+            else if (courseId == null && userType == "Teacher")
+            {
+                model.UserRole = "Teacher";
+            }
+            else
+            {
+                model.UserRole = "Student";
+            }
+               
+            ViewBag.AllCourses = GetCoursesList();
+            return View(model);
+
         }
 
 
+        public ActionResult ListEnrolledStudents(RegisterViewModel model)
+        {
+            TestController tc = new TestController();
+
+            return tc.GetEnrolledStudents(model.CourseId == null ? "0" : model.CourseId.ToString());
+          
+
+        }
+
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateNewUser(RegisterViewModel model)
+        {
+
+
+            if (ModelState.IsValid && (model.UserRole == "Teacher" || model.UserRole == "Student"))
+            {
+                var user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, Email = model.Email, CourseId = model.CourseId };
+                if (!db.Users.Any(u => u.UserName == model.Email))
+                {
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+
+                        //addToRole
+                         result = await UserManager.AddToRoleAsync(user.Id, model.UserRole);
+                        ViewBag.SuccessDesc = string.Format("Användaren {0} är sparad", user.Email);
+                        return RedirectToAction("CreateNewUser", "AdminUsers", new { courseId = model.CourseId, userType = model.UserRole });
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorDesc = "En användaren finns redan";
+                }
+            }
+            else
+            {
+                ViewBag.ErrorDesc = "Kunde ej skapa ny användare";
+            }
+
+            ViewBag.ErrorDesc = "Kunde ej skapa ny användare";
+            ViewBag.AllCourses = GetCoursesList();
+            return View(model);
+        }
 
         // GET: AdminUsers/Create
         public ActionResult CreateUser(int? courseId)
@@ -489,7 +955,8 @@ namespace LMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-          
+
+            ViewBag.AllCourses = GetCoursesList();
 
             ApplicationUser u = db.Users.Find(id);
             if (u == null)
@@ -521,10 +988,12 @@ namespace LMS.Controllers
         [ValidateAntiForgeryToken]
 
         //public Task<ActionResult> EditUser([Bind(Include = "Id,FirstName,LastName,CourseId,Email")] EditUserViewModel currentUser)
-        public ActionResult EditUser([Bind(Include = "Id,FirstName,LastName,CourseId,Email")] EditUserViewModel currentUser)
+        public ActionResult EditUser([Bind(Include = "Id,FirstName,LastName,CourseId,Email,UserRole")] EditUserViewModel currentUser)
 
 
         {
+            ViewBag.AllCourses = GetCoursesList();
+
             if (ModelState.IsValid)
             {
 
@@ -544,21 +1013,32 @@ namespace LMS.Controllers
 
 
                 //ApplicationUser applicationUser = StudentRepo.GetUser(currentUser.Id);
+                try
+                {
+                        ApplicationUser applicationUser = db.Users.Find(currentUser.Id);
 
-                ApplicationUser applicationUser = db.Users.Find(currentUser.Id);
 
-
-                applicationUser.Id = currentUser.Id;
-                applicationUser.FirstName = currentUser.FirstName;
-                applicationUser.LastName = currentUser.LastName;
-                applicationUser.Email = currentUser.Email;
-                applicationUser.CourseId = currentUser.CourseId;
+                        applicationUser.Id = currentUser.Id;
+                        applicationUser.FirstName = currentUser.FirstName;
+                        applicationUser.LastName = currentUser.LastName;
+                        applicationUser.Email = currentUser.Email;
+                        applicationUser.CourseId = currentUser.CourseId;
                 
-                db.Entry(applicationUser).State = EntityState.Modified;
+                        db.Entry(applicationUser).State = EntityState.Modified;
 
-                db.SaveChanges();
+                        db.SaveChanges();
+                    ViewBag.SuccessMsg = "Ändringarna har sparats."; 
+
+
+                }
+                catch (System.Exception ex)
+                {
+
+                    ViewBag.ErrorDescription = ex.Message;
+                }
                 return View(currentUser); 
             }
+            ViewBag.ErrorDescription = "Ändringarna kunde inte sparas";
             return View(currentUser);
         }
 

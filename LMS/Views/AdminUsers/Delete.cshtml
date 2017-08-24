@@ -1,136 +1,105 @@
-﻿@model LMS.Models.ApplicationUser
+﻿@model LMS.Models.EditUserViewModel
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Ta bort";
 }
 
-<h2>Delete</h2>
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "DeleteUser", infoText = "Användarhantering" })
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>ApplicationUser</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
+@*<h2>Användarhantering</h2>*@
+<br />
+<br />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
+<div class="container">
+    @{
+        if (ViewBag.ErrorDescription != "")
+        {
+            <p class="text-danger">@ViewBag.ErrorDescription</p>
 
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseId)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.CourseId)
-        </dd>
+        if (ViewBag.ErrorDescription == "")
+        {
+            <h3>Vill du ta bort användaren @Html.DisplayFor(model => model.Email)?</h3>
+            <div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+                <hr />
+                <dl class="dl-horizontal">
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.EmailConfirmed)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </dt>
+                    @{
+                        if (Model.CourseId != null && Model.CourseId > 0)
+                        {
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CourseName)
+                            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PasswordHash)
-        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.CourseName)
+                            </dd>
+                        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.SecurityStamp)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.SecurityStamp)
-        </dd>
+                    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
-        </dd>
+                </dl>
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.TwoFactorEnabled)
-        </dd>
+                        }
+                        <div>
+                            @using (Html.BeginForm())
+            {
+                                @Html.AntiForgeryToken()
 
-        <dt>
-            @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
-        </dt>
+                                <div class="form-actions no-color">
+                                    @{
+                                        if (ViewBag.ErrorDescription == "")
+                                        {
+                                            <input type="submit" value="Ta bort" class="btn btn-default" /> <span>|</span>
+                                        }
 
-        <dd>
-            @Html.DisplayFor(model => model.LockoutEndDateUtc)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.LockoutEnabled)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.LockoutEnabled)
-        </dd>
+                                        if (Model.CourseId > 0)
+                                        {
+                                            @Html.ActionLink("Tillbaka till elevlista", "ListStudents", "AdminUsers")
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("Tillbaka till lärarlista", "ListTeachers", "AdminUsers")
+                                        }
+                                    }
+                                </div>
+                                        }
+                        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AccessFailedCount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccessFailedCount)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
     }
 </div>
+
+@Html.Action("FootBanner", "CommonLOs", new { origin = "ListUser", infoText = "" })

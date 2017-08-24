@@ -119,6 +119,7 @@ namespace LMS.Controllers
                 return View(documentViewModel);
             }
             // Input validation
+            documentViewModel.SiblingDocuments = DocumentRepo.RetrieveCourseDocumentList(documentViewModel.CourseId, documentViewModel.ModuleId, documentViewModel.ActivityId);
             var validMess = DocumentRepo.DocumentNameIsUnique(documentViewModel);
             if (validMess != null)
             {
@@ -127,10 +128,13 @@ namespace LMS.Controllers
             }
             // End of input validation
 
-            if (documentViewModel.Id > 0)  //endast under test. Ska ändras till "Dokumentet är sparat" oavsett nytt eller ej
-                documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
+            string postMessage = "";
+            if (documentViewModel.Id > 0)
+                //documentViewModel.PostMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
+                postMessage = "Dokumentet " + documentViewModel.Name + " är uppdaterat";
             else
-                documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
+                //documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
+                postMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
 
             if (Request.Files.Count>0)
             {
@@ -171,7 +175,8 @@ namespace LMS.Controllers
 
             documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
 
-            return RedirectToAction("Manage", new { id = documentViewModel.Id });
+            var document = db.Documents.Find(documentViewModel.Id);
+            return RedirectToAction("Manage", new { id = documentViewModel.Id, courseId = document.CourseId, moduleId = document.ModuleId, activityId = document.ActivityId, viewMessage = postMessage });
         }
         //
         // end manage
@@ -206,6 +211,7 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(int id, int? courseId, int? moduleId, int? activityId )
         {
             Document document = db.Documents.Find(id);
+            NotificationRepo.AddRemovedDocumentNote(document);
             db.Documents.Remove(document);
             db.SaveChanges();
 

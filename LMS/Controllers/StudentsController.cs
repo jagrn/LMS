@@ -1,10 +1,11 @@
-﻿using LMS.Repositories;
+﻿using LMS.Models;
+using LMS.Repositories;
 using LMS.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LMS.Controllers
@@ -19,9 +20,17 @@ namespace LMS.Controllers
 
     public class StudentsController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: Students/MyPage
         public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek, bool fromMyPage)
         {
+            //Get currentUser in order to get courseId
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            courseId = currentUser.CourseId;
+            studentId = currentUser.Id;
+
             if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -29,6 +38,7 @@ namespace LMS.Controllers
 
             StudentViewModel viewModel = new StudentViewModel();
             viewModel.CourseId = (int)courseId;
+            viewModel.CourseDescription = CourseRepo.RetrieveCourseDescription((int)courseId);
             viewModel.StudentId = studentId;
             viewModel.StudentName = StudentRepo.GetStudentName(studentId);
             //viewModel.StudentId = StudentRepo.GetFakeStudentId();
@@ -121,6 +131,7 @@ namespace LMS.Controllers
                 if (showModuleDetails)
                 {
                     var start = viewModel.Module.StartDate;
+                    viewModel.SchemeYear = start.Year;
                     viewModel.SchemeWeek = GetWeekFromDate(start);
                     viewModel.SchemeMoveWeek = null;
                 }
@@ -128,6 +139,7 @@ namespace LMS.Controllers
                 if (showActivityDetails)
                 {
                     var start = viewModel.Activity.StartDate;
+                    viewModel.SchemeYear = start.Year;
                     viewModel.SchemeWeek = GetWeekFromDate(start);
                     viewModel.SchemeMoveWeek = null;
                 }
@@ -135,6 +147,105 @@ namespace LMS.Controllers
             return View(viewModel);
         }
 
+        public ActionResult ReadNote(int? moduleId, int? activityId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek, int? noteId)
+        {
+            //Get currentUser in order to studentId
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+            var studentId = currentUser.Id;
+
+            if ((noteId != null) && (noteId != 0))
+            {
+                StudentRepo.UpdateNoteForStudent(studentId, (int) noteId);
+            }
+            return RedirectToAction("MyPage", new { moduleId = moduleId, activityId = activityId, schemeYear = schemeYear, schemeWeek = schemeWeek, schemeMoveWeek = schemeMoveWeek, fromMyPage = true });
+        }
+
+        public ActionResult ReadAllNotes(int? moduleId, int? activityId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek)
+        {
+            //Get currentUser in order to studentId
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+            var studentId = currentUser.Id;
+            
+            StudentRepo.UpdateAllNotesForStudent(studentId);
+            
+            return RedirectToAction("MyPage", new { moduleId = moduleId, activityId = activityId, schemeYear = schemeYear, schemeWeek = schemeWeek, schemeMoveWeek = schemeMoveWeek, fromMyPage = true });
+        }
+
+
+        [Authorize(Roles = "Student")]
+        public ActionResult ListStudents(string sortOrder)
+        {
+
+            IQueryable<StudentListViewModel> query;
+            List<StudentListViewModel> resultList;
+
+            //Get currentUser in order to get courseId
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            
+            if (currentUser.CourseId != null)
+            {
+                query = from u in db.Users
+                        where u.CourseId == currentUser.CourseId
+                        select new StudentListViewModel()
+                        {
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email
+
+                        };
+
+                //Toggle sortorder
+                ViewBag.SortLastName = sortOrder == "LastName_desc" ?  "LastName" : "LastName_desc";
+                ViewBag.SortFirstName = sortOrder == "FirstName" ? "FirstName_desc" : "FirstName";
+                ViewBag.SortEmail = sortOrder == "Email" ? "Email_desc" : "Email";
+
+                switch (sortOrder)
+                {
+                    case "LastName":
+                        query = query.OrderBy(s => s.LastName);
+                        break;
+                    case "LastName_desc":
+                        query = query.OrderByDescending(s => s.LastName);
+                        break;
+                    case "FirstName":
+                        query = query.OrderBy(s => s.FirstName);
+                        break;
+                    case "FirstName_desc":
+                        query = query.OrderByDescending(s => s.FirstName);
+                        break;
+                    case "Email":
+                        query = query.OrderBy(s => s.Email);
+                        break;
+                    case "Email_desc":
+                        query = query.OrderByDescending(s => s.Email);
+                        break;
+                     default:
+                        query = query.OrderBy(s => s.LastName);
+                        break;
+                }
+
+   
+                
+                resultList = query.ToList();
+                ViewBag.Count = resultList.Count();
+                return View(resultList.ToList());
+
+            }
+            else
+            {
+                ViewBag.Count = 0;
+                return View(new List<StudentListViewModel>().DefaultIfEmpty());
+            }
+          
+            
+
+        }
+
+        public ActionResult Test()
+        {
+            return View();
+        }
         private DateTime GetMonday(int year, int week)
         {
             /// Converts a week number to corresponding monday date.
@@ -311,70 +422,70 @@ namespace LMS.Controllers
         }
 
         // GET: Students/Scheme
-        public ActionResult Scheme2(int? courseId, int? year, int? week, int? moveWeek)
-        {
-            SchemeViewModel viewModel = new SchemeViewModel();
-            if (courseId == null)
-            {
-                year = 2017;
-                week = 1;
-                moveWeek = 0;
-            }
+        //public ActionResult Scheme2(int? courseId, int? year, int? week, int? moveWeek)
+        //{
+        //    SchemeViewModel viewModel = new SchemeViewModel();
+        //    if (courseId == null)
+        //    {
+        //        year = 2017;
+        //        week = 1;
+        //        moveWeek = 0;
+        //    }
 
-            var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
-            viewModel.Year = periodData.Year;
-            viewModel.Week = periodData.Week;
-            viewModel.Monday = periodData.Start;
-            viewModel.Period = periodData.Start.Date + " -- " + periodData.End.Date;
-            viewModel.WeekActivities = new List<SchemeActivity>();
+        //    var periodData = GetWeekPeriod((int)year, (int)week, (int)moveWeek);
+        //    viewModel.Year = periodData.Year;
+        //    viewModel.Week = periodData.Week;
+        //    viewModel.Monday = periodData.Start;
+        //    viewModel.Period = periodData.Start.Date + " -- " + periodData.End.Date;
+        //    viewModel.WeekActivities = new List<SchemeActivity>();
 
-            for (int index = 0; index < 10; index++)
-            {
-                SchemeActivity schemeAct = new SchemeActivity();
-                if ((index == 0) || (index == 5) || (index == 6) || (index == 7))
-                {
-                    schemeAct.ActivityType = -1;
-                    schemeAct.NameText = "";
-                    schemeAct.TypeText = "";
-                    schemeAct.ActivityId = 1;
-                }
+        //    for (int index = 0; index < 10; index++)
+        //    {
+        //        SchemeActivity schemeAct = new SchemeActivity();
+        //        if ((index == 0) || (index == 5) || (index == 6) || (index == 7))
+        //        {
+        //            schemeAct.ActivityType = -1;
+        //            schemeAct.NameText = "";
+        //            schemeAct.TypeText = "";
+        //            schemeAct.ActivityId = 1;
+        //        }
 
-                if (index == 2)
-                {
-                    schemeAct.ActivityType = 0;
-                    schemeAct.NameText = "Java introduction";
-                    schemeAct.TypeText = "Föreläsning";
-                    schemeAct.ActivityId = 1;
-                }
+        //        if (index == 2)
+        //        {
+        //            schemeAct.ActivityType = 0;
+        //            schemeAct.NameText = "Java introduction";
+        //            schemeAct.TypeText = "Föreläsning";
+        //            schemeAct.ActivityId = 1;
+        //        }
 
-                if ((index == 3) || (index == 4))
-                {
-                    schemeAct.ActivityType = 1;
-                    if (index == 3)
-                        schemeAct.NameText = "Become a Java coder";
-                    else
-                        schemeAct.NameText = "Advanced techniques in Java";
-                    schemeAct.TypeText = "Datorbaserad";
-                    schemeAct.ActivityId = 1;
-                }
+        //        if ((index == 3) || (index == 4))
+        //        {
+        //            schemeAct.ActivityType = 1;
+        //            if (index == 3)
+        //                schemeAct.NameText = "Become a Java coder";
+        //            else
+        //                schemeAct.NameText = "Advanced techniques in Java";
+        //            schemeAct.TypeText = "Datorbaserad";
+        //            schemeAct.ActivityId = 1;
+        //        }
 
-                if ((index == 1) || (index > 7))
-                {
-                    schemeAct.ActivityType = 3;
-                    if (index == 1)
-                        schemeAct.NameText = "Java övning 1";
-                    else
-                        schemeAct.NameText = "Java övning 2";
-                    schemeAct.TypeText = "Övning";
-                    schemeAct.ActivityId = 1;
-                }
-                viewModel.WeekActivities.Add(schemeAct);
-            }
-
-
+        //        if ((index == 1) || (index > 7))
+        //        {
+        //            schemeAct.ActivityType = 3;
+        //            if (index == 1)
+        //                schemeAct.NameText = "Java övning 1";
+        //            else
+        //                schemeAct.NameText = "Java övning 2";
+        //            schemeAct.TypeText = "Övning";
+        //            schemeAct.ActivityId = 1;
+        //        }
+        //        viewModel.WeekActivities.Add(schemeAct);
+        //    }
 
 
-            return View(viewModel);
-        }
+
+
+        //    return View(viewModel);
+        //}
     }
 }

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LMS.Models.EditUserViewModel>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @if (item.CourseId == 0 || item.CourseId == null)
+                {
+                    <span></span>
+
+                }
+                else
+                {
+                    <span>@Html.DisplayFor(modelItem => item.CourseName)</span>
+                }
+
+            </td>
+            <td>
+                @Html.ActionLink("Ändra", "EditUser", new { id = item.Id }) |
+                @Html.ActionLink("Ta bort", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

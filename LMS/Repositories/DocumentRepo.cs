@@ -173,11 +173,14 @@ namespace LMS.Repositories
 
             if (documentViewModel.Id > 0)
             {
+                Document oldDocument = db.Documents.Find(documentViewModel.Id);
+                NotificationRepo.AddChangedDocumentNote(oldDocument, dbDocument);
                 db.Entry(dbDocument).State = EntityState.Modified;
                 db.SaveChanges();
             }
             else
             {
+                NotificationRepo.AddNewDocumentNote(dbDocument);
                 db.Documents.Add(dbDocument);
                 db.SaveChanges();
             }

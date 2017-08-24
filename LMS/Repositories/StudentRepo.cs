@@ -85,6 +85,15 @@ namespace LMS.Repositories
             return students.First().FullName;
         }
 
+        public static bool IsCourseWithStudents(int courseId)
+        {
+            var students = db.Users.Where(u => u.CourseId == courseId).ToList();
+            if (students.Count() == 0)
+                return false;
+            else
+                return true;
+        }
+
         // ADD a student notification to all students attending the concerned course
         public static void AddNoteToStudents(int courseId, int notificationId)
         {
@@ -115,17 +124,17 @@ namespace LMS.Repositories
             List<Notification> notifications = new List<Notification>();
             foreach (var note in studentNotes)
             {
-                var notification = db.Notifications.Where(n => n.Id == note.MyNoteRef).ToList();
-                if (notification.First().EndOfRelevance >= DateTime.Now)
+                var notification = NotificationRepo.RetrieveRelevantNote(note.MyNoteRef);
+                if (notification != null)
                 {
-                    notifications.Add(notification.First());
+                    notifications.Add(notification);
                 }
             }
             return notifications;
         }
 
         // UPDATE a student notification for a student as read
-        public static void UppdateNoteForStudent(string studentId, int notificationId)
+        public static void UpdateNoteForStudent(string studentId, int notificationId)
         {
             if ((studentId == null) || (notificationId == 0))
                 return;
@@ -134,6 +143,26 @@ namespace LMS.Repositories
                                     .Where(sn => sn.MyNoteRef == notificationId).ToList();
 
             studentNote.First().NoteRead = true;
+
+            db.Entry(studentNote.First()).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        // UPDATE a all student notifications for a student as read
+        public static void UpdateAllNotesForStudent(string studentId)
+        {
+            if (studentId == null)
+                return;
+
+            var studentNotes = db.StudentNotifications.Where(sn => sn.ApplicationUserId == studentId)
+                                    .Where(sn => sn.NoteRead == false).ToList();
+
+            foreach (var note in studentNotes)
+            {
+                note.NoteRead = true;
+                db.Entry(note).State = EntityState.Modified;
+            }
+            db.SaveChanges();
         }
 
     }
