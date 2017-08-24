@@ -20,9 +20,9 @@
         <hr />
         <div class="row">
             <div class="col-lg-6">
-                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Pågående", "Index", new { courseDate = "coursDate_actuall" })</p>
-                <p style="float:left; margin-right:5px;"> @Html.ActionLink("GAMLA", "Index", new { courseDate = "coursDate_old" }) </p>
-                <p style="float:left; margin-right:5px;"> @Html.ActionLink("FRAMTIDA", "Index", new { courseDate = "coursDate_future" }) </p>
+                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Pågående", "Index", new { courseDate = "coursDate_actuall" }) || </p>
+                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Avslutade", "Index", new { courseDate = "coursDate_old" }) || </p>
+                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Kommande", "Index", new { courseDate = "coursDate_future" }) </p>
             </div>
             <div class="col-lg-6 right">
                 <div class="swell right">
@@ -100,7 +100,9 @@
             }
         </table>
     </div>
+</div>
+<div>
+    @Html.Action("FootBanner", "CommonLOs", new { origin = "CourseCatalogue", infoText = "" })
 
-    @Html.Action("FootBanner", "CommonLOs", new { origin = "CourseMgmnt", infoText = "" })
 
 

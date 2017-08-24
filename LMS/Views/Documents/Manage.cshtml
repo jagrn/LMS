@@ -147,7 +147,7 @@
 
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.UploadDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.UploadDate, htmlAttributes: new { @class = "control-label col-md-2"})
                     <div class="col-md-9" style="margin-left:20px;">
 
                         @Html.EditorFor(model => model.UploadDate, new { htmlAttributes = new { @class = "form-control" } })
@@ -200,7 +200,8 @@
         </div>
     </div>
 }
-
+</div>
+<div>
 @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = "" })
 
 

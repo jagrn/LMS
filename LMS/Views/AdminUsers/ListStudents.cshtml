@@ -27,7 +27,7 @@
         @Html.ActionLink("Lägg till ny elev", "CreateNewUser", new { userType = "Student" })
     </p>*@
 
-    <table class="table">
+    <table class="table table-striped table-condensed table-bordered">
         <tr>
             <th>
                 <a href="@Url.Action("ListStudents",new { sortOrder = ViewBag.SortLastName })">@Html.DisplayNameFor(model => model.LastName)</a>

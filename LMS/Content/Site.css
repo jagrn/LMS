@@ -1,8 +1,9 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    /*overflow-y:scroll;*/    
+    overflow-y:scroll;    
   height: 100vh;
+  min-height:100vh;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -304,9 +305,10 @@ color:#198521;
 
 .fl-page {
   position: relative;
-  min-height: 100vh;
-  width: 100%;
-  padding-bottom: 140px; /* Should be equal to the height of your footer */
+  /*min-height: 100vh;*/
+  /*width: 100%;*/
+  padding-bottom: 140px; 
+  /* Should be equal to the height of your footer */
      
 }
 .fl-page-footer-wrap {
@@ -315,6 +317,7 @@ color:#198521;
   position: absolute;
   bottom: 0px;
   background-color:#eaeaea;
+  margin-top:140px;
 }
 
 
