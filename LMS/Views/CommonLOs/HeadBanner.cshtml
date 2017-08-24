@@ -27,109 +27,119 @@
 
 }
 
-<div class="greyBackground">
+<div class="greyBackground headBanner">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
-
+            <div class="col-md-12">
+                
                 @{
-                    switch (Model.Origin)
-                    {
-                        case "CourseCatalogue":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
+                    <ol class="breadcrumb">
+                        @switch (Model.Origin)
+                        {
+                            case "CourseCatalogue":
+
+                                <li class="headerBannerCurrentPage">
                                     @courseCatalogue
-                                </span>
-                            </div>
-                            break;
-                        case "CourseMgmnt":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
-                                    <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
-                                    &nbsp;/&nbsp;
-                                    @courseHandling
-                                </span>
-                            </div>
-                            break;
+                                </li>
 
-                        case "ModuleMgmnt":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
-                                    <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
-                                    &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
-                                    &nbsp;/&nbsp;
-                                    @moduleHandling
-                                </span>
-                            </div>
-                            break;
+                                break;
+                            case "CourseMgmnt":
 
-                        case "ActivityMgmnt":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
-                                    <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
-                                    &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
-                                    &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "LoadMini" }, null)">@moduleHandling</a>
-                                    &nbsp;/&nbsp;
-                                    @activityHandling
-                                </span>
-                            </div>
-                            break;
+                                <li>
+                                    <a  href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
+                                </li>
+                                <li class="headerBannerCurrentPage">@courseHandling</li>
+                                break;
 
-                        case "DocumentMgmnt":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
-                                    <a class="@textColor" href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
-                                    &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
-                                    &nbsp;/&nbsp;
-                                    @{
-                                        if (Model.Id2 != 0)
-                                        {
-                                            <a class="@textColor" href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "LoadMini" }, null)">@moduleHandling</a>                                           
-                                            <span>&nbsp;/ &nbsp;</span>
-                                        }
-                                    }
-                                    
-                                    @{
-                                        if (Model.Id3 != 0)
-                                        {
-                                            <a class="@textColor" href="@Url.Action("Manage", "Activities", new { Id = Model.Id3, courseId = Model.Id1, moduleId = Model.Id2, getOperation = "LoadMini" }, null)">@activityHandling</a>
-                                            <span>&nbsp;/ &nbsp;</span>
-                                        }
+                            case "ModuleMgmnt":
 
-                                    }
+                                <li>
+                                    <a href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
+                                </li>
+                                <li class="headerBannerCurrentPage">@moduleHandling</li>
+                                break;
 
-                                </span>
-                            </div>
-                            break;
+                            case "ActivityMgmnt":
 
-                        case "StudentMyPage":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
-                                    Min sida
-                                </span>
-                            </div>
-                            break;
+                                <li>
+                                    <a href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "LoadMini" }, null)">@moduleHandling</a>
+                                </li>
+                                <li class="headerBannerCurrentPage">@activityHandling</li>
 
-                        case "StudentList":
-                            <div class="@topSection1 @textColor headBannerLink">
-                                <span>
-                                    Min sida
-                                    &nbsp;/&nbsp;
-                                    <a class="@textColor" href="@Url.Action("Index", "Courses")">Kurskamrater</a>
-                                </span>
-                            </div>
-                            break;
+                                break;
 
-                        default:
-                            break;
-                    }
+                            case "DocumentMgmnt":
+
+                                <li>
+                                    <a href="@Url.Action("Index", "Courses")">@courseCatalogue</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Manage", "Courses", new { Id = Model.Id1, getOperation = "LoadMini" }, null)">@courseHandling</a>
+                                </li>
+
+                                if (Model.Id2 != 0)
+                                {
+                                    <li class="headerBannerCurrentPage">
+                                        <a href="@Url.Action("Manage", "Modules", new { Id = Model.Id2, courseId = Model.Id1, getOperation = "LoadMini" }, null)">@moduleHandling</a>
+                                    </li>
+                                }
+
+                                if (Model.Id3 != 0)
+                                {
+                                    <li class="headerBannerCurrentPage">
+                                        <a href="@Url.Action("Manage", "Activities", new { Id = Model.Id3, courseId = Model.Id1, moduleId = Model.Id2, getOperation = "LoadMini" }, null)">@activityHandling</a>
+                                    </li>
+                                }
+
+
+
+                                break;
+
+                            case "StudentMyPage":
+
+                                <li class="headerBannerCurrentPage">
+                                   &nbsp;
+                                </li>
+                                break;
+
+
+                            case "StudentList":
+
+                                <li><a href="@Url.Action("MyPage", "Students", new { schemeMoveWeek = 0, fromMyPage=false})">Min sida</a></li>
+                                <li class="headerBannerCurrentPage">
+                                    Kursdeltagare
+                                </li>
+
+                                break;
+
+                            default:
+                                break;
+                        }
+                    </ol>
                 }
+
             </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+               
+                <p><span style="font-size: 36px">@Model.InfoText</span></p>
+                
+               
             </div>
+        </div>
     </div>
-    <h2 class="topSection2">@Model.InfoText</h2>
+
 </div>
+<br />

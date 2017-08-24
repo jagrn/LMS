@@ -23,39 +23,44 @@
 
     <div class="row">
 
-        <div class="col-md-2">
+        <div class="col-md-3">
 
             <b>Kursdetaljer</b>
-
-
             <ul class="nav nav-stacked">
                 <li>@Html.ActionLink("Kursdeltagare", "ListStudents", "Students")</li>
                 <li> <a data-toggle="modal" data-target="#exampleModalLong">Notiser (@Model.NoOfNotifications)</a></li>
             </ul>
             <br />
-            <b>Kursmoduler</b>
-            <ul class="nav nav-stacked">
+            @*<b>Kursmoduler</b>
+                <ul class="nav nav-stacked">
 
-                @{
+                    @{
 
 
-                    if ((Model.CourseModules != null) && (Model.CourseModules.Count != 0))
-                    {
-                        foreach (var module in Model.CourseModules)
+                        if ((Model.CourseModules != null) && (Model.CourseModules.Count != 0))
                         {
+                            foreach (var module in Model.CourseModules)
+                            {
 
-                            <li>
-                                <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })">@module.Name</a>
-                            </li>
+                                <li>
+                                    <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = module.Id, activityId = 0, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })">@module.Name</a>
+                                </li>
+                            }
                         }
-                    }
-                }
-            </ul>
+                   }
+                </ul>
+                <br />*@
+
+            @if ((Model.CourseModules != null) && (Model.CourseModules.Count != 0))
+            {
+                Html.RenderAction("CourseModuleMenu");
+            }
+
         </div>
 
-        <div class="col-md-10">
+        <div class="col-md-9">
             <h4>Kursinformation @Model.CourseName</h4>
-          
+
 
             <!-- Modal -->
             <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -106,8 +111,8 @@
             @Html.Action("Scheme", "Students", new { courseId = courseId, year = Model.SchemeYear, week = Model.SchemeWeek, moveWeek = Model.SchemeMoveWeek, myPageModuleId = Model.ModuleId, myPageActivityId = Model.ActivityId, myPageStudentId = Model.StudentId })
 
 
-            <div>
-
+            <div class="infobox">
+                <span id="infoBox"></span>
                 @{
                     if ((moduleId != 0) && (activityId == 0))
                     {
@@ -115,10 +120,22 @@
                             <h4>Modulinformation @Model.Module.Name</h4>
 
                             <p>
-                                Startdatum: @Model.Module.StartDate.ToShortDateString()
-                                Slutdatum: @Model.Module.EndDate.ToShortDateString()
+                                <b>Startdatum:</b> @Model.Module.StartDate.ToShortDateString()
+                                <b>Slutdatum:</b> @Model.Module.EndDate.ToShortDateString()
                             </p>
                             <p> @Model.Module.Description</p>
+                            @*<p>
+                                <b>Dokument:</b>
+                                @foreach (var doc in Model.Module.Documents)
+                                {
+                                    <span>&nbsp;@doc.Name</span>
+                                }
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <span>&nbsp;Dokumentnamn,</span>
+
+                                }
+                            </p>*@
                         </div>
                     }
                     else
@@ -130,11 +147,23 @@
                                 <h4>Aktivitetsinformation @Model.Activity.Name</h4>
 
                                 <p>
-                                    Start: @Model.Activity.StartDate.ToShortDateString() @Model.Activity.StartDate.TimeOfDay
-                                    Slut: @Model.Activity.EndDate.ToShortDateString() @Model.Activity.EndDate.TimeOfDay
+                                    <b>Start:</b> @Model.Activity.StartDate.ToShortDateString() @Model.Activity.StartDate.ToShortTimeString()
+                                    <b>Slut:</b> @Model.Activity.EndDate.ToShortDateString() @Model.Activity.EndDate.ToShortTimeString()
                                 </p>
-                                <p>Aktivitetstyp: @activityType[(int)Model.Activity.ActivityType]</p>
-                                <p>Aktivitetsbeskrivning: @Model.Activity.Description</p>
+                                <p><b>Aktivitetstyp:</b> @activityType[(int)Model.Activity.ActivityType]</p>
+                                <p><b>Aktivitetsbeskrivning:</b> @Model.Activity.Description</p>
+                                @*<p>
+                                    <b>Dokument:</b>
+                                    @foreach (var doc in Model.Activity.Documents)
+                                    {
+                                        <span>&nbsp;@doc.Name,</span>
+                                    }
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        <span>&nbsp;Dokumentnamn,</span>
+
+                                    }
+                                </p>*@
                             </div>
                         }
                         else
@@ -149,7 +178,7 @@
             </div>
             <div>
                 @{
-                    if (moduleId != 0)
+                    if (moduleId != 0 && activityId == 0)
                     {
                         <h4 class="page-header"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Aktiviteter i modulen @Model.Module.Name</h4>
 
@@ -161,38 +190,48 @@
                                     <a href="@Url.Action("MyPage", "Students", new { courseId = courseId, moduleId = moduleId, activityId = activity.Id, studentId = studentId, schemeYear = Model.SchemeYear, schemeWeek = Model.SchemeWeek, fromMyPage = true })"><b>@activity.Name</b></a>
                                 </p>
                                 <p>
-                                  
-                                    Startdatum: @activity.StartDate.ToShortDateString() @activity.StartDate.TimeOfDay
+
+                                    <b>Startdatum:</b> @activity.StartDate.ToShortDateString() @activity.StartDate.ToShortTimeString()
                                     <br />
 
-                                    Aktivitetsbeskrivning: @activity.Description
+                                    <b>Aktivitetsbeskrivning:</b> @activity.Description
                                 </p>
+                              
+                                    @*<p>
+                                        <b>Dokument:</b>
+                                        @foreach (var doc in Model.Activity.Documents)
+                                        {
+                                            <span>&nbsp;@doc.Name,</span>
+                                        }
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            <span>&nbsp;Dokumentnamn,</span>
 
-                                <hr />
+                                        }
+                                       
+                                    </p>*@
+                                    <hr />
                                 }
-                                }
-                                }
-                                }
-                            </div>
+                            }
+                        }
+                    }
+        </div>
 
-                        </div>
-
-
-                    </div>
+    </div>
 
 
+</div>
 
 
 
 
-                </div>
+
+
+</div>
 
 
 
-
-                @Html.Action("FootBanner", "CommonLOs", new { origin = "StudentMyPage", infoText = "" })
-
-                                @section Scripts {
-                                    @Scripts.Render("~/bundles/jqueryval")
-                                }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 

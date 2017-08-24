@@ -258,6 +258,8 @@ namespace LMS.ViewModels
         public List<ActivityListData> ModuleActivities { get; set; }
         public int NoOfNotifications { get; set; }
         public List<Notification> Notifications { get; set; }
+        public List<Document> DocumentList { get; set; }
+
 
         public int SchemeYear { get; set; }
         public int SchemeWeek { get; set; }

@@ -21,6 +21,7 @@ namespace LMS.Controllers
     public class StudentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+   
 
         // GET: Students/MyPage
         public ActionResult MyPage(int? courseId, int? moduleId, int? activityId, string studentId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek, bool fromMyPage)
@@ -29,8 +30,10 @@ namespace LMS.Controllers
             ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
 
             courseId = currentUser.CourseId;
+  
             studentId = currentUser.Id;
 
+           
             if ((courseId == 0) || (courseId == null) || (studentId == null))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -58,6 +61,14 @@ namespace LMS.Controllers
                 viewModel.Module.Description = singleModule.module.Description;
                 viewModel.Module.StartDate = singleModule.module.StartDate;
                 viewModel.Module.EndDate = singleModule.module.EndDate;
+
+                //var docs = db.Documents.Where(d => d.CourseId == courseId && d.ModuleId == moduleId);
+                //docs = docs.OrderBy(d => d.Name);
+
+                //viewModel.Module.Documents = docs.ToList();
+
+        
+
                 showModuleDetails = true;
             }
             else
@@ -66,11 +77,12 @@ namespace LMS.Controllers
             }
 
             bool showActivityDetails = false;
+            viewModel.Activity = new Models.Activity();
             if ((activityId != null) && (activityId != 0))
             {
                 viewModel.ActivityId = (int)activityId;
                 // Load a selected activity
-                viewModel.Activity = new Models.Activity();
+                
                 var singleActvivity = ActivityRepo.RetrieveActivity(moduleId, activityId);
                 if (singleActvivity.repoResult == ActivityRepoResult.NotFound)
                 {
@@ -83,9 +95,11 @@ namespace LMS.Controllers
                 viewModel.Activity.ActivityType = singleActvivity.activity.ActivityType;
                 showActivityDetails = true;
                 showModuleDetails = false;
-            }
+
+           }
             else
             {
+               
                 viewModel.ActivityId = 0;
             }
 
@@ -105,6 +119,11 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
             viewModel.ModuleActivities = moduleActivityList.activityList;
+            var docs = db.Documents.Where(d => d.CourseId == courseId && d.ModuleId == moduleId && d.ActivityId == activityId);
+            docs = docs.OrderBy(d => d.Name);
+
+            viewModel.Activity.Documents = docs.ToList();
+
 
             viewModel.Notifications = StudentRepo.RetreiveNotesForStudent(viewModel.StudentId);
             viewModel.NoOfNotifications = viewModel.Notifications.Count;
@@ -144,7 +163,21 @@ namespace LMS.Controllers
                     viewModel.SchemeMoveWeek = null;
                 }
             }
+
+
+
+
             return View(viewModel);
+        }
+
+        public ActionResult CourseModuleMenu()
+        {
+            ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            int courseId = (int)currentUser.CourseId;
+            TestController tc = new TestController();
+
+            return tc.GetCourseModuleMenu(courseId);
         }
 
         public ActionResult ReadNote(int? moduleId, int? activityId, int? schemeYear, int? schemeWeek, int? schemeMoveWeek, int? noteId)
@@ -181,7 +214,7 @@ namespace LMS.Controllers
 
             //Get currentUser in order to get courseId
             ApplicationUser currentUser = db.Users.Find(User.Identity.GetUserId());
-
+            ViewBag.CourseName = Repositories.CourseRepo.RetrieveCourseName(currentUser.CourseId);
             
             if (currentUser.CourseId != null)
             {

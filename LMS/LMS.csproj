@@ -451,6 +451,7 @@
     <Content Include="Views\AdminUsers\CreateNewUser.cshtml" />
     <Content Include="Views\Shared\_ListEnrolledStudents.cshtml" />
     <Content Include="Views\Test\_ListEnrolledStudents.cshtml" />
+    <Content Include="Views\Shared\_CourseModuleMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
