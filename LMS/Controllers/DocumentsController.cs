@@ -102,12 +102,7 @@ namespace LMS.Controllers
             documentViewModel.SiblingDocuments = DocumentRepo.RetrieveCourseDocumentList(courseId, moduleId, activityId);
             return View(documentViewModel);
         }
-        //public ActionResult Manage([Bind(Include = "Id,Name,Description,Format,UploadDate,CourseId,ModuleId,ActivityId,UserId,PostMessage,PostNavigation,PostOperation")] ActivityViewModel viewModel)
-[HttpPost]
-        public ActionResult Manage()
-        {
-            return View();
-        }
+
         // POST: Activities/Manage/5
         [HttpPost]
         [ValidateAntiForgeryToken]
