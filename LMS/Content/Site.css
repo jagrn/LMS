@@ -4,6 +4,7 @@
     overflow-y:scroll;    
   height: 100vh;
   min-height:100vh;
+
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -307,18 +308,11 @@ color:#198521;
   position: relative;
   /*min-height: 100vh;*/
   /*width: 100%;*/
-  padding-bottom: 140px; 
+  /*padding-bottom: 140px;*/ 
   /* Should be equal to the height of your footer */
      
 }
-.fl-page-footer-wrap {
 
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  background-color:#eaeaea;
-  margin-top:140px;
-}
 
 
 .notesModalButton{

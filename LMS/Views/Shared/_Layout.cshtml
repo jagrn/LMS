@@ -71,15 +71,15 @@
 
     
 
-    @*<div class="container-fluid body-content" style="margin-left:-20px; margin-right:-20px">*@
+    @*<div class="container-fluid body-content" style="margin-left:-20px; margin-right:-20px; min-height: 100vh;">*@
     <div class="fl-page">
-        @RenderBody()
+        @RenderBody()</div>
         @*<hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - An example LMS Application</p>
         </footer>*@
-        @{Html.RenderAction("FootBanner", "CommonLOs"); }
-   </div>
+
+
 
 
 

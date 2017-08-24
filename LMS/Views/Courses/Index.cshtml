@@ -20,9 +20,9 @@
         <hr />
         <div class="row">
             <div class="col-lg-6">
-                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Pågående", "Index", new { courseDate = "coursDate_actuall" }) || </p>
-                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Avslutade", "Index", new { courseDate = "coursDate_old" }) || </p>
-                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Kommande", "Index", new { courseDate = "coursDate_future" }) </p>
+                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Pågående", "Index", new { courseDate = "couseDateActual" }) | </p>
+                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Avslutade", "Index", new { courseDate = "coursDate_old" }) | </p>
+                <p style="float:left; margin-right:5px;"> @Html.ActionLink("Alla", "Index", new { courseDate = "couseDateAll" }) </p>
             </div>
             <div class="col-lg-6 right">
                 <div class="swell right">
@@ -46,24 +46,29 @@
         </div>
         <div class="info infoTextWarning">
             <p style="color:@ViewBag.MessageColor">@ViewBag.Message</p>
+            <p>@ViewBag.SearchResult</p>
         </div>
         <hr />
         <table class="table table-striped table-condensed table-bordered">
             <tr>
                 <th class="col-lg-2">
                     @*@Html.ActionLink("Kursnamn", "Index", new { sortOrder = "coursName_desc" })*@
-                    @Html.DisplayNameFor(model => model.Name)
+                    <a href="@Url.Action("Index",new { sortOrder = ViewBag.SortCoursName })">@Html.DisplayNameFor(model => model.Name)</a>
+
+                    @*@Html.DisplayNameFor(model => model.Name)*@
                 </th>
                 <th class="col-lg-7">
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th class="col-lg-1">
+                    <a href="@Url.Action("Index",new { sortOrder = ViewBag.SortStartDate })">@Html.DisplayNameFor(model => model.StartDate)</a>
                     @*@Html.ActionLink("Startdatum", "Index", new { sortOrder = "startDate_desc" })*@
-                    @Html.DisplayNameFor(model => model.StartDate)
+                    @*@Html.DisplayNameFor(model => model.StartDate)*@
                 </th>
                 <th class="col-lg-1">
-                    @*@Html.ActionLink("Slutdatum", "Index", new { sortOrder = "endDate_desc" })*@
-                    @Html.DisplayNameFor(model => model.EndDate)
+                    <a href="@Url.Action("Index",new { sortOrder = ViewBag.SortEndDate })">@Html.DisplayNameFor(model => model.EndDate)</a>
+                   @*@Html.ActionLink("Slutdatum", "Index", new { sortOrder = "endDate_desc" })*@
+                    @*@Html.DisplayNameFor(model => model.EndDate)*@
                 </th>
                 <th class="col-lg-1">
                 </th>
@@ -74,12 +79,12 @@
                 <tr>
                     <td class="col-lg-2">
                         @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td class="col-lg-7">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td class="col-lg-1">
-                        @*@Html.DisplayFor(modelItem => item.StartDate)*@
+    </td>
+    <td class="col-lg-7">
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td class="col-lg-1">
+        @*@Html.DisplayFor(modelItem => item.StartDate)*@
                         @if(item.StartDate != null)
                         {
                             @Html.DisplayFor(modelItem => item.StartDate)
@@ -100,9 +105,6 @@
             }
         </table>
     </div>
-</div>
-<div>
-    @Html.Action("FootBanner", "CommonLOs", new { origin = "CourseCatalogue", infoText = "" })
 
 
 
