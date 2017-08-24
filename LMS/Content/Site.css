@@ -99,7 +99,7 @@ h4 {
 }
 
 .nav-pills > li:hover > a, .nav-pills > li:hover > a:hover, .nav-pills > li:hover > a:focus{
-    background-color:#c4e9c4;
+    background-color:#f6f6f6;
     color:#198521;
 }
 
@@ -186,11 +186,11 @@ color:#198521;
 }
 
 .greenButton{
-    font-size: 16px;
+
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 9px;
@@ -200,12 +200,11 @@ color:#198521;
 }
 
 .greenButtonSmall{
-    font-size: 12px;
-    font-weight:bold;
+
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 6px;
@@ -213,12 +212,12 @@ color:#198521;
 }
 
 .redButton{
-    font-size: 16px;
-    font-weight:bold;
+
+
     color:#cc0000;
     background-color:darksalmon;
     border-color: #cc0000;
-    border-width:2px;
+    border-width:1px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 11px;
@@ -228,11 +227,11 @@ color:#198521;
 }
 
 .saveButton{
-    font-size: 16px;
+ 
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 10px;
@@ -340,9 +339,9 @@ color:#198521;
 
 .notesModalButton{
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     
 }
 .infobox {
