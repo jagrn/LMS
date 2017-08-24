@@ -25,6 +25,17 @@ namespace LMS.Repositories
             return notifications;
         }
 
+
+        // RETRIEVE a notification if it is relevant today
+        public static Notification RetrieveRelevantNote(int noteId)
+        {
+            var notifications = db.Notifications.Where(n => n.Id == noteId).Where(n => n.EndOfRelevance >= DateTime.Now).ToList();
+            if (notifications.Count != 1)
+                return null;
+            return notifications.First();
+        }
+
+        // AS A GENERAL RULE, DO NOT LOG CHANGES UNLESS IT CONCERNS AN ONGOING OR FUTURE ITEM.
         // AS A GENERAL RULE, DO NOT LOG CHANGES UNLESS AT LEAST ONE STUDENT IS PRESENT IN COURSE.
 
         // ADD a notification about a new module
@@ -32,6 +43,9 @@ namespace LMS.Repositories
         {
             if (DateTime.Now > module.EndDate)
                 return;                             // No logging of changes in the passed
+
+            if (!StudentRepo.IsCourseWithStudents(module.CourseId))
+                return;
 
             Notification notification = new Notification();
             notification.CourseId = module.CourseId;
@@ -55,6 +69,9 @@ namespace LMS.Repositories
         {
             if (DateTime.Now > module.EndDate)
                 return;                             // No logging of changes in the passed
+
+            if (!StudentRepo.IsCourseWithStudents(module.CourseId))
+                return;
 
             Notification notification = new Notification();
             notification.CourseId = module.CourseId;
@@ -85,6 +102,9 @@ namespace LMS.Repositories
         {
             if ((DateTime.Now > oldModule.EndDate) && (DateTime.Now > newModule.EndDate))
                 return;                             // No logging of changes in the passed
+
+            if (!StudentRepo.IsCourseWithStudents(newModule.CourseId))
+                return;
 
             Notification notification = new Notification();
             notification.CourseId = newModule.CourseId;
@@ -134,11 +154,15 @@ namespace LMS.Repositories
         {
             if (DateTime.Now > activity.EndDate)
                 return;                             // No logging of changes in the passed
-
-            Notification notification = new Notification();
+          
             int courseId = ModuleRepo.RetrieveModuleCourseId(activity.ModuleId);
             if (courseId < 1)
                 return;             // Bad request for courseId
+
+            if (!StudentRepo.IsCourseWithStudents(courseId))
+                return;
+
+            Notification notification = new Notification();
             notification.CourseId = courseId;
             notification.ChangeTime = DateTime.Now;
             notification.EndOfRelevance = activity.EndDate;
@@ -162,10 +186,14 @@ namespace LMS.Repositories
             if (DateTime.Now > activity.EndDate)
                 return;                             // No logging of changes in the passed
 
-            Notification notification = new Notification();
             int courseId = ModuleRepo.RetrieveModuleCourseId(activity.ModuleId);
             if (courseId < 1)
                 return;             // Bad request for courseId
+
+            if (!StudentRepo.IsCourseWithStudents(courseId))
+                return;
+
+            Notification notification = new Notification();           
             notification.CourseId = courseId;
             notification.ChangeTime = DateTime.Now;
             notification.EndOfRelevance = activity.EndDate;
@@ -189,10 +217,14 @@ namespace LMS.Repositories
             if ((DateTime.Now > oldActivity.EndDate) && (DateTime.Now > newActivity.EndDate))
                 return;                             // No logging of changes in the passed
 
-            Notification notification = new Notification();
             int courseId = ModuleRepo.RetrieveModuleCourseId(newActivity.ModuleId);
             if (courseId < 1)
                 return;             // Bad request for courseId
+
+            if (!StudentRepo.IsCourseWithStudents(courseId))
+                return;
+
+            Notification notification = new Notification();           
             notification.CourseId = courseId;
             notification.ChangeTime = DateTime.Now;
             notification.EndOfRelevance = newActivity.EndDate;
@@ -251,6 +283,9 @@ namespace LMS.Repositories
             {
                 return;
             }
+
+            if (!StudentRepo.IsCourseWithStudents((int) document.CourseId))
+                return;
 
             Notification notification = new Notification();
             notification.CourseId = (int) document.CourseId;
@@ -311,6 +346,9 @@ namespace LMS.Repositories
                 return;
             }
 
+            if (!StudentRepo.IsCourseWithStudents((int)document.CourseId))
+                return;
+
             Notification notification = new Notification();
             notification.CourseId = (int)document.CourseId;
             notification.ChangeTime = DateTime.Now;
@@ -368,6 +406,9 @@ namespace LMS.Repositories
             {
                 return;
             }
+
+            if (!StudentRepo.IsCourseWithStudents((int)newDocument.CourseId))
+                return;
 
             Notification notification = new Notification();
             notification.CourseId = (int)newDocument.CourseId;
