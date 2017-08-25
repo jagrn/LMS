@@ -93,7 +93,7 @@ namespace LMS.Repositories
                 documentViewModel.ActivityId = activityId;
                 documentViewModel.UserId = userId;
                 documentViewModel.UploadDate = DateTime.Now;
-                documentViewModel.FileName = "Ingen fil har valts";
+                //documentViewModel.FileName = "Ingen fil har valts";
             }
             documentViewModel.PostMessage = postMessage;
 

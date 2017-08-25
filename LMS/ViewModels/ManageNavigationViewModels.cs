@@ -299,6 +299,7 @@ namespace LMS.ViewModels
         [Required]
         [DisplayName("Namn")]
         public string Name { get; set; }
+        [DisplayName("Filnamn")]
         public string FileName { get; set; }
         public string UploadedFileName { get; set; }
         [Required]
