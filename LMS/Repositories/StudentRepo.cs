@@ -81,7 +81,7 @@ namespace LMS.Repositories
 
         public static string GetStudentName(string studentId)
         {
-            var students = db.Users.Where(u => u.Id == studentId).ToList();
+            var students = db.Users.AsNoTracking().Where(u => u.Id == studentId).ToList();
             return students.First().FullName;
         }
 
