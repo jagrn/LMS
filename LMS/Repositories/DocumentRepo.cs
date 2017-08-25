@@ -195,6 +195,7 @@ namespace LMS.Repositories
             return documentList;
         }
 
+
         // RETREIVE number of documents for a course / module / activity
         public static int RetrieveNoOfDocuments(int? courseId, int? moduleId, int? activityId)
         {

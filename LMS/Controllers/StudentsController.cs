@@ -62,12 +62,7 @@ namespace LMS.Controllers
                 viewModel.Module.StartDate = singleModule.module.StartDate;
                 viewModel.Module.EndDate = singleModule.module.EndDate;
 
-                //var docs = db.Documents.Where(d => d.CourseId == courseId && d.ModuleId == moduleId);
-                //docs = docs.OrderBy(d => d.Name);
-
-                //viewModel.Module.Documents = docs.ToList();
-
-        
+                viewModel.DocumentList = DocumentRepo.RetrieveCourseDocumentList((int)courseId, (int)moduleId, null);
 
                 showModuleDetails = true;
             }
@@ -94,8 +89,10 @@ namespace LMS.Controllers
                 viewModel.Activity.EndDate = singleActvivity.activity.EndDate;
                 viewModel.Activity.ActivityType = singleActvivity.activity.ActivityType;
                 showActivityDetails = true;
-                showModuleDetails = false;
 
+                viewModel.DocumentList = DocumentRepo.RetrieveCourseDocumentList((int)courseId, (int)moduleId, activityId);
+
+                showModuleDetails = false;
            }
             else
             {
@@ -138,11 +135,6 @@ namespace LMS.Controllers
                 schemeWeek = 1;
             }
             viewModel.SchemeWeek = (int) schemeWeek;
-
-            //if (schemeMoveWeek == null)
-            //{
-            //    schemeMoveWeek = 0;
-            //}
             viewModel.SchemeMoveWeek = schemeMoveWeek;
 
             if (fromMyPage)

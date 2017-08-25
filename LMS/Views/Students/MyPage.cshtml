@@ -114,8 +114,9 @@
             <div class="infobox">
                 <span id="infoBox"></span>
                 @{
-                    if ((moduleId != 0) && (activityId == 0))
-                    {
+                        var docIndex = 0;
+                        if ((moduleId != 0) && (activityId == 0))
+                        {
                         <div class="well">
                             <h4>Modulinformation @Model.Module.Name</h4>
 
@@ -124,18 +125,24 @@
                                 <b>Slutdatum:</b> @Model.Module.EndDate.ToShortDateString()
                             </p>
                             <p> @Model.Module.Description</p>
-                            @*<p>
+                            <p>
                                 <b>Dokument:</b>
-                                @foreach (var doc in Model.Module.Documents)
+                                @foreach (var doc in Model.DocumentList)
                                 {
-                                    <span>&nbsp;@doc.Name</span>
+                                    if (docIndex == 0)
+                                    {
+                                        <span>&nbsp;@doc.Name&nbsp;&nbsp;(@doc.DocumentType)&nbsp;&nbsp;Rev:&nbsp;@doc.UploadDate.ToShortDateString()</span>
+                                        docIndex++;
+                                    }
+                                    else
+                                    {
+                                        <span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@doc.Name
+                                            &nbsp;&nbsp;(@doc.DocumentType)&nbsp;&nbsp;Rev:&nbsp;@doc.UploadDate.ToShortDateString()</span>
+                                    
+                                    }
                                 }
-                                @for (int i = 0; i < 5; i++)
-                                {
-                                    <span>&nbsp;Dokumentnamn,</span>
-
-                                }
-                            </p>*@
+                                
+                            </p>
                         </div>
                     }
                     else
@@ -152,18 +159,28 @@
                                 </p>
                                 <p><b>Aktivitetstyp:</b> @activityType[(int)Model.Activity.ActivityType]</p>
                                 <p><b>Aktivitetsbeskrivning:</b> @Model.Activity.Description</p>
-                                @*<p>
-                                    <b>Dokument:</b>
-                                    @foreach (var doc in Model.Activity.Documents)
-                                    {
-                                        <span>&nbsp;@doc.Name,</span>
-                                    }
-                                    @for (int i = 0; i < 5; i++)
-                                    {
-                                        <span>&nbsp;Dokumentnamn,</span>
 
+                                <p>
+                                    <b>Dokument:</b>
+                                    @foreach (var doc in Model.DocumentList)
+                                    {
+                                        if (docIndex == 0)
+                                        {
+                                            <span>&nbsp;@doc.Name&nbsp;&nbsp;(@doc.DocumentType)&nbsp;&nbsp;Rev:&nbsp;@doc.UploadDate.ToShortDateString()</span>
+                                            docIndex++;
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@doc.Name
+                                                &nbsp;&nbsp;(@doc.DocumentType)&nbsp;&nbsp;Rev:&nbsp;@doc.UploadDate.ToShortDateString()
+                                            </span>
+                                        }
                                     }
-                                </p>*@
+                                    
+                                </p>
+
+
                             </div>
                         }
                         else
