@@ -1,0 +1,47 @@
+﻿@using System.Globalization
+@model IEnumerable<LMS.Models.Module>
+
+
+<ul class="nav nav-stacked">
+
+    @{
+        <b>Kursinnehåll</b>
+        DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+        Calendar cal = dfi.Calendar;
+
+        foreach (var item in Model)
+        {
+            var m_year = item.StartDate.Year;
+            var m_week = cal.GetWeekOfYear(item.StartDate, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+
+            <li class="MenuHeader">
+               
+                <a href="@Url.Action("MyPage", "Students", new { courseId = item.CourseId, moduleId = item.Id, activityId = 0, studentId = 0, schemeYear = m_year, schemeWeek = m_week, fromMyPage = true })">@item.StartDate.ToShortDateString() &nbsp;&nbsp; @item.Name</a>
+
+            </li>
+            foreach (var act in item.Activities)
+            {
+
+                var year = act.StartDate.Year;
+                var week = cal.GetWeekOfYear(act.StartDate, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+
+                <li >
+
+                        <a href="@Url.Action("MyPage", "Students", new { courseId = item.CourseId, moduleId = act.ModuleId, activityId = act.Id, schemeYear = year, schemeWeek = week, fromMyPage = true })"> &nbsp;&nbsp; &nbsp;@act.StartDate.ToShortDateString()&nbsp; &nbsp;@act.Name</a>
+            
+                </li>
+
+            }
+
+
+
+        }
+
+    }
+
+</ul>
+
+<br /><br /><br />
+
+
+

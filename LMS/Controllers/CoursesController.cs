@@ -18,17 +18,21 @@ namespace LMS.Controllers
 
         // GET: Courses
         [Authorize(Roles = "Teacher")]
-        public ActionResult Index(string searchString, string sortOrder, string courseDate, int? page) {
+        public ActionResult Index (string searchString, string sortOrder, string courseDate)
+        {
             IQueryable<CourseViewModel> query;
             List<CourseViewModel> resultList;
 
 
-            if(courseDate != null && courseDate != "") {
-                switch(courseDate) {
+            if(courseDate != null && courseDate != "")
+            {
+                switch(courseDate)
+                {
                     case "coursDate_old":
                         query = from u in db.Courses
                                 where u.EndDate < DateTime.Now
-                                select new CourseViewModel() {
+                                select new CourseViewModel()
+                                {
                                     Id = u.Id,
                                     Name = u.Name,
                                     Description = u.Description,
@@ -39,7 +43,8 @@ namespace LMS.Controllers
                     case "coursDate_future":
                         query = from u in db.Courses
                                 where u.StartDate > DateTime.Now
-                                select new CourseViewModel() {
+                                select new CourseViewModel()
+                                {
                                     Id = u.Id,
                                     Name = u.Name,
                                     Description = u.Description,
@@ -47,21 +52,12 @@ namespace LMS.Controllers
                                     EndDate = u.EndDate
                                 };
                         break;
-                    case "couseDateAll":
-                        query = from u in db.Courses
-                                select new CourseViewModel() {
-                                    Id = u.Id,
-                                    Name = u.Name,
-                                    Description = u.Description,
-                                    StartDate = u.StartDate,
-                                    EndDate = u.EndDate
-                                };
-                        break;
-                    default:
+                    case "couseDateActual":
                         query = from u in db.Courses
                                 where u.EndDate > DateTime.Now
                                        && u.StartDate < DateTime.Now
-                                select new CourseViewModel() {
+                                select new CourseViewModel()
+                                {
                                     Id = u.Id,
                                     Name = u.Name,
                                     Description = u.Description,
@@ -70,12 +66,33 @@ namespace LMS.Controllers
                                 };
 
                         break;
+
+
+
+
+
+
+                    default:
+                        query = from u in db.Courses
+                                select new CourseViewModel()
+                                {
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    Description = u.Description,
+                                    StartDate = u.StartDate,
+                                    EndDate = u.EndDate
+                                };
+                        break;
+
+
                 }
-            } else if(searchString != null && searchString != "") {
+            } else if(searchString != null && searchString != "")
+            {
                 query = from u in db.Courses
                         where u.Name.Contains(searchString)
                                 || u.Description.Contains(searchString)
-                        select new CourseViewModel() {
+                        select new CourseViewModel()
+                        {
                             Id = u.Id,
                             Name = u.Name,
                             Description = u.Description,
@@ -83,40 +100,75 @@ namespace LMS.Controllers
                             EndDate = u.EndDate
                         };
 
-            } else {
+            } else
+            {
                 query = from u in db.Courses
-                        where u.EndDate > DateTime.Now
-                               && u.StartDate < DateTime.Now
-                        select new CourseViewModel() {
+                        select new CourseViewModel()
+                        {
                             Id = u.Id,
                             Name = u.Name,
                             Description = u.Description,
                             StartDate = u.StartDate,
                             EndDate = u.EndDate
                         };
+
+
+                //query = from u in db.Courses
+                //        where u.EndDate > DateTime.Now
+                //               && u.StartDate < DateTime.Now
+                //        select new CourseViewModel()
+                //        {
+                //            Id = u.Id,
+                //            Name = u.Name,
+                //            Description = u.Description,
+                //            StartDate = u.StartDate,
+                //            EndDate = u.EndDate
+                //        };
             }
+
+
             query = query.OrderBy(s => s.Name);
 
-            //switch(sortOrder) {
-            //    case "coursName_desc":
-            //        query = query.OrderBy(s => s.Name);
-            //        break;
-            //    case "startDate_desc":
-            //        query = query.OrderByDescending(s => s.StartDate);
-            //        break;
-            //    case "endDate_desc":
-            //        query = query.OrderByDescending(s => s.EndDate);
-            //        break;
-            //    default:
-            //        query = query.OrderBy(s => s.Name);
-            //        break;
-            //}
+            //Toggle sortorder
+            ViewBag.SortCoursName = sortOrder == "coursName_desc" ? "coursName" : "coursName_desc";
+            ViewBag.SortStartDate = sortOrder == "startDate_desc" ? "startDate" : "startDate_desc";
+            ViewBag.SortEndDate = sortOrder == "endDate_desc" ? "endDate" : "endDate_desc";
+
+            switch(sortOrder)
+            {
+                case "coursName":
+                    query = query.OrderBy(s => s.Name);
+                    break;
+                case "coursName_desc":
+                    query = query.OrderByDescending(s => s.Name);
+                    break;
+                case "startDate":
+                    query = query.OrderBy(s => s.StartDate);
+                    break;
+                case "startDate_desc":
+                    query = query.OrderByDescending(s => s.StartDate);
+                    break;
+                case "endDate":
+                    query = query.OrderBy(s => s.EndDate);
+                    break;
+                case "endDate_desc":
+                    query = query.OrderByDescending(s => s.EndDate);
+                    break;
+                default:
+                    query = query.OrderBy(s => s.Name);
+                    break;
+            }
 
             resultList = query.ToList();
 
-            if(resultList.Count < 1) {
+            if(resultList.Count < 1)
+            {
                 ViewBag.Message = "Ingen kurs hittad";
                 ViewBag.MessageColor = "red";
+            }
+            if(resultList.Count > 0)
+            {
+                ViewBag.SearchResult = string.Format("Antal sökträffar {0}", query.Count());
             }
 
             // int pageSize = 2;
@@ -127,14 +179,14 @@ namespace LMS.Controllers
         }
 
         // GET: Courses/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details (int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Course course = db.Courses.Find(id);
-            if (course == null)
+            if(course == null)
             {
                 return HttpNotFound();
             }
@@ -143,9 +195,9 @@ namespace LMS.Controllers
 
         // GET: Courses/Manage/5
         [Authorize(Roles = "Teacher")]
-        public ActionResult Manage(int? id, string getOperation, string viewMessage)
+        public ActionResult Manage (int? id, string getOperation, string viewMessage)
         {
-            if ((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New")))
+            if((getOperation == null) || (((id == null) || (id == 0)) && (getOperation != "New")))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -156,17 +208,16 @@ namespace LMS.Controllers
             // Load view model with module specific info
             viewModel.ShowModules = false;
             viewModel.ShowDocuments = false;
-            if (getOperation == "New")
+            if(getOperation == "New")
             {
                 // Create new, reached from course views only              
                 viewModel.StartDate = DateTime.Parse("2017-01-01");
                 viewModel.EndDate = DateTime.Parse("2017-01-01");
-            }           
-            else // getOperation == "Load"/"LoadMini"/"LoadMod"/"LoadDoc"
+            } else // getOperation == "Load"/"LoadMini"/"LoadMod"/"LoadDoc"
             {
                 // Load existing, reached from course views only
                 var singleCourse = CourseRepo.RetrieveCourse(id);
-                if (singleCourse.repoResult == CourseRepoResult.NotFound)
+                if(singleCourse.repoResult == CourseRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
@@ -176,32 +227,30 @@ namespace LMS.Controllers
                 viewModel.Description = singleCourse.course.Description;
                 viewModel.StartDate = singleCourse.course.StartDate;
                 viewModel.EndDate = singleCourse.course.EndDate;
-                
+
                 // Load view model with additional display info wrt module activities
                 var courseModuleList = ModuleRepo.RetrieveCourseModuleList(id);
-                if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
+                if(courseModuleList.repoResult == ModuleRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 viewModel.NoOfModules = courseModuleList.moduleList.Count;
                 viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(id, null, null);
 
-                if ((getOperation == "Load") || (getOperation == "LoadMod"))
+                if((getOperation == "Load") || (getOperation == "LoadMod"))
                 {
                     viewModel.CourseModules = courseModuleList.moduleList;
                     viewModel.ShowModules = true;
-                }
-                else // getOperation == "LoadMini"/"LoadDoc"
+                } else // getOperation == "LoadMini"/"LoadDoc"
                 {
                     viewModel.CourseModules = null;
                     viewModel.ShowModules = false;
                 }
-                if ((getOperation == "Load") || (getOperation == "LoadDoc"))
+                if((getOperation == "Load") || (getOperation == "LoadDoc"))
                 {
-                    viewModel.CourseDocuments = DocumentRepo.RetrieveCourseDocumentList(id, null, null);                   
+                    viewModel.CourseDocuments = DocumentRepo.RetrieveCourseDocumentList(id, null, null);
                     viewModel.ShowDocuments = true;
-                }
-                else // getOperation == "LoadMini"/"LoadMod"
+                } else // getOperation == "LoadMini"/"LoadMod"
                 {
                     viewModel.CourseDocuments = null;
                     viewModel.ShowDocuments = false;
@@ -211,7 +260,7 @@ namespace LMS.Controllers
 
             // Load view model with additional display info wrt parent course
             var allCoursesList = CourseRepo.RetrieveCourseList();
-            if (allCoursesList.repoResult == CourseRepoResult.NotFound)
+            if(allCoursesList.repoResult == CourseRepoResult.NotFound)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
@@ -226,34 +275,34 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "Id,Name,Description,StartDate,EndDate,ModuleId,ShowModules,ShowDocuments,PostNavigation,PostOperation,PostMessage")] CourseViewModel viewModel)
+        public ActionResult Manage ([Bind(Include = "Id,Name,Description,StartDate,EndDate,ModuleId,ShowModules,ShowDocuments,PostNavigation,PostOperation,PostMessage")] CourseViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 var actPostOp = viewModel.PostOperation;        // PostOperation concerns activity, not module, in this case
-                if (viewModel.PostNavigation == "SaveAct")
+                if(viewModel.PostNavigation == "SaveAct")
                 {
                     // Operation on course must be "Update" since parent course is required
                     viewModel.PostOperation = "Update";
                 }
 
-                if ((viewModel.Id == 0) && (viewModel.PostOperation == "Update"))
+                if((viewModel.Id == 0) && (viewModel.PostOperation == "Update"))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                if (viewModel.PostOperation == "New")
+                if(viewModel.PostOperation == "New")
                 {
                     viewModel.Id = 0;
                 }
 
                 // Input validation
                 var validMess = CourseRepo.IsCourseNameValid(viewModel.Id, viewModel.Name);
-                if (validMess != null)
+                if(validMess != null)
                 {
                     // Load view model with additional display info wrt all courses               
                     var allCoursesList = CourseRepo.RetrieveCourseList();
-                    if (allCoursesList.repoResult == CourseRepoResult.NotFound)
+                    if(allCoursesList.repoResult == CourseRepoResult.NotFound)
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }
@@ -261,7 +310,7 @@ namespace LMS.Controllers
 
                     // Load view model with additional display info wrt module activities
                     var courseModuleList = ModuleRepo.RetrieveCourseModuleList(viewModel.Id);
-                    if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
+                    if(courseModuleList.repoResult == ModuleRepoResult.NotFound)
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }
@@ -278,7 +327,7 @@ namespace LMS.Controllers
                 course.Description = viewModel.Description;
 
                 // Perform Add or Update operation against DB
-                if (viewModel.PostOperation == "New")
+                if(viewModel.PostOperation == "New")
                 {
                     CourseModulesSpan courseSpan = ModuleRepo.RetrieveCourseSpan(0);
                     course.StartDate = courseSpan.start;
@@ -286,35 +335,35 @@ namespace LMS.Controllers
                     viewModel.Id = CourseRepo.AddCourse(course);
                     viewModel.PostMessage = "Den nya kursen " + viewModel.Name + " är sparad";
                 }
-                if (viewModel.PostOperation == "Update")
+                if(viewModel.PostOperation == "Update")
                 {
                     course.Id = viewModel.Id;       // Use concerned id from view
                     CourseModulesSpan courseSpan = ModuleRepo.RetrieveCourseSpan(course.Id);
                     course.StartDate = courseSpan.start;
-                    course.EndDate = courseSpan.end;              
+                    course.EndDate = courseSpan.end;
                     CourseRepoResult result = CourseRepo.UpdateCourse(course);
-                    if (result == CourseRepoResult.NotFound)
+                    if(result == CourseRepoResult.NotFound)
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }
                     viewModel.PostMessage = "Kursen " + viewModel.Name + " är uppdaterad";
                 }
 
-                if (viewModel.PostNavigation == "Save")
+                if(viewModel.PostNavigation == "Save")
                 {
                     // Load view model with additional display info wrt all courses               
                     var allCoursesList = CourseRepo.RetrieveCourseList();
-                    if (allCoursesList.repoResult == CourseRepoResult.NotFound)
+                    if(allCoursesList.repoResult == CourseRepoResult.NotFound)
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                     }
                     viewModel.AllCourses = allCoursesList.courseList;
 
-                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowModules))
+                    if((viewModel.PostOperation == "Update") && (viewModel.ShowModules))
                     {
                         // Load view model with additional display info wrt course modules
                         var courseModuleList = ModuleRepo.RetrieveCourseModuleList(viewModel.Id);
-                        if (courseModuleList.repoResult == ModuleRepoResult.NotFound)
+                        if(courseModuleList.repoResult == ModuleRepoResult.NotFound)
                         {
                             return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                         }
@@ -323,7 +372,7 @@ namespace LMS.Controllers
 
                     viewModel.NoOfModules = CourseRepo.RetrieveNoOfModules(viewModel.Id);
 
-                    if ((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
+                    if((viewModel.PostOperation == "Update") && (viewModel.ShowDocuments))
                     {
                         // Load view model with additional display info wrt course documents
                         viewModel.CourseDocuments = DocumentRepo.RetrieveCourseDocumentList(viewModel.Id, null, null);
@@ -332,7 +381,7 @@ namespace LMS.Controllers
                     viewModel.NoOfDocuments = DocumentRepo.RetrieveNoOfDocuments(viewModel.Id, null, null);
                 }
 
-                switch (viewModel.PostNavigation)
+                switch(viewModel.PostNavigation)
                 {
                     case "Save":
                         return View(viewModel);
@@ -340,7 +389,7 @@ namespace LMS.Controllers
                         return RedirectToAction("Index", "Courses");
                     case "SaveAct":
                         string actGetOp = "New";
-                        if (actPostOp == "Update")
+                        if(actPostOp == "Update")
                             actGetOp = "Load";
                         return RedirectToAction("Manage", "Modules", new { id = viewModel.ModuleId, courseId = viewModel.Id, getOperation = actGetOp });
                     default:
@@ -354,9 +403,9 @@ namespace LMS.Controllers
 
         // GET: Courses/Delete/5
         [Authorize(Roles = "Teacher")]
-        public ActionResult Delete(int? id, string deleteType)
+        public ActionResult Delete (int? id, string deleteType)
         {
-            if ((deleteType == null) || (((id == null) || (id == 0)) && (deleteType == "Single")))
+            if((deleteType == null) || (((id == null) || (id == 0)) && (deleteType == "Single")))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -364,10 +413,11 @@ namespace LMS.Controllers
             CourseDeleteViewModel viewModel = new CourseDeleteViewModel();
             viewModel.DeleteType = deleteType;
 
-            if(deleteType == "Single") {
+            if(deleteType == "Single")
+            {
                 // Init specifically required fields
                 var singleCourse = CourseRepo.RetrieveCourse(id);
-                if (singleCourse.repoResult == CourseRepoResult.NotFound)
+                if(singleCourse.repoResult == CourseRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
@@ -378,11 +428,11 @@ namespace LMS.Controllers
                 viewModel.StartDate = singleCourse.course.StartDate;
                 viewModel.EndDate = singleCourse.course.EndDate;
             }
-            if (deleteType == "All")
+            if(deleteType == "All")
             {
                 // Init specifically required fields
                 var allCoursesList = CourseRepo.RetrieveCourseList();
-                if (allCoursesList.repoResult == CourseRepoResult.NotFound)
+                if(allCoursesList.repoResult == CourseRepoResult.NotFound)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
@@ -396,9 +446,9 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int? id, string deleteType)
+        public ActionResult DeleteConfirmed (int? id, string deleteType)
         {
-            if ((deleteType == null) || (((id == null) || (id == 0)) && (deleteType == "Single")))
+            if((deleteType == null) || (((id == null) || (id == 0)) && (deleteType == "Single")))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -406,19 +456,18 @@ namespace LMS.Controllers
             CourseRepoResult result;
             string message = "";
 
-            if (deleteType == "Single")
+            if(deleteType == "Single")
             {
                 string courseName = CourseRepo.RetrieveCourseName(id);
                 message = "Kursen " + courseName + " är borttagen";
                 result = CourseRepo.RemoveCourse(id);
-            }
-            else // deleteType == "All"
+            } else // deleteType == "All"
             {
                 message = "Alla kurser är borttagna";
                 result = CourseRepo.RemoveCourses();
             }
 
-            if (result == CourseRepoResult.NotFound)
+            if(result == CourseRepoResult.NotFound)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
@@ -426,9 +475,9 @@ namespace LMS.Controllers
         }
 
 
-        protected override void Dispose(bool disposing)
+        protected override void Dispose (bool disposing)
         {
-            if (disposing)
+            if(disposing)
             {
                 db.Dispose();
             }

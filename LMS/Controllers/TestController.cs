@@ -13,14 +13,14 @@ namespace LMS.Controllers
 
         public PartialViewResult GetEnrolledStudents(string strCourseId)
         {
-            IQueryable<EditUserViewModel> query;
+            IQueryable<EditUserViewModel> query = null;
             List<EditUserViewModel> resultList;
             int thisCourseId = 0;
 
             if (int.TryParse(strCourseId, out thisCourseId))
             {
                 ViewBag.CourseName = Repositories.CourseRepo.RetrieveCourseName(thisCourseId);
-                
+
                 query = from u in db.Users
                         where u.CourseId == thisCourseId
                         select new EditUserViewModel()
@@ -34,23 +34,42 @@ namespace LMS.Controllers
                             UserRole = "Elev"
 
                         };
+            }
 
             resultList = query.ToList();
             return PartialView("_ListEnrolledStudents", resultList.ToList());
 
-            }
+            
+        }
 
-            return PartialView(Enumerable.Empty<EditUserViewModel>().ToList());
+        public PartialViewResult GetCourseModuleMenu(int courseId)
+        {
+
+                var modules = db.Modules.Where(m => m.CourseId == courseId);
+                modules = modules.OrderBy(s => s.StartDate);
+
+                return PartialView("_CourseModuleMenu", modules.ToList());
 
         
         }
-  
+
+        //public PartialViewResult GetDocuments(int courseId, int module, int )
+        //{
+
+        //    var modules = db.Modules.Where(m => m.CourseId == courseId);
+        //    modules = modules.OrderBy(s => s.StartDate);
+
+        //    return PartialView("_CourseModuleMenu", modules.ToList());
+
+
+        //}
+
         //public PartialViewResult _ListEnrolledStudents()
         //{
         //    return GetEnrolledStudents();
         //}
 
-     
+
         //public ActionResult _ListEnrolledStudents(string courseId)
         //{
 

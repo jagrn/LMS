@@ -1,8 +1,10 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 74px;
     padding-bottom: 20px;
-    /*overflow-y:scroll;*/    
+    overflow-y:scroll;    
   height: 100vh;
+  min-height:100vh;
+
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -97,7 +99,7 @@ h4 {
 }
 
 .nav-pills > li:hover > a, .nav-pills > li:hover > a:hover, .nav-pills > li:hover > a:focus{
-    background-color:#c4e9c4;
+    background-color:#f6f6f6;
     color:#198521;
 }
 
@@ -108,11 +110,34 @@ a {
 color:#198521;
 
 }
+/* override margins*/
+.breadcrumb{padding:0px;margin:10px 0px 10px 0px;list-style:none;background-color:#f6f6f6; border-radius:4px}
+
 /*Override link looks*/ 
 .headBannerLink > span > a:hover{
     color:coral;
     cursor: auto;
     text-decoration:none;
+}
+.headBanner 
+{
+    background-color:#f6f6f6;
+    border: 1px solid #eaeaea;
+}
+.headBanner > li > a
+{
+  color:black;
+}
+.headerBannerCurrentPage 
+{
+ color:black ;
+}
+
+.headBannerHeader 
+{
+    font-size: 32px;
+    padding: 15px 0px 0px 0px;
+    margin-top: 15px;
 }
 
 /* override margins*/
@@ -131,7 +156,7 @@ color:#198521;
 }
 
 .greyBackground{
-    background-color:#eaeaea;
+    background-color:#f6f6f6;
 }
 
 .greenText{
@@ -161,11 +186,11 @@ color:#198521;
 }
 
 .greenButton{
-    font-size: 16px;
+
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 9px;
@@ -175,12 +200,11 @@ color:#198521;
 }
 
 .greenButtonSmall{
-    font-size: 12px;
-    font-weight:bold;
+
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 6px;
@@ -188,12 +212,12 @@ color:#198521;
 }
 
 .redButton{
-    font-size: 16px;
-    font-weight:bold;
+
+
     color:#cc0000;
     background-color:darksalmon;
     border-color: #cc0000;
-    border-width:2px;
+    border-width:1px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left: 11px;
@@ -203,11 +227,11 @@ color:#198521;
 }
 
 .saveButton{
-    font-size: 16px;
+ 
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 10px;
@@ -304,24 +328,26 @@ color:#198521;
 
 .fl-page {
   position: relative;
-  min-height: 100vh;
-  width: 100%;
-  padding-bottom: 140px; /* Should be equal to the height of your footer */
+  /*min-height: 100vh;*/
+  /*width: 100%;*/
+  /*padding-bottom: 140px;*/ 
+  /* Should be equal to the height of your footer */
      
 }
-.fl-page-footer-wrap {
 
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  background-color:#eaeaea;
-}
 
 
 .notesModalButton{
     color:#198521;
-    background-color:#c4e9c4;
+    background-color:white;
     border-color: #198521;
-    border-width:2px;
+    border-width:1px;
     
+}
+.infobox {
+    text-decoration: none;
+}
+.MenuHeader {
+ font-weight: bold;
+
 }

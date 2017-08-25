@@ -139,12 +139,12 @@ namespace LMS.ViewModels
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
         [DisplayName("Startdatum")]
-        //[DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [DisplayName("Slutdatum")]
-        //[DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
         public int CourseId { get; set; }
@@ -259,6 +259,8 @@ namespace LMS.ViewModels
         public List<ActivityListData> ModuleActivities { get; set; }
         public int NoOfNotifications { get; set; }
         public List<Notification> Notifications { get; set; }
+        public List<DocumentListData> DocumentList { get; set; }
+
 
         public int SchemeYear { get; set; }
         public int SchemeWeek { get; set; }

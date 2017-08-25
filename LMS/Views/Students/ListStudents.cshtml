@@ -5,25 +5,14 @@
     ViewBag.Title = "Index";
 }
 
-@Html.Action("HeadBanner", "CommonLOs", new { origin = "EditUser", infoText = "Elever på din kurs" })
-<br />
-<br />
+@Html.Action("HeadBanner", "CommonLOs", new { origin = "StudentList", infoText = "Kursdeltagare" })
 
 <div class="container">
     <div class="row">
-        <div class="col-md-2">
-           
-        </div>
-        <div class="col-md-10">
-            @*<h2>Kursdeltagare</h2>
-            <br />*@
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+            <h4>Deltagare på kursen @ViewBag.CourseName </h4>
             <p>Antal elever: @ViewBag.Count</p>
-
-        </div>
-        </div>
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-10">
             <table class="table">
                 <tr>
                     <th>
@@ -64,4 +53,3 @@
 
 </div>
 
-@Html.Action("FootBanner", "CommonLOs", new { origin = "EditUser", infoText = "" })

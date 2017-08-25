@@ -23,7 +23,7 @@
     @*<p>
         @Html.ActionLink("Lägg till ny lärare", "CreateNewUser", new { userType = "Teacher" })
     </p>*@
-    <table class="table">
+    <table class="table table-striped table-condensed table-bordered">
         <tr>
             <th>
                 <a href="@Url.Action("ListTeachers",new { sortOrder = ViewBag.SortLastName })">@Html.DisplayNameFor(model => model.LastName)</a>
@@ -63,4 +63,3 @@
     </table>
 </div>
 
-@Html.Action("FootBanner", "CommonLOs", new { origin = "ListUser", infoText = "" })

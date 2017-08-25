@@ -64,23 +64,3 @@
     </div>
 </div>
 
-@{
-    if (Model.ModuleId != 0)
-    {
-        if (Model.ActivityId != 0)
-        {
-            @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = "" })
-
-        }
-        else
-        {
-            @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = 0, infoText = "" })
-
-        }
-    }
-    else
-    {
-        @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = 0, id3 = 0, infoText = "" })
-
-    }
-}

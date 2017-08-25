@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - LMS</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -13,8 +13,7 @@
         <div class="container">
 
                 <div class="navbar-brand" style="padding: 5px 10px">
-                    
-                    <img src="~/images/logo-lexicon-small.gif" style="width:50%;height:50%" /> 
+                      <a href="#"><img src="~/images/logo-lexicon-small.gif" width="190" /> </a>
                 </div>
 
                 <div class="navbar-header">
@@ -26,31 +25,26 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    @if (User.IsInRole("Student"))
-                    {
-                        @Html.ActionLink("Min sida", "MyPage", "Students", new { schemeMoveWeek = 0, fromMyPage = false  }, new { @class = "navbar-brand" })
-                    }
-
     
-                    @if (User.IsInRole("Teacher"))
+                    @*@if (User.IsInRole("Teacher"))
                     {
                         @Html.ActionLink("LMS", "Index", "Courses", new { area = "" }, new { @class = "navbar-brand" })
-                    }
+                    }*@
                 
                     
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        @if (User.IsInRole("Teacher"))
+                        @if(User.IsInRole("Teacher"))
                         {
-                            <li>@Html.ActionLink("Kurser", "Index", "Courses")</li>
-                            <li>@Html.ActionLink("Användare", "CreateUser", "AdminUsers")</li>
+                            <li>@Html.ActionLink("Kurskatalog", "Index", "Courses")</li>
+                     
                         }
                     
-                        @if (User.IsInRole("Teacher"))
+                        @if(User.IsInRole("Teacher"))
                         {
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Användare<span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Användarhantering<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                              
                                         <li>@Html.ActionLink("Lägg till ny elev", "CreateNewUser", "AdminUsers")</li>
@@ -69,16 +63,33 @@
             </div>
     </div>
 
-    
 
     @*<div class="container-fluid body-content" style="margin-left:-20px; margin-right:-20px">*@
     <div class="fl-page">
-        @RenderBody()
+        @RenderBody()</div>
         @*<hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - An example LMS Application</p>
         </footer>*@
-    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
