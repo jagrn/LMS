@@ -159,18 +159,12 @@ namespace LMS.Repositories
             dbDocument.Name = documentViewModel.Name;
             dbDocument.Description = documentViewModel.Description;
             dbDocument.DokumentType = documentViewModel.DocumentType;
-            dbDocument.UploadDate = documentViewModel.UploadDate;
+            dbDocument.UploadDate = DateTime.Now; //documentViewModel.UploadDate;
 
-
-            if (documentViewModel.UploadedFile != null)
-            {
-                string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
-                dbDocument.FileName = documentViewModel.UploadedFile.FileName;
-                dbDocument.UploadedFileName = Guid.NewGuid() + Path.GetExtension(dbDocument.FileName);
-                dbDocument.UploadedFileName = Path.Combine(path, dbDocument.UploadedFileName);
-                documentViewModel.UploadedFile.SaveAs(dbDocument.UploadedFileName);
-            }
-
+            dbDocument.FileName = documentViewModel.FileName;
+            dbDocument.UploadedFileName = documentViewModel.UploadedFileName;
+            dbDocument.Format = documentViewModel.Format;
+            
             if (documentViewModel.Id > 0)
             {
                 Document oldDocument = db.Documents.Find(documentViewModel.Id);

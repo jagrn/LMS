@@ -4,23 +4,40 @@
 
 <script>
 
+    $(document).on('change', ':file', function() {
+        alert("FFFTTTTTTTTTTTTTTTTT");
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
+    });
+
     $(document).ready(function () {
-        $('#btnUploadFile').on('click', function () {
+
+            $(':file').on('fileselect', function(event, numFiles, label) {
+                alert("FFFTTTTTTTTTTTTTTTTT");
+                console.log(numFiles);
+                console.log(label);
+            });
+        
+        
+        
+        $('#fileUpload').on('click', function () {
+            alert("EEE");
             var data = new FormData();
             var files = $("#fileUpload").get(0).files;
-            alert("EEE");
             // Add the uploaded image content to the form data collection
             if (files.length > 0) {
                 alert("FFFTTTTTTTTTTTTTTTTT");
                 data.append("UploadedImage", files[0]);
             }
             // Make Ajax request with the contentType = false, and procesDate = false
-            var ajaxRequest = $.ajax({
-                type: "POST",
-                url: "/Documents/Manage",
-                contentType: false,
-                processData: false,
-                data: data
+            //var ajaxRequest = $.ajax({
+            //    type: "POST",
+            //    url: "/Documents/Manage",
+            //    contentType: false,
+            //    processData: false,
+            //    data: data
             });
             //ajaxRequest.done(function (xhr, textStatus) {
             //    // Do other operation
@@ -57,7 +74,7 @@
 @Html.Action("HeadBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = headBannerInfo })
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Manage", "Documents", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -124,7 +141,7 @@
                 @{
                     if (!(Model.Id > 0))
                     {
-                        <h4 class="page-header">Skapa nytt dokument</h4>
+                        <h4 class="page-header">Lägg till dokument</h4>
                     }
                     else
                     {
@@ -132,7 +149,6 @@
                     }
                 }
 
-                <input type="file" name="Ladda upp dokument" id="fileUpload" />
 
 
                 @{
@@ -150,6 +166,20 @@
                 @Html.HiddenFor(model => model.ModuleId)
                 @Html.HiddenFor(model => model.ActivityId)
                 @Html.HiddenFor(model => model.UserId)
+
+<br />
+                <span class="btn btn-default">
+                    <input type="file" name="hahahaha" id="fileUpload">
+                </span>
+                @*                <input type="file" name="hahahaha" id="fileUpload" class="btn btn-default saveButton">*@
+
+                @*<input type="file" name="Ladda upp dokument" id="fileUpload" />*@
+
+
+                <br />
+                <br />
+
+
 
 
                 <div class="form-group">
@@ -179,20 +209,23 @@
                 </div>
 
 
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.LabelFor(model => model.UploadDate, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-9" style="margin-left:20px;">
 
                         @Html.EditorFor(model => model.UploadDate, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.UploadDate, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-9" style="margin-left:20px;">
-                        @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
-                    </div>
                 </div>*@
+
+
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9" style="margin-left:20px;">
+                            @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
 
                 @*<input type="file" id="fileUpload"/>*@
 
@@ -202,19 +235,20 @@
                     @{
                         if (true) //documentId != 0)
                         {
-                            @*<button type="submit" class="btn btn-default saveButton" id="btnUploadFile" aria-label="Left Align">Uppsdatera</button>*@
-                            <input type="button" class="btn btn-default saveButton" id="btnUploadFile" aria-label="Left Align" value="Uppsaadatera" />
+                            <button type="submit" class="btn btn-default saveButton" id="btnUploadFile" aria-label="Left Align">Spara</button>
+
+                            @*<input type="button" class="btn btn-default saveButton" id="btnUploadFile" aria-label="Left Align" value="Uppsaadatera" />*@
                             @*<button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'Update', @activityId, @showDocuments)" aria-label="Left Align">
-                                Uppdatera
-                            </button>*@
+                                    Uppdatera
+                                </button>*@
                         }
                         else
                         {
                             <button type="submit" class="btn btn-default saveButton" aria-label="Left Align">Spara</button>
 
                             @*<button type="submit" class="btn btn-sm saveButton" onclick="ActivityPostConfig('Save', 'New', @activityId, @showDocuments)" aria-label="Left Align">
-                                Spara
-                            </button>*@
+                                    Spara
+                                </button>*@
                         }
                     }
 
@@ -232,7 +266,7 @@
 
         </div>
     </div>
-}
+                        }
 
 @Html.Action("FootBanner", "CommonLOs", new { origin = "DocumentMgmnt", id1 = Model.CourseId, id2 = Model.ModuleId, id3 = Model.ActivityId, infoText = "" })
 

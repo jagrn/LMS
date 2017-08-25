@@ -302,6 +302,7 @@ namespace LMS.ViewModels
         [Required]
         [DisplayName("Beskrivning")]
         public string Description { get; set; }
+        [Required]
         [DisplayName("Dokumenttyp")]
         public DocumentType DocumentType { get; set; }
         public string Format { get; set; }

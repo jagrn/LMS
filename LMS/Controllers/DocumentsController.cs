@@ -18,6 +18,11 @@ namespace LMS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+
+        //public ActionResult OpenFile(string fileName)
+        //{
+        //}
+
         // GET: Documents
         public ActionResult Index()
         {
@@ -103,6 +108,7 @@ namespace LMS.Controllers
             return View(documentViewModel);
         }
 
+
         // POST: Activities/Manage/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -131,53 +137,31 @@ namespace LMS.Controllers
                 //documentViewModel.PostMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
                 postMessage = "Det nya dokumentet " + documentViewModel.Name + " är sparat";
 
-            if (Request.Files.Count>0)
-            {
-                documentViewModel.UploadedFile = Request.Files[0];
-            }
-            foreach (string upload in Request.Files)
+            if (Request.Files.Count > 0)
 
             {
-                if (Request.Files[upload].FileName != "")
+                foreach (string upload in Request.Files)
                 {
-                    
-                    Guid g = Guid.NewGuid();
-                    string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
-                    string fileName = Path.GetFileName(Request.Files[upload].FileName);
-                    string fileExt = Path.GetExtension(fileName);
-
-                    var doc = DocumentRepo.GetDocumentViewModel(null, null, null, 1, null, null);
-                    doc.Name = fileName;
-                    doc.FileName = fileName;
-                    doc.Format = Path.GetExtension(fileName);
-                    fileName = Guid.NewGuid().ToString() + doc.Format;
-                    Request.Files[upload].SaveAs(Path.Combine(path, fileName));
-
-                    DocumentRepo.PostDocumentViewModel(doc);
-                    var s = Path.Combine(path, fileName);
-                    System.Diagnostics.Process.Start(s);
-                    //System.Diagnostics.Process.Start("@" + Path.Combine(path, filename));
+                    if (Request.Files[upload].FileName != "")
+                    {
+                        string path = AppDomain.CurrentDomain.BaseDirectory + "uploads\\";
+                        documentViewModel.FileName = Request.Files[upload].FileName;
+                        documentViewModel.Format = Path.GetExtension(documentViewModel.FileName);
+                        documentViewModel.UploadedFileName = Path.Combine(path, Guid.NewGuid() + Path.GetExtension(documentViewModel.FileName));
+                        Request.Files[upload].SaveAs(documentViewModel.UploadedFileName);
+                        break;
+                    }
                 }
             }
-
-
-
             // SPARA SKER HÄR
-
-
-
-
-
             documentViewModel.Id = DocumentRepo.PostDocumentViewModel(documentViewModel);
 
             var document = db.Documents.Find(documentViewModel.Id);
             return RedirectToAction("Manage", new { id = documentViewModel.Id, courseId = document.CourseId, moduleId = document.ModuleId, activityId = document.ActivityId, viewMessage = postMessage });
         }
-        //
-        // end manage
-        //
 
-        // GET: Documents/Delete/5
+
+            // GET: Documents/Delete/5
         public ActionResult Delete(int? id, int? activityId, int? moduleId, int? courseId)
         {
             if (id == null)
@@ -196,14 +180,14 @@ namespace LMS.Controllers
             viewModel.DocumentType = document.DokumentType;
             viewModel.CourseId = courseId;
             viewModel.ModuleId = moduleId;
-            viewModel.ActivityId = activityId;         
+            viewModel.ActivityId = activityId;
             return View(viewModel);
         }
 
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id, int? courseId, int? moduleId, int? activityId )
+        public ActionResult DeleteConfirmed(int id, int? courseId, int? moduleId, int? activityId)
         {
             Document document = db.Documents.Find(id);
             NotificationRepo.AddRemovedDocumentNote(document);
